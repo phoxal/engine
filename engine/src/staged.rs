@@ -5,15 +5,16 @@ use crate::conventions::COMPONENTS_DIR;
 use anyhow::{Context, Result, anyhow, bail};
 use phoxal_utils_component::v1::CapabilityRef;
 use phoxal_utils_component::v1::capability::{Capability, Encoder, Motor, StructuralTarget};
+use phoxal_utils_robot::Robot as RobotManifest;
 use phoxal_utils_robot::v1::capability::Parameters;
 use phoxal_utils_robot::v1::{
-    self as model_v1, ModelV1, ResolvedFacts, SourceBundle, resolve_source_bundle,
+    self as model_v1, ResolvedFacts, SourceBundle, resolve_source_bundle,
 };
 use phoxal_utils_structure::Structure;
 
 #[derive(Debug, Clone)]
 pub struct Robot {
-    pub model: ModelV1,
+    pub model: RobotManifest,
     pub components: BTreeMap<String, phoxal_utils_component::v1::Component>,
 }
 
@@ -64,11 +65,8 @@ impl Robot {
         ))
     }
 
-    fn read_model_config(path: impl AsRef<Path>) -> Result<ModelV1> {
-        Ok(phoxal_utils_robot::Model::read_from_dir(path)?
-            .as_v1()
-            .context("staged robot only supports model.yaml version v1")?
-            .clone())
+    fn read_model_config(path: impl AsRef<Path>) -> Result<RobotManifest> {
+        phoxal_utils_robot::Robot::read_from_dir(path)
     }
 
     fn read_component_config(
@@ -93,7 +91,7 @@ impl Robot {
 
     fn read_used_component_configs(
         path: impl AsRef<Path>,
-        model: &ModelV1,
+        model: &RobotManifest,
     ) -> Result<BTreeMap<String, phoxal_utils_component::v1::Component>> {
         model
             .used_component_types()
@@ -110,7 +108,7 @@ impl Robot {
     pub fn component_instance(&self, component_id: &str) -> Result<&model_v1::Component> {
         self.model.component_instance(component_id).ok_or_else(|| {
             anyhow!(
-                "component instance '{}' is not defined in model.yaml",
+                "component instance '{}' is not defined in robot.yaml",
                 component_id
             )
         })
@@ -342,7 +340,7 @@ impl Robot {
         let component_instance = self.component_instance(component_id)?;
         let driver = component_instance.driver.as_ref().ok_or_else(|| {
             anyhow!(
-                "component '{}' has no driver config in model.yaml",
+                "component '{}' has no driver config in robot.yaml",
                 component_id
             )
         })?;

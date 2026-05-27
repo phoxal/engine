@@ -1,5 +1,6 @@
 use anyhow::{Result, bail};
-use phoxal_utils_robot::v1::{KinematicKind, ModelV1};
+use phoxal_utils_robot::Robot;
+use phoxal_utils_robot::v1::KinematicKind;
 
 const ALL_KINEMATICS: &[KinematicKind] = &[
     KinematicKind::Differential,
@@ -158,7 +159,7 @@ pub const RUNTIME_SUPPORT: &[RuntimeSupport] = &[
     },
 ];
 
-pub fn validate_runtime_support(model: &ModelV1) -> Result<()> {
+pub fn validate_runtime_support(model: &Robot) -> Result<()> {
     let kinematic = model.motion.kinematic.kind();
     for support in RUNTIME_SUPPORT {
         if !support.supported_kinematics.contains(&kinematic) {

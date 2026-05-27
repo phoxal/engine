@@ -2,15 +2,14 @@ use serde::{Deserialize, Serialize};
 
 use phoxal_utils_component::v1::CapabilityRef;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Motion {
     pub kinematic: KinematicConfig,
-    pub limits: MotionLimits,
-    #[serde(default)]
-    pub calibration: Option<CalibrationConfig>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum KinematicConfig {
     Differential {
@@ -80,21 +79,4 @@ impl std::fmt::Display for KinematicKind {
     fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         formatter.write_str(self.as_str())
     }
-}
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-pub struct MotionLimits {
-    pub max_linear_speed_mps: f64,
-    pub max_angular_speed_radps: f64,
-    pub max_linear_accel_mps2: f64,
-    pub max_linear_decel_mps2: f64,
-    pub max_angular_accel_radps2: f64,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CalibrationConfig {
-    #[serde(default)]
-    pub wheel_radius_left_m: Option<f64>,
-    #[serde(default)]
-    pub wheel_radius_right_m: Option<f64>,
 }

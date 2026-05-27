@@ -5,7 +5,9 @@ use serde::{Deserialize, Serialize};
 use phoxal_utils_component::v1::CapabilityRef;
 use phoxal_utils_component::v1::capability::Capability;
 
-use super::{ModelV1, Role};
+use crate::Robot;
+
+use super::Role;
 
 /// Resolved-fact identity of the localization backend.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -96,7 +98,7 @@ struct InputCandidates {
 /// BLUEPRINT: the backend is selected by resolved sensing roles, not hand-declared.
 #[must_use]
 pub fn resolve_localize_backend(
-    model: &ModelV1,
+    model: &Robot,
     components: &BTreeMap<String, phoxal_utils_component::v1::Component>,
 ) -> ResolvedLocalizeBackend {
     let mut candidates = InputCandidates::default();
@@ -163,8 +165,8 @@ mod tests {
     use phoxal_utils_component::v1::capability::{Capability, Gnss, StructuralTarget};
 
     use super::{LocalizeBackendKind, ResolvedLocalizeBackend, Role, resolve_localize_backend};
-    use crate::Model;
-    use crate::v1::{Component, ModelV1};
+    use crate::Robot;
+    use crate::v1::Component;
 
     #[test]
     fn resolves_orb_slam3_from_rgbd_imu_roles() {
@@ -290,17 +292,14 @@ mod tests {
     }
 
     fn fixture_model_and_components() -> (
-        ModelV1,
+        Robot,
         BTreeMap<String, phoxal_utils_component::v1::Component>,
     ) {
         let bundle_root = fixture_bundle_root();
-        let model = match Model::read_from_dir(&bundle_root) {
-            Ok(model) => match model.as_v1() {
-                Some(model) => model.clone(),
-                None => panic!("fixture model is not v1"),
-            },
+        let model = match Robot::read_from_dir(&bundle_root) {
+            Ok(model) => model,
             Err(error) => panic!(
-                "failed to read fixture model from {}: {error:#}",
+                "failed to read fixture robot from {}: {error:#}",
                 bundle_root.display()
             ),
         };
@@ -357,7 +356,7 @@ mod tests {
     }
 
     fn component_roles_mut<'a>(
-        model: &'a mut ModelV1,
+        model: &'a mut Robot,
         component_id: &str,
     ) -> &'a mut BTreeMap<String, Vec<Role>> {
         match model.components.get_mut(component_id) {
@@ -367,7 +366,7 @@ mod tests {
     }
 
     fn add_gnss_localization_component(
-        model: &mut ModelV1,
+        model: &mut Robot,
         components: &mut BTreeMap<String, phoxal_utils_component::v1::Component>,
     ) {
         components.insert(

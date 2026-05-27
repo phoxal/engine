@@ -62,7 +62,7 @@ pub fn stale_timeout_ns(publish_hz: f64) -> u64 {
 /// Shared CLI arguments for all robot binaries.
 #[derive(Debug, Parser, Clone)]
 pub struct RobotRuntimeArgs {
-    /// Path to a bundled robot directory containing model.yaml, components/, and structure.urdf.
+    /// Path to a bundled robot directory containing robot.yaml, components/, and structure.urdf.
     #[arg(long, env = ENV_ROBOT_CONFIG)]
     pub robot_config: PathBuf,
 

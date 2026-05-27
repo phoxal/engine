@@ -4,7 +4,7 @@ use anyhow::{Result, bail};
 use nalgebra::{Isometry3, UnitQuaternion};
 use phoxal_utils_component::v1::capability::Capability;
 use phoxal_utils_component::v1::{CapabilityRef, Component as SourceComponent};
-use phoxal_utils_robot::v1::ModelV1;
+use phoxal_utils_robot::Robot;
 use phoxal_utils_structure::Structure;
 
 use crate::frame::{extract_link_transforms, resolve_target_link};
@@ -42,7 +42,7 @@ pub enum ResolvedSensorKind {
 }
 
 pub fn resolve_sensor_poses(
-    model: &ModelV1,
+    model: &Robot,
     components: &BTreeMap<String, SourceComponent>,
     structure: &Structure,
     devices: &[CapabilityRef],
@@ -57,7 +57,7 @@ pub fn resolve_sensor_poses(
 }
 
 pub fn resolve_sensor_poses_in_frame(
-    model: &ModelV1,
+    model: &Robot,
     components: &BTreeMap<String, SourceComponent>,
     structure: &Structure,
     devices: &[CapabilityRef],
@@ -85,7 +85,7 @@ pub fn resolve_sensor_poses_in_frame(
 }
 
 pub fn resolve_capability_link_pose_in_frame(
-    model: &ModelV1,
+    model: &Robot,
     components: &BTreeMap<String, SourceComponent>,
     structure: &Structure,
     capability: &CapabilityRef,
@@ -109,7 +109,7 @@ pub fn resolve_capability_link_pose_in_frame(
 }
 
 fn resolve_sensor_pose_with_transforms(
-    model: &ModelV1,
+    model: &Robot,
     components: &BTreeMap<String, SourceComponent>,
     structure: &Structure,
     link_transforms: &HashMap<String, Isometry3<f64>>,
@@ -147,7 +147,7 @@ fn resolve_sensor_pose_with_transforms(
 }
 
 fn resolve_capability_link_pose_with_transforms(
-    model: &ModelV1,
+    model: &Robot,
     components: &BTreeMap<String, SourceComponent>,
     structure: &Structure,
     link_transforms: &HashMap<String, Isometry3<f64>>,
@@ -178,7 +178,7 @@ fn resolve_capability_link_pose_with_transforms(
 }
 
 fn configuration_capability<'a>(
-    model: &'a ModelV1,
+    model: &'a Robot,
     components: &'a BTreeMap<String, SourceComponent>,
     capability_ref: &CapabilityRef,
 ) -> Result<&'a Capability> {
@@ -186,7 +186,7 @@ fn configuration_capability<'a>(
         .component_instance(&capability_ref.component_id)
         .ok_or_else(|| {
             anyhow::anyhow!(
-                "component instance '{}' is not defined in model.yaml",
+                "component instance '{}' is not defined in robot.yaml",
                 capability_ref.component_id
             )
         })?;
@@ -260,10 +260,7 @@ mod tests {
             .join("fixture")
             .join("robot")
             .join("rgbd-imu-diff-drive");
-        let model = phoxal_utils_robot::Model::read_from_dir(&bundle_root)?
-            .as_v1()
-            .context("fixture robot must use model.yaml version v1")?
-            .clone();
+        let model = phoxal_utils_robot::Robot::read_from_dir(&bundle_root)?;
         let components = source_components(&bundle_root, &model)?;
         let structure = Structure::read_from_dir(&bundle_root)?;
         assert!(
@@ -294,10 +291,7 @@ mod tests {
             .join("fixture")
             .join("robot")
             .join("rgbd-imu-diff-drive");
-        let model = phoxal_utils_robot::Model::read_from_dir(&bundle_root)?
-            .as_v1()
-            .context("fixture robot must use model.yaml version v1")?
-            .clone();
+        let model = phoxal_utils_robot::Robot::read_from_dir(&bundle_root)?;
         let components = source_components(&bundle_root, &model)?;
         let structure = Structure::read_from_dir(&bundle_root)?;
 
@@ -388,7 +382,7 @@ mod tests {
 
     fn source_components(
         bundle_root: &Path,
-        model: &phoxal_utils_robot::v1::ModelV1,
+        model: &phoxal_utils_robot::Robot,
     ) -> Result<BTreeMap<String, phoxal_utils_component::v1::Component>> {
         let fixture_root = bundle_root
             .parent()

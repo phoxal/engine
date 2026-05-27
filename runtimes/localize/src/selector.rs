@@ -349,7 +349,7 @@ mod tests {
     use phoxal_engine::staged::Robot;
     use phoxal_utils_component::v1::CapabilityRef;
     use phoxal_utils_component::v1::capability::{Capability, Gnss, StructuralTarget};
-    use phoxal_utils_robot::Model;
+    use phoxal_utils_robot::Robot as RobotManifest;
     use phoxal_utils_robot::v1::{Component, Role};
     use phoxal_utils_structure::Structure;
 
@@ -611,13 +611,10 @@ mod tests {
     fn fixture_robot() -> Robot {
         let bundle_root = fixture_bundle_root();
 
-        let model = match Model::read_from_dir(&bundle_root) {
-            Ok(model) => match model.as_v1() {
-                Some(model) => model.clone(),
-                None => panic!("fixture model is not v1"),
-            },
+        let model = match RobotManifest::read_from_dir(&bundle_root) {
+            Ok(model) => model,
             Err(error) => panic!(
-                "failed to read fixture model from {}: {error:#}",
+                "failed to read fixture robot from {}: {error:#}",
                 bundle_root.display()
             ),
         };

@@ -1,226 +1,436 @@
-//! Data types for authored source robot models.
+//! Data types for authored source robot manifests.
 
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
-use std::path::Path;
+use std::collections::{BTreeMap, BTreeSet};
+use std::fmt;
+use std::ops::{Deref, DerefMut};
+use std::path::{Path, PathBuf};
 
 pub mod transform;
 pub mod v1;
 
-const MODEL_FILE: &str = "model.yaml";
+const ROBOT_FILE: &str = "robot.yaml";
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(tag = "version")]
-pub enum Model {
-    #[serde(rename = "v1")]
-    V1(v1::ModelV1),
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Robot {
+    pub version: Version,
+    pub phoxal: Phoxal,
+    pub identity: Identity,
+    #[serde(default = "default_structure_path")]
+    pub structure: PathBuf,
+    pub phoxal_runtimes: PhoxalRuntimes,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub user_runtimes: BTreeMap<String, UserRuntime>,
+    pub sim: Sim,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub tools: BTreeMap<String, Tool>,
+    pub motion: v1::Motion,
+    pub components: Components,
 }
 
-impl Model {
-    pub fn read_from_dir(path: impl AsRef<Path>) -> Result<Model> {
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Version {
+    V1,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Phoxal {
+    pub cli_min_version: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Identity {
+    pub id: String,
+    pub namespace: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PhoxalRuntimes {
+    pub version: String,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub overrides: BTreeMap<String, PlatformRuntimeOverride>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PlatformRuntimeOverride {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub image: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct UserRuntime {
+    pub path: PathBuf,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Sim {
+    pub world: PathBuf,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Tool {
+    pub version: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Components {
+    pub sources: BTreeMap<String, ComponentSource>,
+    pub instances: BTreeMap<String, v1::Component>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ComponentSource {
+    Git(SourceGit),
+    Path(SourcePath),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SourceGit {
+    pub git: String,
+    pub tag: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SourcePath {
+    pub path: PathBuf,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ValidationError {
+    EmptyIdentityId,
+    EmptyIdentityNamespace,
+    UnknownPlatformRuntimeOverride {
+        name: String,
+    },
+    UserRuntimeShadowsPlatformRuntime {
+        name: String,
+    },
+    MissingComponentSource {
+        instance: String,
+        source: String,
+    },
+    InvalidToken {
+        field: String,
+        value: String,
+    },
+    EmptyComponentType {
+        instance: String,
+    },
+    EmptyMountLink {
+        instance: String,
+    },
+    EmptyRoleList {
+        instance: String,
+        capability: String,
+    },
+    RepeatedRole {
+        instance: String,
+        capability: String,
+        role: v1::Role,
+    },
+    InvalidRuntimeClock {
+        instance: String,
+    },
+    InvalidKinematicField {
+        field: String,
+        message: String,
+    },
+    InvalidDirectionSign {
+        instance: String,
+        capability: String,
+    },
+}
+
+impl Robot {
+    pub fn read_from_dir(path: impl AsRef<Path>) -> Result<Self> {
         let path = path.as_ref();
         Self::read_from_string(
-            &std::fs::read_to_string(path.join(MODEL_FILE)).with_context(|| {
+            &std::fs::read_to_string(path.join(ROBOT_FILE)).with_context(|| {
                 format!(
-                    "failed to read model file {}",
-                    path.join(MODEL_FILE).display()
+                    "failed to read robot file {}",
+                    path.join(ROBOT_FILE).display()
                 )
             })?,
         )
     }
 
-    pub fn read_from_string(string: &str) -> Result<Model> {
-        let model = Self::parse_from_string(string)?;
-        model.validate()?;
-        Ok(model)
+    pub fn read_from_string(string: &str) -> Result<Self> {
+        let robot = Self::parse_from_string(string)?;
+        robot.validate().map_err(validation_error)?;
+        Ok(robot)
     }
 
-    pub fn parse_from_dir(path: impl AsRef<Path>) -> Result<Model> {
+    pub fn parse_from_dir(path: impl AsRef<Path>) -> Result<Self> {
         let path = path.as_ref();
         Self::parse_from_string(
-            &std::fs::read_to_string(path.join(MODEL_FILE)).with_context(|| {
+            &std::fs::read_to_string(path.join(ROBOT_FILE)).with_context(|| {
                 format!(
-                    "failed to read model file {}",
-                    path.join(MODEL_FILE).display()
+                    "failed to read robot file {}",
+                    path.join(ROBOT_FILE).display()
                 )
             })?,
         )
     }
 
-    pub fn parse_from_string(string: &str) -> Result<Model> {
-        serde_yaml::from_str(string).with_context(|| "failed to parse model")
+    pub fn parse_from_string(string: &str) -> Result<Self> {
+        serde_yaml::from_str(string).with_context(|| "failed to parse robot")
     }
 
     pub fn write_to_dir(&self, path: impl AsRef<Path>) -> Result<()> {
         let path = path.as_ref();
         std::fs::create_dir_all(path)
-            .with_context(|| format!("failed to create model directory {}", path.display()))?;
+            .with_context(|| format!("failed to create robot directory {}", path.display()))?;
         let yaml = serde_yaml::to_string(&self)?;
-        std::fs::write(path.join(MODEL_FILE), yaml).with_context(|| {
+        std::fs::write(path.join(ROBOT_FILE), yaml).with_context(|| {
             format!(
-                "failed to write model file {}",
-                path.join(MODEL_FILE).display()
+                "failed to write robot file {}",
+                path.join(ROBOT_FILE).display()
             )
         })?;
         Ok(())
     }
 
-    pub fn validate(&self) -> Result<()> {
-        match self {
-            Model::V1(m) => m.validate(),
+    pub fn validate(&self) -> std::result::Result<(), Vec<ValidationError>> {
+        let mut errors = Vec::new();
+        self.validate_basics(&mut errors);
+        self.validate_component_sources(&mut errors);
+        self.validate_component_structure(&mut errors);
+        self.validate_driver_structure(&mut errors);
+        self.validate_role_hints(&mut errors);
+        self.validate_kinematics(&mut errors);
+        self.validate_numerics(&mut errors);
+        validation_result(errors)
+    }
+
+    pub fn validate_with(
+        &self,
+        platform_runtime_names: &[&str],
+    ) -> std::result::Result<(), Vec<ValidationError>> {
+        let mut errors = match self.validate() {
+            Ok(()) => Vec::new(),
+            Err(errors) => errors,
+        };
+        let platform_runtime_names = platform_runtime_names
+            .iter()
+            .copied()
+            .collect::<BTreeSet<_>>();
+
+        for runtime_name in self.phoxal_runtimes.overrides.keys() {
+            if !platform_runtime_names.contains(runtime_name.as_str()) {
+                errors.push(ValidationError::UnknownPlatformRuntimeOverride {
+                    name: runtime_name.clone(),
+                });
+            }
+        }
+        for runtime_name in self.user_runtimes.keys() {
+            if platform_runtime_names.contains(runtime_name.as_str()) {
+                errors.push(ValidationError::UserRuntimeShadowsPlatformRuntime {
+                    name: runtime_name.clone(),
+                });
+            }
+        }
+
+        validation_result(errors)
+    }
+
+    #[must_use]
+    pub fn robot_id(&self) -> &str {
+        &self.identity.id
+    }
+
+    #[must_use]
+    pub fn namespace(&self) -> &str {
+        &self.identity.namespace
+    }
+
+    #[must_use]
+    pub fn components(&self) -> &BTreeMap<String, v1::Component> {
+        &self.components.instances
+    }
+
+    #[must_use]
+    pub fn component_instance(&self, component_id: &str) -> Option<&v1::Component> {
+        self.components.instances.get(component_id)
+    }
+
+    #[must_use]
+    pub fn parameter(
+        &self,
+        capability_ref: &phoxal_utils_component::v1::CapabilityRef,
+    ) -> Option<&v1::capability::Parameters> {
+        self.component_instance(&capability_ref.component_id)
+            .and_then(|component| component.parameters.get(&capability_ref.capability_id))
+    }
+
+    #[must_use]
+    pub fn used_component_types(&self) -> BTreeSet<&str> {
+        self.components
+            .instances
+            .values()
+            .map(|component| component.component.as_str())
+            .collect()
+    }
+
+    fn validate_basics(&self, errors: &mut Vec<ValidationError>) {
+        if self.identity.id.trim().is_empty() {
+            errors.push(ValidationError::EmptyIdentityId);
+        }
+        if self.identity.namespace.trim().is_empty() {
+            errors.push(ValidationError::EmptyIdentityNamespace);
+        }
+    }
+
+    fn validate_component_sources(&self, errors: &mut Vec<ValidationError>) {
+        for (instance_name, instance) in &self.components.instances {
+            if !self.components.sources.contains_key(&instance.component) {
+                errors.push(ValidationError::MissingComponentSource {
+                    instance: instance_name.clone(),
+                    source: instance.component.clone(),
+                });
+            }
         }
     }
 }
 
-impl Model {
-    pub fn as_v1(&self) -> Option<&v1::ModelV1> {
+impl Components {
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.sources.is_empty() && self.instances.is_empty()
+    }
+}
+
+impl Deref for Components {
+    type Target = BTreeMap<String, v1::Component>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.instances
+    }
+}
+
+impl DerefMut for Components {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.instances
+    }
+}
+
+impl<'a> IntoIterator for &'a Components {
+    type Item = (&'a String, &'a v1::Component);
+    type IntoIter = std::collections::btree_map::Iter<'a, String, v1::Component>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.instances.iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut Components {
+    type Item = (&'a String, &'a mut v1::Component);
+    type IntoIter = std::collections::btree_map::IterMut<'a, String, v1::Component>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.instances.iter_mut()
+    }
+}
+
+impl fmt::Display for ValidationError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Model::V1(v1) => Some(v1),
+            Self::EmptyIdentityId => formatter.write_str("identity.id must not be empty"),
+            Self::EmptyIdentityNamespace => {
+                formatter.write_str("identity.namespace must not be empty")
+            }
+            Self::UnknownPlatformRuntimeOverride { name } => write!(
+                formatter,
+                "phoxal_runtimes.overrides.{name} is not a platform runtime"
+            ),
+            Self::UserRuntimeShadowsPlatformRuntime { name } => {
+                write!(formatter, "user_runtimes.{name} shadows a platform runtime")
+            }
+            Self::MissingComponentSource { instance, source } => write!(
+                formatter,
+                "components.instances.{instance}.component references missing source '{source}'"
+            ),
+            Self::InvalidToken { field, value } => write!(
+                formatter,
+                "{field} value '{value}' must contain only lowercase ASCII letters, digits, '_' or '-'"
+            ),
+            Self::EmptyComponentType { instance } => write!(
+                formatter,
+                "components.instances.{instance}.component must not be empty"
+            ),
+            Self::EmptyMountLink { instance } => {
+                write!(
+                    formatter,
+                    "components.instances.{instance}.mount_link must not be empty"
+                )
+            }
+            Self::EmptyRoleList {
+                instance,
+                capability,
+            } => write!(
+                formatter,
+                "components.instances.{instance}.roles.{capability} must list at least one role"
+            ),
+            Self::RepeatedRole {
+                instance,
+                capability,
+                role,
+            } => write!(
+                formatter,
+                "components.instances.{instance}.roles.{capability} repeats role '{role}'"
+            ),
+            Self::InvalidRuntimeClock { instance } => write!(
+                formatter,
+                "components.instances.{instance}.driver.runtime_clock_ms must be > 0"
+            ),
+            Self::InvalidKinematicField { field, message } => {
+                write!(formatter, "motion.kinematic.{field} {message}")
+            }
+            Self::InvalidDirectionSign {
+                instance,
+                capability,
+            } => write!(
+                formatter,
+                "components.instances.{instance}.parameters.{capability}.direction_sign must be either -1 or 1"
+            ),
         }
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::Model;
-    use tempfile::tempdir;
+fn validation_error(errors: Vec<ValidationError>) -> anyhow::Error {
+    let message = errors
+        .iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>()
+        .join("\n");
+    anyhow::anyhow!("Robot errors:\n{message}")
+}
 
-    fn valid_model_yaml(model: &str) -> String {
-        format!(
-            r#"
-version: v1
-identity:
-  model: {model}
-components:
-  left_drive:
-    component: ddsm115
-    mount_link: left_wheel_mount
-    driver:
-      connection:
-        type: can
-        bus: 0
-        node_id: 1
-    parameters:
-      motor:
-        kind: motor
-        direction_sign: 1
-      encoder:
-        kind: encoder
-        direction_sign: 1
-  right_drive:
-    component: ddsm115
-    mount_link: right_wheel_mount
-    driver:
-      connection:
-        type: can
-        bus: 0
-        node_id: 2
-    parameters:
-      motor:
-        kind: motor
-        direction_sign: -1
-      encoder:
-        kind: encoder
-        direction_sign: -1
-motion:
-  kinematic:
-    kind: differential
-    left_actuators: [left_drive.motor]
-    right_actuators: [right_drive.motor]
-    left_encoders: [left_drive.encoder]
-    right_encoders: [right_drive.encoder]
-    wheel_radius_m: 0.1
-    wheel_base_m: 0.5
-  limits:
-    max_linear_speed_mps: 0.8
-    max_angular_speed_radps: 2.0
-    max_linear_accel_mps2: 10.0
-    max_linear_decel_mps2: 10.0
-    max_angular_accel_radps2: 30.0
-
-"#
-        )
-    }
-
-    #[test]
-    fn deserialize_versioned_model() {
-        let parsed =
-            Model::read_from_string(&valid_model_yaml("robot-v1")).expect("model should parse");
-        assert_eq!(
-            parsed
-                .as_v1()
-                .expect("model version should be supported")
-                .identity
-                .model,
-            "robot-v1"
-        );
-    }
-
-    #[test]
-    fn model_roundtrips_through_directory() -> anyhow::Result<()> {
-        let temp_dir = tempdir()?;
-        let model_dir = temp_dir.path().join("robot");
-        let model = Model::read_from_string(&valid_model_yaml("robot-v1"))?;
-
-        model.write_to_dir(&model_dir)?;
-        let loaded = Model::read_from_dir(&model_dir)?;
-
-        assert_eq!(
-            loaded
-                .as_v1()
-                .expect("model version should be supported")
-                .identity
-                .model,
-            "robot-v1"
-        );
+fn validation_result(
+    errors: Vec<ValidationError>,
+) -> std::result::Result<(), Vec<ValidationError>> {
+    if errors.is_empty() {
         Ok(())
+    } else {
+        Err(errors)
     }
+}
 
-    #[test]
-    fn component_driver_requires_connection() {
-        let yaml = valid_model_yaml("robot-v1").replace(
-            "    driver:\n      connection:\n        type: can\n        bus: 0\n        node_id: 1\n",
-            "    driver:\n      runtime_clock_ms: 20\n",
-        );
-
-        let error = Model::read_from_string(&yaml).expect_err("model should fail");
-        let message = format!("{error:#}");
-        assert!(message.contains("missing field `connection`"), "{message}");
-    }
-
-    #[test]
-    fn model_accepts_mecanum_kinematic_config() {
-        let yaml = valid_model_yaml("robot-v2").replace(
-            r#"  kinematic:
-    kind: differential
-    left_actuators: [left_drive.motor]
-    right_actuators: [right_drive.motor]
-    left_encoders: [left_drive.encoder]
-    right_encoders: [right_drive.encoder]
-    wheel_radius_m: 0.1
-    wheel_base_m: 0.5"#,
-            r#"  kinematic:
-    kind: mecanum
-    front_left_actuator: front_left_drive.motor
-    front_right_actuator: front_right_drive.motor
-    rear_left_actuator: rear_left_drive.motor
-    rear_right_actuator: rear_right_drive.motor
-    wheel_radius_m: 0.1
-    wheel_base_m: 0.5
-    track_m: 0.4"#,
-        );
-
-        let parsed = Model::read_from_string(&yaml).expect("mecanum model should parse");
-
-        assert_eq!(
-            parsed
-                .as_v1()
-                .expect("model version should be supported")
-                .motion
-                .kinematic
-                .kind()
-                .as_str(),
-            "mecanum"
-        );
-    }
+fn default_structure_path() -> PathBuf {
+    PathBuf::from("structure.urdf")
 }

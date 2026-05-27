@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{Role, capability, driver::DriverConfig};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Component {
     pub component: String,
     pub mount_link: String,

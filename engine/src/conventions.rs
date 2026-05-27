@@ -5,7 +5,7 @@ pub const COMPONENT_FILE: &str = "component.yaml";
 pub const COMPONENTS_DIR: &str = "components";
 pub const DEFAULT_ROBOT_NAMESPACE: &str = "dev";
 pub const MESHES_DIR: &str = "meshes";
-pub const MODEL_FILE: &str = "model.yaml";
+pub const ROBOT_FILE: &str = "robot.yaml";
 pub const SIMULATION_FILE: &str = "simulation.yaml";
 pub const STRUCTURE_FILE: &str = "structure.urdf";
 

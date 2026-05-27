@@ -1,15 +1,16 @@
-# Robot Model
+# Robot Manifest
 
-Versioned source-model data types for authored robot facts.
+Source robot manifest data types for authored robot facts.
 
 ## Overview
 
-`phoxal-utils-robot` owns the v1 source schema and the shared deterministic
-foundation contracts:
+`phoxal-utils-robot` owns the `robot.yaml` source schema and the shared
+deterministic foundation contracts:
 
-- `Model` is the versioned enum stored in `model.yaml`.
-- `ModelV1` describes robot facts: identity, motion, component instances,
-  driver connections, capability parameters, and model-instance role hints.
+- `Robot` is the single top-level type stored in `robot.yaml`.
+- `Robot` describes identity, runtime resolution intent, simulation intent,
+  motion kinematics, component sources, mounted component instances, driver
+  connections, capability parameters, and model-instance role hints.
 - Source models do not author the runtime graph or per-runtime wiring.
 - Component `roles` map capability ids to role hints such as `localization`,
   `mapping`, `traversability`, `safety`, `odometry`, and optional `perception`.
@@ -21,15 +22,14 @@ foundation contracts:
   owning runtime crates in later phases.
 
 Component-driver config remains per component instance and includes an explicit
-`connection`. Motion limits and kinematics remain durable robot facts. Timing,
-safety margins, runtime presence, image selection, and deploy topology are not
-source-model runtime config.
+`connection`. Timing, safety margins, runtime presence, and deploy topology are
+not source-manifest runtime config.
 
 ## Usage
 
 ```rust
-use phoxal_utils_robot::Model;
+use phoxal_utils_robot::Robot;
 
-let model: Model = serde_yaml::from_str(include_str!("model.yaml"))?;
-let model = model.as_v1().expect("expected v1 schema");
+let robot: Robot = serde_yaml::from_str(include_str!("robot.yaml"))?;
+robot.validate_with(&["router", "drive", "localize"])?;
 ```

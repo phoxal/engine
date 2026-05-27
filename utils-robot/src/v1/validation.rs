@@ -1,120 +1,105 @@
 use std::collections::BTreeSet;
 
-use anyhow::{Result, bail};
 use phoxal_utils_component::v1::CapabilityRef;
 
-use super::{KinematicConfig, ModelV1, capability};
+use crate::{Robot, ValidationError};
 
-impl ModelV1 {
-    pub fn validate(&self) -> Result<()> {
-        let mut validation_errors = Vec::new();
+use super::{KinematicConfig, capability};
 
-        self.validate_basics(&mut validation_errors);
-        self.validate_component_structure(&mut validation_errors);
-        self.validate_driver_structure(&mut validation_errors);
-        self.validate_role_hints(&mut validation_errors);
-        self.validate_kinematics(&mut validation_errors);
-        self.validate_numerics(&mut validation_errors);
-
-        if validation_errors.is_empty() {
-            Ok(())
-        } else {
-            bail!("Model errors:\n{}", validation_errors.join("\n"))
-        }
-    }
-
-    fn validate_basics(&self, validation_errors: &mut Vec<String>) {
-        let model = self.identity.model.trim();
-        if model.is_empty() {
-            validation_errors.push("model.identity.model must not be empty".to_string());
-        }
-    }
-
-    fn validate_component_structure(&self, validation_errors: &mut Vec<String>) {
+impl Robot {
+    pub(crate) fn validate_component_structure(
+        &self,
+        validation_errors: &mut Vec<ValidationError>,
+    ) {
         for (component_id, component) in &self.components {
             if !phoxal_utils_component::v1::is_valid_token(component_id) {
-                validation_errors.push(format!(
-                    "component id '{}' must contain only lowercase ASCII letters, digits, '_' or '-'",
-                    component_id
-                ));
+                validation_errors.push(ValidationError::InvalidToken {
+                    field: format!("components.instances.{component_id}"),
+                    value: component_id.clone(),
+                });
             }
             if component.component.trim().is_empty() {
-                validation_errors.push(format!(
-                    "component '{}' must provide a non-empty component type",
-                    component_id
-                ));
+                validation_errors.push(ValidationError::EmptyComponentType {
+                    instance: component_id.clone(),
+                });
             }
             if !phoxal_utils_component::v1::is_valid_token(&component.component) {
-                validation_errors.push(format!(
-                    "component '{}' has invalid component type '{}'; it must contain only lowercase ASCII letters, digits, '_' or '-'",
-                    component_id, component.component
-                ));
+                validation_errors.push(ValidationError::InvalidToken {
+                    field: format!("components.instances.{component_id}.component"),
+                    value: component.component.clone(),
+                });
             }
 
             if component.mount_link.trim().is_empty() {
-                validation_errors.push(format!(
-                    "component '{}' has an empty mount_link",
-                    component_id
-                ));
+                validation_errors.push(ValidationError::EmptyMountLink {
+                    instance: component_id.clone(),
+                });
             }
 
             for (capability_key, parameters) in &component.parameters {
                 if !phoxal_utils_component::v1::is_valid_token(capability_key) {
-                    validation_errors.push(format!(
-                        "component '{}' parameter id '{}' must contain only lowercase ASCII letters, digits, '_' or '-'",
-                        component_id, capability_key
-                    ));
+                    validation_errors.push(ValidationError::InvalidToken {
+                        field: format!("components.instances.{component_id}.parameters"),
+                        value: capability_key.clone(),
+                    });
                 }
                 if parameters.kind_name().trim().is_empty() {
-                    validation_errors.push(format!(
-                        "components.{component_id}.parameters.{capability_key}.kind must not be empty"
-                    ));
+                    validation_errors.push(ValidationError::InvalidToken {
+                        field: format!(
+                            "components.instances.{component_id}.parameters.{capability_key}.kind"
+                        ),
+                        value: String::new(),
+                    });
                 }
             }
 
             for capability_id in component.roles.keys() {
                 if !phoxal_utils_component::v1::is_valid_token(capability_id) {
-                    validation_errors.push(format!(
-                        "components.{component_id}.roles.{capability_id} must use a valid capability token"
-                    ));
+                    validation_errors.push(ValidationError::InvalidToken {
+                        field: format!("components.instances.{component_id}.roles"),
+                        value: capability_id.clone(),
+                    });
                 }
             }
         }
     }
 
-    fn validate_driver_structure(&self, validation_errors: &mut Vec<String>) {
+    pub(crate) fn validate_driver_structure(&self, validation_errors: &mut Vec<ValidationError>) {
         for (component_id, component) in &self.components {
             if let Some(driver) = &component.driver
                 && driver.runtime_clock_ms == 0
             {
-                validation_errors.push(format!(
-                    "components.{component_id}.driver.runtime_clock_ms must be > 0"
-                ));
+                validation_errors.push(ValidationError::InvalidRuntimeClock {
+                    instance: component_id.clone(),
+                });
             }
         }
     }
 
-    fn validate_role_hints(&self, validation_errors: &mut Vec<String>) {
+    pub(crate) fn validate_role_hints(&self, validation_errors: &mut Vec<ValidationError>) {
         for (component_id, component) in &self.components {
             for (capability_id, roles) in &component.roles {
                 if roles.is_empty() {
-                    validation_errors.push(format!(
-                        "components.{component_id}.roles.{capability_id} must list at least one role"
-                    ));
+                    validation_errors.push(ValidationError::EmptyRoleList {
+                        instance: component_id.clone(),
+                        capability: capability_id.clone(),
+                    });
                 }
                 let mut seen = BTreeSet::new();
                 for role in roles {
                     if !seen.insert(*role) {
-                        validation_errors.push(format!(
-                            "components.{component_id}.roles.{capability_id} repeats role '{role}'"
-                        ));
+                        validation_errors.push(ValidationError::RepeatedRole {
+                            instance: component_id.clone(),
+                            capability: capability_id.clone(),
+                            role: *role,
+                        });
                     }
                 }
             }
         }
     }
 
-    fn validate_kinematics(&self, validation_errors: &mut Vec<String>) {
+    pub(crate) fn validate_kinematics(&self, validation_errors: &mut Vec<ValidationError>) {
         match &self.motion.kinematic {
             KinematicConfig::Differential {
                 left_actuators,
@@ -149,11 +134,10 @@ impl ModelV1 {
                     validation_errors,
                 );
                 if !is_valid_positive_f64(*wheel_radius_m) {
-                    validation_errors
-                        .push("motion.kinematic.wheel_radius_m must be > 0".to_string());
+                    validation_errors.push(invalid_kinematic("wheel_radius_m", "must be > 0"));
                 }
                 if !is_valid_positive_f64(*wheel_base_m) {
-                    validation_errors.push("motion.kinematic.wheel_base_m must be > 0".to_string());
+                    validation_errors.push(invalid_kinematic("wheel_base_m", "must be > 0"));
                 }
             }
             KinematicConfig::Mecanum {
@@ -186,14 +170,13 @@ impl ModelV1 {
                     validation_errors,
                 );
                 if !is_valid_positive_f64(*wheel_radius_m) {
-                    validation_errors
-                        .push("motion.kinematic.wheel_radius_m must be > 0".to_string());
+                    validation_errors.push(invalid_kinematic("wheel_radius_m", "must be > 0"));
                 }
                 if !is_valid_positive_f64(*wheel_base_m) {
-                    validation_errors.push("motion.kinematic.wheel_base_m must be > 0".to_string());
+                    validation_errors.push(invalid_kinematic("wheel_base_m", "must be > 0"));
                 }
                 if !is_valid_positive_f64(*track_m) {
-                    validation_errors.push("motion.kinematic.track_m must be > 0".to_string());
+                    validation_errors.push(invalid_kinematic("track_m", "must be > 0"));
                 }
             }
             KinematicConfig::Ackermann {
@@ -214,14 +197,14 @@ impl ModelV1 {
                     validate_capability_ref(capability_ref, "drive_encoder", validation_errors);
                 }
                 if !is_valid_positive_f64(*wheel_base_m) {
-                    validation_errors.push("motion.kinematic.wheel_base_m must be > 0".to_string());
+                    validation_errors.push(invalid_kinematic("wheel_base_m", "must be > 0"));
                 }
                 if !is_valid_positive_f64(*track_m) {
-                    validation_errors.push("motion.kinematic.track_m must be > 0".to_string());
+                    validation_errors.push(invalid_kinematic("track_m", "must be > 0"));
                 }
                 if !is_valid_positive_f64(*max_steering_angle_rad) {
                     validation_errors
-                        .push("motion.kinematic.max_steering_angle_rad must be > 0".to_string());
+                        .push(invalid_kinematic("max_steering_angle_rad", "must be > 0"));
                 }
             }
             KinematicConfig::Omnidirectional {
@@ -229,8 +212,7 @@ impl ModelV1 {
                 encoders,
             } => {
                 if actuators.is_empty() {
-                    validation_errors
-                        .push("motion.kinematic.actuators must not be empty".to_string());
+                    validation_errors.push(invalid_kinematic("actuators", "must not be empty"));
                 }
                 for actuator in actuators {
                     validate_capability_ref(actuator, "actuator", validation_errors);
@@ -242,39 +224,25 @@ impl ModelV1 {
         }
     }
 
-    fn validate_numerics(&self, validation_errors: &mut Vec<String>) {
-        if !is_valid_positive_f64(self.motion.limits.max_linear_speed_mps) {
-            validation_errors.push("motion.limits.max_linear_speed_mps must be > 0".to_string());
-        }
-        if !is_valid_positive_f64(self.motion.limits.max_angular_speed_radps) {
-            validation_errors.push("motion.limits.max_angular_speed_radps must be > 0".to_string());
-        }
-        if !is_valid_positive_f64(self.motion.limits.max_linear_accel_mps2) {
-            validation_errors.push("motion.limits.max_linear_accel_mps2 must be > 0".to_string());
-        }
-        if !is_valid_positive_f64(self.motion.limits.max_linear_decel_mps2) {
-            validation_errors.push("motion.limits.max_linear_decel_mps2 must be > 0".to_string());
-        }
-        if !is_valid_positive_f64(self.motion.limits.max_angular_accel_radps2) {
-            validation_errors
-                .push("motion.limits.max_angular_accel_radps2 must be > 0".to_string());
-        }
+    pub(crate) fn validate_numerics(&self, validation_errors: &mut Vec<ValidationError>) {
         for (component_id, component) in &self.components {
             for (capability_id, parameters) in &component.parameters {
                 match parameters {
                     capability::Parameters::Motor(motor)
                         if motor.direction_sign != -1 && motor.direction_sign != 1 =>
                     {
-                        validation_errors.push(format!(
-                            "components.{component_id}.parameters.{capability_id}.direction_sign must be either -1 or 1"
-                        ));
+                        validation_errors.push(ValidationError::InvalidDirectionSign {
+                            instance: component_id.clone(),
+                            capability: capability_id.clone(),
+                        });
                     }
                     capability::Parameters::Encoder(sensor)
                         if sensor.direction_sign != -1 && sensor.direction_sign != 1 =>
                     {
-                        validation_errors.push(format!(
-                            "components.{component_id}.parameters.{capability_id}.direction_sign must be either -1 or 1"
-                        ));
+                        validation_errors.push(ValidationError::InvalidDirectionSign {
+                            instance: component_id.clone(),
+                            capability: capability_id.clone(),
+                        });
                     }
                     _ => {}
                 }
@@ -286,14 +254,14 @@ impl ModelV1 {
 fn validate_capability_ref(
     capability_ref: &CapabilityRef,
     field: &str,
-    validation_errors: &mut Vec<String>,
+    validation_errors: &mut Vec<ValidationError>,
 ) {
     if !phoxal_utils_component::v1::is_valid_token(&capability_ref.component_id)
         || !phoxal_utils_component::v1::is_valid_token(&capability_ref.capability_id)
     {
-        validation_errors.push(format!(
-            "motion.kinematic.{field} '{}' must use valid capability tokens",
-            capability_ref
+        validation_errors.push(invalid_kinematic(
+            field,
+            &format!("'{capability_ref}' must use valid capability tokens"),
         ));
     }
 }
@@ -302,11 +270,12 @@ fn validate_capability_ref_list(
     capability_refs: &[CapabilityRef],
     field: &str,
     capability_kind: &str,
-    validation_errors: &mut Vec<String>,
+    validation_errors: &mut Vec<ValidationError>,
 ) {
     if capability_refs.is_empty() {
-        validation_errors.push(format!(
-            "motion.kinematic.{field} must list at least one {capability_kind}"
+        validation_errors.push(invalid_kinematic(
+            field,
+            &format!("must list at least one {capability_kind}"),
         ));
     }
     for (index, capability_ref) in capability_refs.iter().enumerate() {
@@ -320,4 +289,11 @@ fn validate_capability_ref_list(
 
 fn is_valid_positive_f64(value: f64) -> bool {
     value.is_finite() && value > f64::EPSILON
+}
+
+fn invalid_kinematic(field: &str, message: &str) -> ValidationError {
+    ValidationError::InvalidKinematicField {
+        field: field.to_string(),
+        message: message.to_string(),
+    }
 }

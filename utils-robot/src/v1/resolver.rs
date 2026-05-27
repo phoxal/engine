@@ -7,11 +7,12 @@ use serde::{Deserialize, Serialize};
 use super::conformance::{ConformanceEvidence, ConformanceFailure, ConformanceReport};
 use super::localize_backend::{LocalizeBackendKind, resolve_localize_backend};
 use super::role_resolution::resolve_roles;
-use super::{AutonomyProfileId, ModelV1, Role, RoleResolution, autonomy_profile};
+use super::{AutonomyProfileId, Role, RoleResolution, autonomy_profile};
+use crate::Robot;
 
 #[derive(Debug, Clone)]
 pub struct SourceBundle {
-    pub model: ModelV1,
+    pub model: Robot,
     pub components: BTreeMap<String, phoxal_utils_component::v1::Component>,
     pub autonomy_profile: AutonomyProfileId,
 }
@@ -19,7 +20,7 @@ pub struct SourceBundle {
 impl SourceBundle {
     #[must_use]
     pub fn new(
-        model: ModelV1,
+        model: Robot,
         components: BTreeMap<String, phoxal_utils_component::v1::Component>,
     ) -> Self {
         Self {
@@ -46,7 +47,16 @@ pub struct ResolvedCapabilityRole {
 }
 
 pub fn resolve_source_bundle(bundle: SourceBundle) -> Result<ResolvedFacts> {
-    bundle.model.validate()?;
+    bundle.model.validate().map_err(|errors| {
+        anyhow::anyhow!(
+            "Robot errors:\n{}",
+            errors
+                .iter()
+                .map(ToString::to_string)
+                .collect::<Vec<_>>()
+                .join("\n")
+        )
+    })?;
     let profile = autonomy_profile(bundle.autonomy_profile);
     let role_resolution = resolve_roles(&bundle.model, &bundle.components)?;
     let localize_backend = resolve_localize_backend(&bundle.model, &bundle.components).kind();
@@ -74,7 +84,7 @@ pub fn resolve_source_bundle(bundle: SourceBundle) -> Result<ResolvedFacts> {
 }
 
 fn validate_profile(
-    model: &ModelV1,
+    model: &Robot,
     roles: &RoleResolution,
     profile_id: AutonomyProfileId,
 ) -> ConformanceReport {

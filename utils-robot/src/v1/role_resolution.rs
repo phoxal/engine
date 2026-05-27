@@ -5,7 +5,9 @@ use phoxal_utils_component::v1::CapabilityRef;
 use phoxal_utils_component::v1::capability::Capability;
 use serde::{Deserialize, Serialize};
 
-use super::{ModelV1, Role};
+use crate::Robot;
+
+use super::Role;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RoleAssignment {
@@ -38,7 +40,7 @@ impl RoleResolution {
 }
 
 pub fn resolve_roles(
-    model: &ModelV1,
+    model: &Robot,
     components_by_type: &BTreeMap<String, phoxal_utils_component::v1::Component>,
 ) -> Result<RoleResolution> {
     let mut errors = Vec::new();

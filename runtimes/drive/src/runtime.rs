@@ -17,6 +17,8 @@ use phoxal_utils_structure::Structure;
 
 const CLOCK_PERIOD: Duration = Duration::from_millis(20);
 const TARGET_STALE_TIMEOUT_NS: u64 = 500_000_000;
+const MAX_LINEAR_SPEED_MPS: f64 = 0.6;
+const MAX_ANGULAR_SPEED_RADPS: f64 = 2.0;
 
 #[derive(Clone)]
 pub struct Config {
@@ -58,17 +60,13 @@ impl Config {
         let left_motors = resolve_motor_bindings(robot, left_actuators, "left_actuators")?;
         let right_motors = resolve_motor_bindings(robot, right_actuators, "right_actuators")?;
 
-        let limits = &robot.model.motion.limits;
-        validate_positive_f64(limits.max_linear_speed_mps, "max_linear_speed_mps")?;
-        validate_positive_f64(limits.max_angular_speed_radps, "max_angular_speed_radps")?;
-
         Ok(Self {
             left_motors,
             right_motors,
             wheel_radius_m: *wheel_radius_m,
             wheel_base_m: *wheel_base_m,
-            max_linear_speed_mps: limits.max_linear_speed_mps,
-            max_angular_speed_radps: limits.max_angular_speed_radps,
+            max_linear_speed_mps: MAX_LINEAR_SPEED_MPS,
+            max_angular_speed_radps: MAX_ANGULAR_SPEED_RADPS,
             clock_period: CLOCK_PERIOD,
         })
     }
@@ -315,7 +313,7 @@ fn signed_velocity(omega_radps: f64, direction_sign: i8) -> f32 {
 mod tests {
     use std::path::{Path, PathBuf};
 
-    use phoxal_utils_robot::Model;
+    use phoxal_utils_robot::Robot as RobotManifest;
 
     use super::*;
 
@@ -379,13 +377,10 @@ mod tests {
 
     fn fixture_robot_and_structure() -> (Robot, Structure) {
         let bundle_root = fixture_bundle_root();
-        let model = match Model::read_from_dir(&bundle_root) {
-            Ok(model) => match model.as_v1() {
-                Some(model) => model.clone(),
-                None => panic!("fixture model is not v1"),
-            },
+        let model = match RobotManifest::read_from_dir(&bundle_root) {
+            Ok(model) => model,
             Err(error) => panic!(
-                "failed to read fixture model from {}: {error:#}",
+                "failed to read fixture robot from {}: {error:#}",
                 bundle_root.display()
             ),
         };
