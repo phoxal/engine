@@ -1,4 +1,5 @@
-pub mod capability;
-pub mod stream_demand;
+//! phoxal-component-api — public wire contract.
+//!
+//! Active version: see [`v1`].
 
-pub use stream_demand::{CameraStreamDemand, DepthStreamDemand, RuntimeStreamDemand};
+pub mod v1;

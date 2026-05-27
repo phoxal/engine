@@ -4,7 +4,7 @@ use std::time::Instant;
 use anyhow::{Result, anyhow, ensure};
 use phoxal_bus::liveliness::declare_liveliness_token;
 use phoxal_bus::pubsub::Stamped;
-use phoxal_component_api::capability::{
+use phoxal_component_api::v1::capability::{
     camera::{Encoding as CameraEncoding, Frame as CameraFrame},
     depth::Depth as DepthFrame,
     profile::{CameraProfileEncoding, CameraProfileSpec, DepthProfileSpec},
@@ -12,7 +12,7 @@ use phoxal_component_api::capability::{
 };
 use phoxal_engine::RobotRuntimeArgs;
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_motion_api::ManualCommand;
+use phoxal_runtime_motion_api::v1::ManualCommand;
 use phoxal_utils_scenario::harness::ScenarioContext;
 use phoxal_utils_scenario::webots::{command_deadline, context_from_args};
 

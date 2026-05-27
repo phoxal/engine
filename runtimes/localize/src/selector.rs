@@ -1,5 +1,5 @@
 use anyhow::{Result, bail};
-use phoxal_component_api::capability::profile::ProfileId;
+use phoxal_component_api::v1::capability::profile::ProfileId;
 use phoxal_engine::staged::Robot;
 use phoxal_utils_component::v1::CapabilityRef;
 use phoxal_utils_component::v1::capability::{Capability, GnssCoordinateSystem};
@@ -16,7 +16,7 @@ pub fn capability_default_profile_topic(
     capability: &CapabilityRef,
 ) -> anyhow::Result<String> {
     robot.capability(capability)?;
-    Ok(phoxal_component_api::capability::profile_path(
+    Ok(phoxal_component_api::v1::capability::profile_path(
         &capability.component_id,
         &capability.capability_id,
         &ProfileId::default_profile(),
@@ -24,7 +24,7 @@ pub fn capability_default_profile_topic(
 }
 
 fn capability_profile_topic(capability: &CapabilityRef, profile_id: &ProfileId) -> String {
-    phoxal_component_api::capability::profile_path(
+    phoxal_component_api::v1::capability::profile_path(
         &capability.component_id,
         &capability.capability_id,
         profile_id,

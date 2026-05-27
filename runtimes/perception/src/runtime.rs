@@ -3,15 +3,15 @@ use std::time::Duration;
 use crate::core::{HealthState, Tracker, TrackerConfig};
 use anyhow::{Result, bail};
 use phoxal_bus::pubsub::Stamped;
-use phoxal_component_api::capability::{camera, depth};
+use phoxal_component_api::v1::capability::{camera, depth};
 use phoxal_engine::clock::Step;
 use phoxal_engine::staged::Robot;
 use phoxal_engine::step::{InputPolicy, Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_frame_api::{FrameId, Tree, tree};
-use phoxal_runtime_localize_api::LocalizationState;
-use phoxal_runtime_map_api::{MapRevision, revision};
-use phoxal_runtime_perception_api::{
+use phoxal_runtime_frame_api::v1::{FrameId, Tree, tree};
+use phoxal_runtime_localize_api::v1::LocalizationState;
+use phoxal_runtime_map_api::v1::{MapRevision, revision};
+use phoxal_runtime_perception_api::v1::{
     BoundingBox, Detection, Detections, PerceptionDegradedReason, PerceptionState,
     PerceptionStoppedReason, RevisionLinkage, detections, state,
 };
@@ -132,7 +132,7 @@ impl Runtime for PerceptionRuntime {
             warn!("perception runtime started without perception-role camera/depth source");
         }
         io.subscribe::<Stamped<LocalizationState>, _>(
-            phoxal_runtime_localize_api::state::TOPIC,
+            phoxal_runtime_localize_api::v1::state::TOPIC,
             Input::LocalizationState,
         )
         .await?;
@@ -294,11 +294,11 @@ impl PerceptionSource {
             (Some(camera), Some(depth)) => {
                 let source_frame_id = FrameId::new(robot.require_link_target(&camera, structure)?);
                 Ok(Some(Self {
-                    camera_topic: phoxal_component_api::capability::default_profile_path(
+                    camera_topic: phoxal_component_api::v1::capability::default_profile_path(
                         &camera.component_id,
                         &camera.capability_id,
                     ),
-                    depth_topic: phoxal_component_api::capability::default_profile_path(
+                    depth_topic: phoxal_component_api::v1::capability::default_profile_path(
                         &depth.component_id,
                         &depth.capability_id,
                     ),

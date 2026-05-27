@@ -1,4 +1,4 @@
-use phoxal_runtime_map_api::{Grid, OccupancyCell, Resolution, TraversabilityCell};
+use phoxal_runtime_map_api::v1::{Grid, OccupancyCell, Resolution, TraversabilityCell};
 
 use super::occupancy::{GRID_RESOLUTION_M, OccupancyGrid};
 

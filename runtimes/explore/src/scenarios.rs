@@ -4,7 +4,7 @@ use std::time::Instant;
 use anyhow::{Result, ensure};
 use phoxal_engine::RobotRuntimeArgs;
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_mission_api::{GoalSource, MissionMode};
+use phoxal_runtime_mission_api::v1::{GoalSource, MissionMode};
 use phoxal_utils_scenario::harness::ScenarioContext;
 use phoxal_utils_scenario::webots::{
     command_deadline, context_from_args, wait_for_mission_state, wait_until_tracking,

@@ -1,6 +1,6 @@
 use nalgebra::Vector3;
-use phoxal_component_api::capability::depth::MILLIMETERS_PER_METER;
-use phoxal_component_api::capability::lidar::Scan as LidarData;
+use phoxal_component_api::v1::capability::depth::MILLIMETERS_PER_METER;
+use phoxal_component_api::v1::capability::lidar::Scan as LidarData;
 use serde::{Deserialize, Serialize};
 
 use crate::sensor::ResolvedSensorPose;
@@ -271,8 +271,8 @@ fn is_range_hit(distance_m: f32, max_range_m: f32) -> bool {
 #[cfg(test)]
 mod tests {
     use nalgebra::UnitQuaternion;
-    use phoxal_component_api::capability::depth::Depth as DepthPayload;
-    use phoxal_component_api::capability::lidar::{Points, Ranges, Scan as LidarData};
+    use phoxal_component_api::v1::capability::depth::Depth as DepthPayload;
+    use phoxal_component_api::v1::capability::lidar::{Points, Ranges, Scan as LidarData};
     use phoxal_utils_component::v1::CapabilityRef;
 
     use crate::sensor::{ResolvedSensorKind, ResolvedSensorPose};

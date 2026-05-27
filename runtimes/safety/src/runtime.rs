@@ -4,13 +4,13 @@ use std::time::Duration;
 use crate::core::{EmergencyStopInputs, EvaluationOutcome, RangeSafetyClass};
 use anyhow::Result;
 use phoxal_bus::pubsub::Stamped;
-use phoxal_component_api::capability::{emergency_stop as component_emergency_stop, range};
+use phoxal_component_api::v1::capability::{emergency_stop as component_emergency_stop, range};
 use phoxal_engine::clock::Step;
 use phoxal_engine::staged::Robot;
 use phoxal_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_localize_api::{LocalizationState, state as localize_state};
-use phoxal_runtime_safety_api::{
+use phoxal_runtime_localize_api::v1::{LocalizationState, state as localize_state};
+use phoxal_runtime_safety_api::v1::{
     EmergencyStopRequest, SafetyAuthorization, SafetySourceRevision, State,
     authorization as safety_authorization, emergency_stop_request as safety_emergency_stop_request,
     state as safety_state,

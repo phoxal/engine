@@ -4,12 +4,11 @@
 macro_rules! pubsub_leaf {
     ($module:ident, $topic:ident, $payload:ident) => {
         pub mod $module {
+            use super::*;
             use phoxal_bus::pubsub::Stamped;
             use phoxal_bus::zenoh_typed::{TypedPublisherBuilder, TypedSubscriberBuilder};
 
-            use crate::$payload;
-
-            pub const TOPIC: &str = crate::$topic;
+            pub const TOPIC: &str = $topic;
 
             pub fn topic(bus: &phoxal_bus::Bus) -> String {
                 bus.topic(TOPIC)

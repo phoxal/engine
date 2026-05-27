@@ -6,9 +6,9 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_engine::clock::Step;
 use phoxal_engine::step::{InputPolicy, Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_follow_api::{FollowReason, FollowStatus, State, Target, state, target};
-use phoxal_runtime_localize_api::LocalizationState;
-use phoxal_runtime_plan_api::{Path, path as plan_path};
+use phoxal_runtime_follow_api::v1::{FollowReason, FollowStatus, State, Target, state, target};
+use phoxal_runtime_localize_api::v1::LocalizationState;
+use phoxal_runtime_plan_api::v1::{Path, path as plan_path};
 use tracing::info;
 
 const CLOCK_PERIOD: Duration = Duration::from_millis(50);
@@ -59,7 +59,7 @@ impl Runtime for FollowRuntime {
         io.subscribe_with::<Stamped<Path>, _>(plan_path::TOPIC, InputPolicy::latest(), Input::Path)
             .await?;
         io.subscribe::<Stamped<LocalizationState>, _>(
-            phoxal_runtime_localize_api::state::TOPIC,
+            phoxal_runtime_localize_api::v1::state::TOPIC,
             Input::LocalizationState,
         )
         .await?;

@@ -6,10 +6,10 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_engine::clock::Step;
 use phoxal_engine::step::{InputPolicy, Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_localize_api::LocalizationState;
-use phoxal_runtime_map_api::MapRevision;
-use phoxal_runtime_mission_api::Goal;
-use phoxal_runtime_plan_api::{Path, PlanReason, PlanStatus, State, path, state};
+use phoxal_runtime_localize_api::v1::LocalizationState;
+use phoxal_runtime_map_api::v1::MapRevision;
+use phoxal_runtime_mission_api::v1::Goal;
+use phoxal_runtime_plan_api::v1::{Path, PlanReason, PlanStatus, State, path, state};
 use tracing::info;
 
 const CLOCK_PERIOD: Duration = Duration::from_millis(100);
@@ -60,18 +60,18 @@ impl Runtime for PlanRuntime {
 
     async fn new(io: &mut Io<Self::Input>, _config: Self::Config) -> Result<Self> {
         io.subscribe_with::<Stamped<Goal>, _>(
-            phoxal_runtime_mission_api::goal::TOPIC,
+            phoxal_runtime_mission_api::v1::goal::TOPIC,
             InputPolicy::latest(),
             Input::Goal,
         )
         .await?;
         io.subscribe::<Stamped<LocalizationState>, _>(
-            phoxal_runtime_localize_api::state::TOPIC,
+            phoxal_runtime_localize_api::v1::state::TOPIC,
             Input::LocalizationState,
         )
         .await?;
         io.subscribe::<Stamped<MapRevision>, _>(
-            phoxal_runtime_map_api::revision::TOPIC,
+            phoxal_runtime_map_api::v1::revision::TOPIC,
             Input::MapRevision,
         )
         .await?;

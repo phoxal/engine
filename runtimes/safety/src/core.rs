@@ -1,9 +1,9 @@
 use std::collections::BTreeMap;
 
 use phoxal_bus::pubsub::Stamped;
-use phoxal_component_api::capability::range;
-use phoxal_runtime_localize_api::{LocalizationMode, LocalizationState};
-use phoxal_runtime_safety_api::{
+use phoxal_component_api::v1::capability::range;
+use phoxal_runtime_localize_api::v1::{LocalizationMode, LocalizationState};
+use phoxal_runtime_safety_api::v1::{
     Constraint, MotionConstraint, SafetyDecision, SafetyReason, SafetyReasonCode,
 };
 
@@ -280,7 +280,7 @@ fn full_motion() -> MotionConstraint {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use phoxal_runtime_localize_api::{
+    use phoxal_runtime_localize_api::v1::{
         LocalizationSource, LocalizationStatus, LocalizationStatusReason,
     };
 

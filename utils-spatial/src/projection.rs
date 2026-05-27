@@ -1,6 +1,6 @@
-use phoxal_component_api::capability::depth::Depth;
-use phoxal_component_api::capability::lidar::Scan;
-use phoxal_component_api::capability::range::Sample;
+use phoxal_component_api::v1::capability::depth::Depth;
+use phoxal_component_api::v1::capability::lidar::Scan;
+use phoxal_component_api::v1::capability::range::Sample;
 
 use crate::ray::{
     DepthGrid, DepthRayProjection, RangeRayProjection, Ray, sample_depth_rays, sample_lidar_rays,
@@ -220,7 +220,7 @@ fn project_planar_ray(
 mod tests {
     use super::*;
     use nalgebra::UnitQuaternion;
-    use phoxal_component_api::capability::depth::Depth as DepthPayload;
+    use phoxal_component_api::v1::capability::depth::Depth as DepthPayload;
     use phoxal_utils_component::v1::CapabilityRef;
 
     fn range_pose(yaw_rad: f32, pitch_rad: f32, roll_rad: f32) -> ResolvedSensorPose {
@@ -292,7 +292,7 @@ mod tests {
         let pose = range_pose(0.4, 0.0, 0.0);
         let rays = rays_from_range_sample(
             &pose,
-            &phoxal_component_api::capability::range::Sample::new(1.5),
+            &phoxal_component_api::v1::capability::range::Sample::new(1.5),
         )
         .expect("valid range sample");
 
@@ -307,7 +307,7 @@ mod tests {
         let pose = range_pose(0.0, 0.0, 0.0);
         let rays = rays_from_range_sample(
             &pose,
-            &phoxal_component_api::capability::range::Sample::new(4.0),
+            &phoxal_component_api::v1::capability::range::Sample::new(4.0),
         )
         .expect("valid range sample");
 

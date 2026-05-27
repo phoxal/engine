@@ -6,10 +6,10 @@ use anyhow::{Context, Result, anyhow, bail, ensure};
 use phoxal_engine::DEFAULT_ROBOT_NAMESPACE;
 use phoxal_engine::presence::Readiness;
 use phoxal_engine::{RobotIdentity, RobotRuntimeArgs};
-use phoxal_runtime_localize_api::LocalizationMode;
-use phoxal_runtime_mission_api::{GoalPose, GoalTolerance};
-use phoxal_runtime_motion_api::ManualCommand;
-use phoxal_runtime_safety_api::SafetyDecision;
+use phoxal_runtime_localize_api::v1::LocalizationMode;
+use phoxal_runtime_mission_api::v1::{GoalPose, GoalTolerance};
+use phoxal_runtime_motion_api::v1::ManualCommand;
+use phoxal_runtime_safety_api::v1::SafetyDecision;
 
 use crate::harness::{ScenarioContext, ScenarioEnvironment};
 
@@ -110,7 +110,7 @@ pub async fn wait_until_robot_reaches(
 pub async fn wait_for_mission_state(
     ctx: &ScenarioContext,
     deadline: Instant,
-    predicate: impl Fn(&phoxal_runtime_mission_api::State) -> bool,
+    predicate: impl Fn(&phoxal_runtime_mission_api::v1::State) -> bool,
     what: &str,
 ) -> Result<()> {
     loop {

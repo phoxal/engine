@@ -4,7 +4,7 @@ use anyhow::{Result, anyhow};
 use phoxal_bus::Bus;
 use phoxal_bus::pubsub::Stamped;
 use phoxal_bus::zenoh_typed::TypedSubscriber;
-use phoxal_simulator_api::clock::Clock as SimulationClock;
+use phoxal_simulator_api::v1::clock::Clock as SimulationClock;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Step {
@@ -111,7 +111,7 @@ impl StepStream {
         Ok(Self {
             source: if simulation {
                 StepSource::Simulation(
-                    phoxal_simulator_api::clock::subscriber_builder(bus)
+                    phoxal_simulator_api::v1::clock::subscriber_builder(bus)
                         .await
                         .map_err(phoxal_bus::Error::from)?,
                 )

@@ -1,6 +1,6 @@
 #![allow(clippy::module_name_repetitions)]
 
-use crate::capability::profile::{CameraProfileEncoding, DepthProfileEncoding};
+use crate::v1::capability::profile::{CameraProfileEncoding, DepthProfileEncoding};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum RuntimeStreamDemand {

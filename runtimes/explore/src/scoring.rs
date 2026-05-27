@@ -1,6 +1,6 @@
-use phoxal_runtime_explore_api::{Frontier, GoalCandidate};
-use phoxal_runtime_map_api::{Grid, MapRevisionId, TraversabilityCell};
-use phoxal_runtime_mission_api::{GoalPose, GoalTolerance};
+use phoxal_runtime_explore_api::v1::{Frontier, GoalCandidate};
+use phoxal_runtime_map_api::v1::{Grid, MapRevisionId, TraversabilityCell};
+use phoxal_runtime_mission_api::v1::{GoalPose, GoalTolerance};
 
 use crate::frontiers::cell_at_xy;
 
@@ -104,9 +104,9 @@ fn distance(left: [f64; 2], right: [f64; 2]) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use phoxal_runtime_explore_api::Frontier;
-    use phoxal_runtime_map_api::{Grid, MapRevisionId, Resolution, TraversabilityCell};
-    use phoxal_runtime_mission_api::GoalPose;
+    use phoxal_runtime_explore_api::v1::Frontier;
+    use phoxal_runtime_map_api::v1::{Grid, MapRevisionId, Resolution, TraversabilityCell};
+    use phoxal_runtime_mission_api::v1::GoalPose;
 
     use super::score_candidates;
 

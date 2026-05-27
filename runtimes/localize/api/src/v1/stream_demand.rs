@@ -1,6 +1,6 @@
 #![allow(clippy::module_name_repetitions)]
 
-use phoxal_component_api::{
+use phoxal_component_api::v1::{
     CameraStreamDemand, DepthStreamDemand, RuntimeStreamDemand,
     capability::profile::{CameraProfileEncoding, DepthProfileEncoding},
 };

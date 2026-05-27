@@ -4,7 +4,7 @@ use std::time::Instant;
 use anyhow::{Result, anyhow, ensure};
 use phoxal_engine::RobotRuntimeArgs;
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_follow_api::FollowStatus;
+use phoxal_runtime_follow_api::v1::FollowStatus;
 use phoxal_utils_scenario::harness::ScenarioContext;
 use phoxal_utils_scenario::webots::{
     P4_GOAL_REACHED_TOLERANCE_M, P4_GOAL_XY_M, command_deadline, context_from_args, p4_goal,

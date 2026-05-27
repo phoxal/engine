@@ -9,12 +9,12 @@ use crate::core::submaps::SubmapStore;
 use anyhow::{Result, bail, ensure};
 use phoxal_engine::RobotRuntimeArgs;
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_localize_api::{LocalizationMode, LocalizationRevisionId};
-use phoxal_runtime_map_api::{
+use phoxal_runtime_localize_api::v1::{LocalizationMode, LocalizationRevisionId};
+use phoxal_runtime_map_api::v1::{
     MapRevisionCause, MapRevisionId, Traversability, TraversabilityCell, TraversabilityStatus,
 };
-use phoxal_runtime_mission_api::{GoalPose, GoalTolerance};
-use phoxal_runtime_motion_api::ManualCommand;
+use phoxal_runtime_mission_api::v1::{GoalPose, GoalTolerance};
+use phoxal_runtime_motion_api::v1::ManualCommand;
 use phoxal_utils_scenario::harness::ScenarioContext;
 use phoxal_utils_scenario::helpers::{
     assert_close, assert_schema, keyframe, localization_revision,

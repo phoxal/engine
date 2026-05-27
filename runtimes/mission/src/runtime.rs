@@ -6,9 +6,9 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_engine::clock::Step;
 use phoxal_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_explore_api::{GoalCandidates, goal_candidates};
-use phoxal_runtime_localize_api::{LocalizationMode, LocalizationState, PoseEstimate};
-use phoxal_runtime_mission_api::{
+use phoxal_runtime_explore_api::v1::{GoalCandidates, goal_candidates};
+use phoxal_runtime_localize_api::v1::{LocalizationMode, LocalizationState, PoseEstimate};
+use phoxal_runtime_mission_api::v1::{
     Goal, GoalSource, MissionCommand, MissionMode, State, command, goal, state,
 };
 use tracing::info;
@@ -76,7 +76,7 @@ impl Runtime for MissionRuntime {
         io.subscribe::<Stamped<MissionCommand>, _>(command::TOPIC, Input::Command)
             .await?;
         io.subscribe::<Stamped<LocalizationState>, _>(
-            phoxal_runtime_localize_api::state::TOPIC,
+            phoxal_runtime_localize_api::v1::state::TOPIC,
             Input::LocalizationState,
         )
         .await?;
@@ -188,14 +188,14 @@ const fn mission_goal_source(source: &GoalSource) -> MissionGoalSource {
 
 #[cfg(test)]
 mod tests {
-    use phoxal_runtime_explore_api::{GoalCandidate, GoalCandidates};
-    use phoxal_runtime_frame_api::FrameId;
-    use phoxal_runtime_localize_api::{LocalizationSource, LocalizationStatus};
-    use phoxal_runtime_map_api::MapRevisionId;
-    use phoxal_runtime_mission_api::{
+    use phoxal_runtime_explore_api::v1::{GoalCandidate, GoalCandidates};
+    use phoxal_runtime_frame_api::v1::FrameId;
+    use phoxal_runtime_localize_api::v1::{LocalizationSource, LocalizationStatus};
+    use phoxal_runtime_map_api::v1::MapRevisionId;
+    use phoxal_runtime_mission_api::v1::{
         ExplorationCompletion, ExplorationCompletionMode, GoalPose, GoalSource, GoalTolerance,
     };
-    use phoxal_simulator_api::clock::Clock;
+    use phoxal_simulator_api::v1::clock::Clock;
 
     use super::*;
 
@@ -286,7 +286,7 @@ mod tests {
                 epoch: 1,
                 sequence: 2,
             },
-            built_from_localize_revision: phoxal_runtime_localize_api::LocalizationRevisionId {
+            built_from_localize_revision: phoxal_runtime_localize_api::v1::LocalizationRevisionId {
                 epoch: 1,
                 sequence: 3,
             },

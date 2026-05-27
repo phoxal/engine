@@ -7,17 +7,17 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_bus::zenoh_typed::{TypedPublisher, TypedSchema, TypedSubscriber};
 use phoxal_engine::DEFAULT_ROBOT_NAMESPACE;
 use phoxal_engine::presence::Summary;
-use phoxal_runtime_explore_api::{GoalCandidates, State as ExploreState};
-use phoxal_runtime_follow_api::State as FollowState;
-use phoxal_runtime_localize_api::LocalizationState;
-use phoxal_runtime_map_api::{Summary as MapSummary, TraversabilitySummary};
-use phoxal_runtime_mission_api::{
+use phoxal_runtime_explore_api::v1::{GoalCandidates, State as ExploreState};
+use phoxal_runtime_follow_api::v1::State as FollowState;
+use phoxal_runtime_localize_api::v1::LocalizationState;
+use phoxal_runtime_map_api::v1::{Summary as MapSummary, TraversabilitySummary};
+use phoxal_runtime_mission_api::v1::{
     ExplorationCompletion, ExplorationCompletionMode, GoalPose, GoalTolerance, MissionCommand,
     State as MissionState,
 };
-use phoxal_runtime_plan_api::State as PlanState;
-use phoxal_runtime_safety_api::State as SafetyState;
-use phoxal_simulator_api::{clock::Clock, pose::Pose, reset, status::Status};
+use phoxal_runtime_plan_api::v1::State as PlanState;
+use phoxal_runtime_safety_api::v1::State as SafetyState;
+use phoxal_simulator_api::v1::{clock::Clock, pose::Pose, reset, status::Status};
 use serde::{Serialize, de::DeserializeOwned};
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -129,7 +129,7 @@ impl ScenarioContext {
 
     pub async fn advance_for_secs(&self, secs: f64) -> Result<Stamped<Clock>> {
         let duration_ns = duration_ns_from_secs(secs)?;
-        let subscriber = phoxal_simulator_api::clock::subscriber_builder(&self.bus)
+        let subscriber = phoxal_simulator_api::v1::clock::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         let first = next_stamped(&subscriber, self.wallclock_timeout).await?;
@@ -156,15 +156,17 @@ impl ScenarioContext {
     }
 
     pub async fn simulation_pose(&self) -> Result<Stamped<Pose>> {
-        let subscriber =
-            phoxal_simulator_api::pose::subscriber_builder(&self.bus, &self.environment.robot_id)
-                .await
-                .map_err(|error| anyhow!(error.to_string()))?;
+        let subscriber = phoxal_simulator_api::v1::pose::subscriber_builder(
+            &self.bus,
+            &self.environment.robot_id,
+        )
+        .await
+        .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
     pub async fn latest_localization_state(&self) -> Result<Stamped<LocalizationState>> {
-        let subscriber = phoxal_runtime_localize_api::state::subscriber_builder(&self.bus)
+        let subscriber = phoxal_runtime_localize_api::v1::state::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
@@ -178,49 +180,50 @@ impl ScenarioContext {
     }
 
     pub async fn latest_safety_state(&self) -> Result<Stamped<SafetyState>> {
-        let subscriber = phoxal_runtime_safety_api::state::subscriber_builder(&self.bus)
+        let subscriber = phoxal_runtime_safety_api::v1::state::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
     pub async fn latest_plan_state(&self) -> Result<Stamped<PlanState>> {
-        let subscriber = phoxal_runtime_plan_api::state::subscriber_builder(&self.bus)
+        let subscriber = phoxal_runtime_plan_api::v1::state::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
     pub async fn latest_follow_state(&self) -> Result<Stamped<FollowState>> {
-        let subscriber = phoxal_runtime_follow_api::state::subscriber_builder(&self.bus)
+        let subscriber = phoxal_runtime_follow_api::v1::state::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
     pub async fn latest_mission_state(&self) -> Result<Stamped<MissionState>> {
-        let subscriber = phoxal_runtime_mission_api::state::subscriber_builder(&self.bus)
+        let subscriber = phoxal_runtime_mission_api::v1::state::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
     pub async fn latest_explore_state(&self) -> Result<Stamped<ExploreState>> {
-        let subscriber = phoxal_runtime_explore_api::state::subscriber_builder(&self.bus)
+        let subscriber = phoxal_runtime_explore_api::v1::state::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
     pub async fn latest_explore_candidates(&self) -> Result<Stamped<GoalCandidates>> {
-        let subscriber = phoxal_runtime_explore_api::goal_candidates::subscriber_builder(&self.bus)
-            .await
-            .map_err(|error| anyhow!(error.to_string()))?;
+        let subscriber =
+            phoxal_runtime_explore_api::v1::goal_candidates::subscriber_builder(&self.bus)
+                .await
+                .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
     pub async fn latest_map_summary(&self) -> Result<Stamped<MapSummary>> {
-        let subscriber = phoxal_runtime_map_api::summary::subscriber_builder(&self.bus)
+        let subscriber = phoxal_runtime_map_api::v1::summary::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
@@ -228,7 +231,7 @@ impl ScenarioContext {
 
     pub async fn latest_traversability_summary(&self) -> Result<Stamped<TraversabilitySummary>> {
         let subscriber =
-            phoxal_runtime_map_api::traversability_summary::subscriber_builder(&self.bus)
+            phoxal_runtime_map_api::v1::traversability_summary::subscriber_builder(&self.bus)
                 .await
                 .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
@@ -265,10 +268,10 @@ impl ScenarioContext {
 
     pub async fn publish_manual_command(
         &self,
-        command: phoxal_runtime_motion_api::ManualCommand,
+        command: phoxal_runtime_motion_api::v1::ManualCommand,
     ) -> Result<()> {
         let produced_at_ns = self.wait_until_ready().await?.data.time_ns;
-        let publisher = phoxal_runtime_motion_api::manual::publisher(&self.bus)?
+        let publisher = phoxal_runtime_motion_api::v1::manual::publisher(&self.bus)?
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         wait_for_matching_subscriber(&publisher, self.wallclock_timeout).await?;
@@ -282,7 +285,7 @@ impl ScenarioContext {
         &self,
         predicate: impl Fn(&Status) -> bool,
     ) -> Result<Stamped<Status>> {
-        let subscriber = phoxal_simulator_api::status::subscriber_builder(&self.bus)
+        let subscriber = phoxal_simulator_api::v1::status::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         loop {
@@ -295,7 +298,7 @@ impl ScenarioContext {
 
     async fn publish_mission_command(&self, command: MissionCommand) -> Result<()> {
         let produced_at_ns = self.wait_until_ready().await?.data.time_ns;
-        let publisher = phoxal_runtime_mission_api::command::publisher(&self.bus)?
+        let publisher = phoxal_runtime_mission_api::v1::command::publisher(&self.bus)?
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         wait_for_matching_subscriber(&publisher, self.wallclock_timeout).await?;

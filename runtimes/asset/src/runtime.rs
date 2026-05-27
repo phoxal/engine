@@ -4,7 +4,7 @@ use anyhow::Result;
 use phoxal_engine::clock::Step;
 use phoxal_engine::step::{Io, RequestResponder, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_asset_api::{
+use phoxal_runtime_asset_api::v1::{
     GetRequest as AssetRequest, GetResponse as AssetResponse, InvalidPathReason, UnavailableReason,
 };
 
@@ -84,7 +84,7 @@ impl Runtime for AssetRuntime {
 
     async fn new(io: &mut Io<Self::Input>, bundle_root: Self::Config) -> Result<Self> {
         io.serve_request::<AssetRequest, AssetResponse, _>(
-            phoxal_runtime_asset_api::get::TOPIC,
+            phoxal_runtime_asset_api::v1::get::TOPIC,
             |request, responder| Input::Get { request, responder },
         )
         .await?;
@@ -108,7 +108,7 @@ mod tests {
     use super::AssetRuntime;
     use anyhow::Result;
     use phoxal_engine::MESHES_DIR;
-    use phoxal_runtime_asset_api::{
+    use phoxal_runtime_asset_api::v1::{
         GetRequest as Request, GetResponse as Response, InvalidPathReason,
     };
     use std::fs;

@@ -4,16 +4,16 @@ use std::time::Duration;
 use anyhow::Result;
 use nalgebra::{Quaternion, UnitQuaternion};
 use phoxal_bus::pubsub::Stamped;
-use phoxal_component_api::capability::range;
+use phoxal_component_api::v1::capability::range;
 use phoxal_engine::clock::Step;
 use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_frame_api::FrameId;
-use phoxal_runtime_localize_api::{
+use phoxal_runtime_frame_api::v1::FrameId;
+use phoxal_runtime_localize_api::v1::{
     Keyframe, LocalizationRevision, LocalizationRevisionId, LocalizationState, PoseEstimate,
     keyframe as localize_keyframe, revision as localize_revision, state as localize_state,
 };
-use phoxal_runtime_map_api::{
+use phoxal_runtime_map_api::v1::{
     EsdfTile, EsdfTileRequest, EsdfTileResponse, GlobalGrid, GlobalGridRequest, GlobalGridResponse,
     Grid, LocalCost, LocalGrid, LocalGridRequest, LocalGridResponse, MapRevision, MapRevisionId,
     MapTileResponse, RegionSummary, Snapshot, SnapshotRequest, SnapshotResponse, SubmapRequest,
@@ -472,7 +472,7 @@ fn traversability_summary_payload(
 fn zero_grid<T>(cell: T) -> Grid<T> {
     Grid {
         origin_xy_m: [0.0, 0.0],
-        resolution: phoxal_runtime_map_api::Resolution {
+        resolution: phoxal_runtime_map_api::v1::Resolution {
             xy_m: 1.0,
             z_m: None,
         },
@@ -550,7 +550,7 @@ fn submap_response(
                     served_map_revision: retained.map_revision_id,
                     built_from_localize_revision: retained.built_from_localize_revision,
                     frame_id: frame_id.clone(),
-                    payload: phoxal_runtime_map_api::Submap {
+                    payload: phoxal_runtime_map_api::v1::Submap {
                         submap_id: latest.submap_id.clone(),
                         bytes,
                     },
@@ -728,7 +728,7 @@ fn empty_global_grid() -> GlobalGrid {
 fn empty_grid<T>() -> Grid<T> {
     Grid {
         origin_xy_m: [0.0, 0.0],
-        resolution: phoxal_runtime_map_api::Resolution {
+        resolution: phoxal_runtime_map_api::v1::Resolution {
             xy_m: 1.0,
             z_m: None,
         },
@@ -740,11 +740,13 @@ fn empty_grid<T>() -> Grid<T> {
 
 #[cfg(test)]
 mod tests {
-    use phoxal_runtime_localize_api::{
+    use phoxal_runtime_localize_api::v1::{
         AffectedKeyframeSummary, Keyframe, KeyframeId, LocalizationRevisionCause, PoseEstimate,
         Region as LocalizeRegion,
     };
-    use phoxal_runtime_map_api::{MapRevisionCause, MapTileRequest, Region, Resolution, Submap};
+    use phoxal_runtime_map_api::v1::{
+        MapRevisionCause, MapTileRequest, Region, Resolution, Submap,
+    };
 
     use crate::core::occupancy::{
         GRID_HEIGHT_CELLS, GRID_RESOLUTION_M, GRID_WIDTH_CELLS, OccupancyGrid, OccupancySnapshot,
@@ -935,7 +937,7 @@ mod tests {
                 built_from_localize_revision: retained.built_from_localize_revision,
                 frame_id,
                 payload: Submap {
-                    submap_id: phoxal_runtime_map_api::SubmapId::new("submap-kf-a"),
+                    submap_id: phoxal_runtime_map_api::v1::SubmapId::new("submap-kf-a"),
                     bytes: Vec::new()
                 }
             })
@@ -1168,7 +1170,7 @@ mod tests {
                 built_from_localize_revision: retained.built_from_localize_revision,
                 frame_id,
                 payload: Submap {
-                    submap_id: phoxal_runtime_map_api::SubmapId::new("submap-kf-a"),
+                    submap_id: phoxal_runtime_map_api::v1::SubmapId::new("submap-kf-a"),
                     bytes: Vec::new()
                 }
             })
@@ -1203,15 +1205,15 @@ mod tests {
                     map_revision: retained.map_revision_id,
                     submaps: vec![
                         Submap {
-                            submap_id: phoxal_runtime_map_api::SubmapId::new("submap-kf-b"),
+                            submap_id: phoxal_runtime_map_api::v1::SubmapId::new("submap-kf-b"),
                             bytes: Vec::new()
                         },
                         Submap {
-                            submap_id: phoxal_runtime_map_api::SubmapId::new("submap-kf-a"),
+                            submap_id: phoxal_runtime_map_api::v1::SubmapId::new("submap-kf-a"),
                             bytes: Vec::new()
                         },
                         Submap {
-                            submap_id: phoxal_runtime_map_api::SubmapId::new("submap-kf-c"),
+                            submap_id: phoxal_runtime_map_api::v1::SubmapId::new("submap-kf-c"),
                             bytes: Vec::new()
                         },
                     ]

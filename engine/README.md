@@ -78,7 +78,7 @@ primary published topics and are not mirrored by the harness.
 
 Capability topics come from owner-local API helpers in the unrooted
 `topic(component_id, capability_id) -> String` form, such as
-`phoxal_component_api::capability::motor::topic(...)`, before they are passed to
+`phoxal_component_api::v1::capability::motor::topic(...)`, before they are passed to
 `Io`.
 
 ## Input policies
@@ -212,7 +212,7 @@ async fn records_outputs_without_bus() {
 
     runtime
         .step(
-            phoxal_engine::step::Step::new(phoxal_simulator_api::clock::Clock::new(
+            phoxal_engine::step::Step::new(phoxal_simulator_api::v1::clock::Clock::new(
                 0, 0, 1_000, 1_000,
             )),
             RuntimeInputs::default(),

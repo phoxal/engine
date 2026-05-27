@@ -5,12 +5,12 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_engine::clock::Step;
 use phoxal_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_explore_api::{
+use phoxal_runtime_explore_api::v1::{
     ExploreStatus, Frontiers, GoalCandidates, State, frontiers, goal_candidates, state,
 };
-use phoxal_runtime_frame_api::FrameId;
-use phoxal_runtime_localize_api::{LocalizationRevisionId, LocalizationState};
-use phoxal_runtime_map_api::{MapRevision, Traversability, revision, traversability};
+use phoxal_runtime_frame_api::v1::FrameId;
+use phoxal_runtime_localize_api::v1::{LocalizationRevisionId, LocalizationState};
+use phoxal_runtime_map_api::v1::{MapRevision, Traversability, revision, traversability};
 use tracing::info;
 
 use crate::frontiers::detect_frontiers_in_frame;
@@ -95,7 +95,7 @@ impl Runtime for ExploreRuntime {
         io.subscribe::<Stamped<MapRevision>, _>(revision::TOPIC, Input::MapRevision)
             .await?;
         io.subscribe::<Stamped<LocalizationState>, _>(
-            phoxal_runtime_localize_api::state::TOPIC,
+            phoxal_runtime_localize_api::v1::state::TOPIC,
             Input::LocalizationState,
         )
         .await?;

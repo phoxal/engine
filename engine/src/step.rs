@@ -10,7 +10,7 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_bus::zenoh_typed::{
     TypedPublisher, TypedQuery, TypedQueryable, TypedSchema, TypedSubscriber,
 };
-use phoxal_component_api::RuntimeStreamDemand;
+use phoxal_component_api::v1::RuntimeStreamDemand;
 use serde::{Serialize, de::DeserializeOwned};
 use tokio::task::JoinHandle;
 

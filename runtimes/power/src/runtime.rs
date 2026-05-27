@@ -5,7 +5,7 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_engine::RobotRuntimeArgs;
 use phoxal_engine::clock::Step;
 use phoxal_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
-use phoxal_runtime_power_api::{
+use phoxal_runtime_power_api::v1::{
     Command, FailedReason, RejectedReason, State, Status, command, state,
 };
 
@@ -230,7 +230,7 @@ fn idle_state() -> State {
 #[cfg(test)]
 mod tests {
     use super::{ExecutorOutcome, LatchedState, PowerExecutor, idle_state, state_for_command};
-    use phoxal_runtime_power_api::{Command, FailedReason, RejectedReason, State, Status};
+    use phoxal_runtime_power_api::v1::{Command, FailedReason, RejectedReason, State, Status};
 
     struct StaticExecutor {
         outcome: ExecutorOutcome,

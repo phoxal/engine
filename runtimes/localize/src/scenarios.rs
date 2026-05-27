@@ -4,14 +4,14 @@ use std::time::Instant;
 use anyhow::{Result, anyhow, ensure};
 use phoxal_engine::RobotRuntimeArgs;
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_localize_api::{
+use phoxal_runtime_localize_api::v1::{
     Keyframe, LocalizationMode, LocalizationRevision, LocalizationRevisionCause,
     LocalizationSource, LocalizationState, LocalizationStatusReason, PoseEstimate,
     PoseGraphCorrection,
 };
-use phoxal_runtime_map_api::Summary as MapSummary;
-use phoxal_runtime_motion_api::ManualCommand;
-use phoxal_simulator_api::pose::Pose as SimulatorPose;
+use phoxal_runtime_map_api::v1::Summary as MapSummary;
+use phoxal_runtime_motion_api::v1::ManualCommand;
+use phoxal_simulator_api::v1::pose::Pose as SimulatorPose;
 use phoxal_utils_scenario::harness::ScenarioContext;
 use phoxal_utils_scenario::helpers::{assert_schema, fixture_robot};
 use phoxal_utils_scenario::webots::{

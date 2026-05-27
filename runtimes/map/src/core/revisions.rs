@@ -1,7 +1,7 @@
 use std::collections::BTreeMap;
 
-use phoxal_runtime_localize_api::{LocalizationRevision, LocalizationRevisionId};
-use phoxal_runtime_map_api::{MapRevisionCause, MapRevisionId};
+use phoxal_runtime_localize_api::v1::{LocalizationRevision, LocalizationRevisionId};
+use phoxal_runtime_map_api::v1::{MapRevisionCause, MapRevisionId};
 use tracing::warn;
 
 /// How many completed revisions to retain (current + previous N-1). 3 per BLUEPRINT default.
@@ -196,8 +196,10 @@ impl Default for RevisionStore {
 
 #[cfg(test)]
 mod tests {
-    use phoxal_runtime_frame_api::FrameId;
-    use phoxal_runtime_localize_api::{AffectedKeyframeSummary, LocalizationRevisionCause, Region};
+    use phoxal_runtime_frame_api::v1::FrameId;
+    use phoxal_runtime_localize_api::v1::{
+        AffectedKeyframeSummary, LocalizationRevisionCause, Region,
+    };
 
     use super::*;
 

@@ -2,8 +2,8 @@ use std::borrow::Cow;
 
 use anyhow::{Result, bail, ensure};
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_joint_api::JointId;
-use phoxal_runtime_odometry_api::{
+use phoxal_runtime_joint_api::v1::JointId;
+use phoxal_runtime_odometry_api::v1::{
     Integration, IntegrationStep, SourceHealth, SourceId, SourceReason, SourceStatus, Status,
     StatusMode, StatusReason,
 };

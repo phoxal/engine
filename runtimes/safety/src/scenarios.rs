@@ -5,13 +5,13 @@ use std::time::Instant;
 use crate::core::{EmergencyStopInputs, EvaluationOutcome};
 use anyhow::{Result, ensure};
 use phoxal_bus::pubsub::Stamped;
-use phoxal_component_api::capability::range;
+use phoxal_component_api::v1::capability::range;
 use phoxal_engine::RobotRuntimeArgs;
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_localize_api::{
+use phoxal_runtime_localize_api::v1::{
     LocalizationMode, LocalizationSource, LocalizationState, LocalizationStatus,
 };
-use phoxal_runtime_safety_api::{
+use phoxal_runtime_safety_api::v1::{
     Constraint, MotionConstraint, SafetyAuthorization, SafetyDecision, SafetyReason,
     SafetyReasonCode, SafetySourceRevision, State as SafetyState,
 };

@@ -4,14 +4,14 @@ use crate::core::Arbitration as MotionArbitration;
 use anyhow::{Result, ensure};
 use phoxal_bus::pubsub::Stamped;
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_drive_api::Target as DriveTarget;
-use phoxal_runtime_follow_api::Target as FollowTarget;
-use phoxal_runtime_localize_api::LocalizationRevisionId;
-use phoxal_runtime_map_api::MapRevisionId;
-use phoxal_runtime_motion_api::{
+use phoxal_runtime_drive_api::v1::Target as DriveTarget;
+use phoxal_runtime_follow_api::v1::Target as FollowTarget;
+use phoxal_runtime_localize_api::v1::LocalizationRevisionId;
+use phoxal_runtime_map_api::v1::MapRevisionId;
+use phoxal_runtime_motion_api::v1::{
     Arbitration, ArbitrationCandidate, MotionSource, SourceFreshness, State as MotionState,
 };
-use phoxal_runtime_safety_api::{
+use phoxal_runtime_safety_api::v1::{
     Constraint, MotionConstraint, SafetyAuthorization, SafetyDecision, SafetySourceRevision,
 };
 use phoxal_utils_scenario::helpers::assert_schema;

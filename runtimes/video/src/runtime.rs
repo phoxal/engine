@@ -10,13 +10,13 @@ use openh264::formats::{RgbSliceU8, YUVBuffer};
 use phoxal_bus::Bus;
 use phoxal_bus::liveliness::LivelinessEvent;
 use phoxal_bus::pubsub::Stamped;
-use phoxal_component_api::capability::camera;
-use phoxal_component_api::capability::profile::{CameraProfileEncoding, CameraProfileSpec};
+use phoxal_component_api::v1::capability::camera;
+use phoxal_component_api::v1::capability::profile::{CameraProfileEncoding, CameraProfileSpec};
 use phoxal_engine::clock::Step;
 use phoxal_engine::staged::Robot;
 use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_runtime_video_api::{
+use phoxal_runtime_video_api::v1::{
     Codec, EndReason, OpenRequest, OpenResponse, StreamEvent, StreamFormat, StreamPacket,
     UnavailableReason, open, stream,
 };
@@ -48,7 +48,7 @@ impl PreviewSource {
         let profile_id = spec
             .to_profile_id()
             .context("failed to derive video preview profile id")?;
-        let profile_topic = phoxal_component_api::capability::profile_path(
+        let profile_topic = phoxal_component_api::v1::capability::profile_path(
             &capability.component_id,
             &capability.capability_id,
             &profile_id,
