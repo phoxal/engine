@@ -1,0 +1,176 @@
+use phoxal_bus::pubsub::Stamped;
+use phoxal_bus::zenoh_typed::{TypedPublisherBuilder, TypedSchema, TypedSubscriberBuilder};
+use serde::{Deserialize, Serialize};
+
+pub const STATE_TOPIC: &str = "runtime/motion/state";
+pub const MANUAL_COMMAND_TOPIC: &str = "runtime/motion/manual";
+pub const DRIVE_TARGET_TOPIC: &str = phoxal_runtime_drive_api::TARGET_TOPIC;
+pub const DEBUG_ARBITRATION_TOPIC: &str = "runtime/motion/debug/arbitration";
+pub const DEBUG_SOURCE_FRESHNESS_TOPIC: &str = "runtime/motion/debug/source_freshness";
+pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
+    phoxal_utils_conventions::resource::RuntimeBudget {
+        ram_mb: 100,
+        cpu_sustained_pct: 6,
+        gpu_memory_mb: None,
+    };
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct State {
+    pub active_source: Option<MotionSource>,
+    pub selected: Option<phoxal_runtime_drive_api::Target>,
+    pub reason: Option<MotionReason>,
+}
+
+impl TypedSchema for State {
+    const SCHEMA_NAME: &'static str = "runtime/motion/state";
+    const SCHEMA_VERSION: u32 = 2;
+}
+
+/// Operator manual velocity command (host joypad/teleop). Consumed by the motion runtime as a
+/// top-priority source, still clamped to the safety-approved envelope and overridden by safety Stop.
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub struct ManualCommand {
+    pub linear_x_mps: f64,
+    pub angular_z_radps: f64,
+}
+
+impl TypedSchema for ManualCommand {
+    const SCHEMA_NAME: &'static str = "runtime/motion/manual";
+    const SCHEMA_VERSION: u32 = 1;
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MotionSource {
+    Manual,
+    Follow,
+    MissionStop,
+    Recovery,
+    EmergencyStop,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MotionReason {
+    SafetyEmergencyStop,
+    ManualEscapeUnderStop,
+    SafetyConstrained(phoxal_runtime_safety_api::SafetyDecision),
+    NoFollowTarget,
+    FollowTargetStale,
+    SafetyAuthorizationUnavailable,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Arbitration {
+    pub candidates: Vec<ArbitrationCandidate>,
+    pub selected_source: Option<MotionSource>,
+}
+
+impl TypedSchema for Arbitration {
+    const SCHEMA_NAME: &'static str = "runtime/motion/debug/arbitration";
+    const SCHEMA_VERSION: u32 = 1;
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ArbitrationCandidate {
+    pub source: MotionSource,
+    pub target: Option<phoxal_runtime_drive_api::Target>,
+    pub accepted: bool,
+    pub reason: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SourceFreshness {
+    pub sources: Vec<SourceStatus>,
+}
+
+impl TypedSchema for SourceFreshness {
+    const SCHEMA_NAME: &'static str = "runtime/motion/debug/source_freshness";
+    const SCHEMA_VERSION: u32 = 1;
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct SourceStatus {
+    pub source: MotionSource,
+    pub fresh: bool,
+    pub reason: Option<String>,
+}
+
+pub mod state {
+    use super::*;
+
+    pub const TOPIC: &str = STATE_TOPIC;
+
+    pub fn topic(bus: &phoxal_bus::Bus) -> String {
+        bus.topic(TOPIC)
+    }
+
+    pub fn publisher(
+        bus: &phoxal_bus::Bus,
+    ) -> phoxal_bus::Result<TypedPublisherBuilder<'_, 'static, Stamped<State>>> {
+        phoxal_bus::pubsub::publisher_builder(bus, TOPIC)
+    }
+
+    pub fn subscriber_builder(
+        bus: &phoxal_bus::Bus,
+    ) -> TypedSubscriberBuilder<'_, 'static, Stamped<State>> {
+        phoxal_bus::pubsub::subscriber_builder(bus, TOPIC)
+    }
+}
+
+pub mod manual {
+    use super::*;
+
+    pub const TOPIC: &str = MANUAL_COMMAND_TOPIC;
+
+    pub fn topic(bus: &phoxal_bus::Bus) -> String {
+        bus.topic(TOPIC)
+    }
+
+    pub fn publisher(
+        bus: &phoxal_bus::Bus,
+    ) -> phoxal_bus::Result<TypedPublisherBuilder<'_, 'static, Stamped<ManualCommand>>> {
+        phoxal_bus::pubsub::publisher_builder(bus, TOPIC)
+    }
+
+    pub fn subscriber_builder(
+        bus: &phoxal_bus::Bus,
+    ) -> TypedSubscriberBuilder<'_, 'static, Stamped<ManualCommand>> {
+        phoxal_bus::pubsub::subscriber_builder(bus, TOPIC)
+    }
+}
+
+pub mod drive {
+    pub const TARGET_TOPIC: &str = crate::DRIVE_TARGET_TOPIC;
+}
+
+pub mod debug {
+    phoxal_bus::pubsub_leaf!(arbitration, DEBUG_ARBITRATION_TOPIC, Arbitration);
+    phoxal_bus::pubsub_leaf!(
+        source_freshness,
+        DEBUG_SOURCE_FRESHNESS_TOPIC,
+        SourceFreshness
+    );
+}
+
+#[cfg(test)]
+mod tests {
+    use phoxal_bus::zenoh_typed::TypedSchema;
+
+    use super::{Arbitration, ManualCommand, SourceFreshness, State};
+
+    #[test]
+    fn schema_contracts_do_not_drift() {
+        assert_eq!(State::SCHEMA_NAME, "runtime/motion/state");
+        assert_eq!(State::SCHEMA_VERSION, 2);
+        assert_eq!(ManualCommand::SCHEMA_NAME, "runtime/motion/manual");
+        assert_eq!(ManualCommand::SCHEMA_VERSION, 1);
+        assert_eq!(Arbitration::SCHEMA_NAME, "runtime/motion/debug/arbitration");
+        assert_eq!(Arbitration::SCHEMA_VERSION, 1);
+        assert_eq!(
+            SourceFreshness::SCHEMA_NAME,
+            "runtime/motion/debug/source_freshness"
+        );
+        assert_eq!(SourceFreshness::SCHEMA_VERSION, 1);
+    }
+}

@@ -1,0 +1,21 @@
+[package]
+name = "phoxal-runtime-plan-api"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[dependencies]
+phoxal-utils-conventions = { workspace = true }
+phoxal-bus = { workspace = true }
+phoxal-runtime-localize-api = { workspace = true }
+phoxal-runtime-map-api = { workspace = true }
+phoxal-runtime-mission-api = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+
+[lints]
+workspace = true

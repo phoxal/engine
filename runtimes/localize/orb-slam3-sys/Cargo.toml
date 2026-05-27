@@ -1,0 +1,12 @@
+[package]
+name = "orb-slam3-sys"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Thin C-ABI bindings to ORB-SLAM3. GPLv3 - see crate-root docs."
+
+[build-dependencies]
+cc = { version = "1.2", features = ["parallel"] }
+
+[dependencies]

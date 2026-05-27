@@ -1,0 +1,42 @@
+[package]
+name = "phoxal-utils-scenario"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lib]
+name = "phoxal_utils_scenario"
+path = "src/lib.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+phoxal-bus = { workspace = true }
+phoxal-runtime-frame-api = { workspace = true }
+phoxal-runtime-explore-api = { workspace = true }
+phoxal-runtime-follow-api = { workspace = true }
+phoxal-runtime-localize-api = { workspace = true }
+phoxal-runtime-map-api = { workspace = true }
+phoxal-runtime-mission-api = { workspace = true }
+phoxal-runtime-motion-api = { workspace = true }
+phoxal-runtime-odometry-api = { workspace = true }
+phoxal-runtime-plan-api = { workspace = true }
+phoxal-runtime-presence-api = { workspace = true }
+phoxal-runtime-safety-api = { workspace = true }
+phoxal-utils-component = { workspace = true }
+phoxal-engine = { workspace = true }
+phoxal-utils-scenario-spec = { workspace = true }
+phoxal-utils-robot = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+phoxal-simulator-api = { workspace = true }
+tokio = { workspace = true, features = ["time"] }
+phoxal-utils-conventions = { workspace = true }
+nalgebra = { workspace = true }
+
+[lints]
+workspace = true

@@ -1,0 +1,39 @@
+[package]
+name = "phoxal-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lib]
+name = "phoxal_engine"
+path = "src/lib.rs"
+
+[dependencies]
+tracing = { workspace = true }
+clap = { workspace = true, features = ["derive", "env"] }
+anyhow = { workspace = true }
+dotenvy = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+phoxal-utils-helpers = { workspace = true }
+phoxal-utils-conventions = { workspace = true }
+phoxal-utils-component = { workspace = true }
+phoxal-utils-robot = { workspace = true }
+phoxal-utils-spatial = { workspace = true }
+phoxal-utils-structure = { workspace = true }
+phoxal-component-api = { workspace = true }
+phoxal-runtime-presence-api = { workspace = true }
+urdf-rs = { workspace = true }
+async-trait = { workspace = true }
+erased-serde = { workspace = true }
+phoxal-bus = { workspace = true }
+phoxal-simulator-api = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt", "signal", "sync", "time"] }
+
+[dev-dependencies]
+nalgebra.workspace = true

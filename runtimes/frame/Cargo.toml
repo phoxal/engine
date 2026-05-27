@@ -1,0 +1,28 @@
+[package]
+name = "phoxal-runtime-frame"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+description.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[dependencies]
+phoxal-engine = { workspace = true }
+phoxal-bus = { workspace = true }
+phoxal-runtime-frame-api = { workspace = true }
+phoxal-runtime-joint-api = { workspace = true }
+phoxal-utils-spatial = { workspace = true }
+phoxal-utils-structure = { workspace = true }
+urdf-rs = { workspace = true }
+phoxal-utils-helpers = { workspace = true }
+phoxal-utils-scenario = { workspace = true }
+
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+clap = { workspace = true, features = ["derive", "env"] }
+tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread", "sync", "signal", "process", "time"] }
+tracing = { workspace = true }
+nalgebra = { workspace = true }
