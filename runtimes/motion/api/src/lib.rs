@@ -7,8 +7,8 @@ pub const MANUAL_COMMAND_TOPIC: &str = "runtime/motion/manual";
 pub const DRIVE_TARGET_TOPIC: &str = phoxal_runtime_drive_api::TARGET_TOPIC;
 pub const DEBUG_ARBITRATION_TOPIC: &str = "runtime/motion/debug/arbitration";
 pub const DEBUG_SOURCE_FRESHNESS_TOPIC: &str = "runtime/motion/debug/source_freshness";
-pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
-    phoxal_utils_conventions::resource::RuntimeBudget {
+pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
+    phoxal_engine::resource::RuntimeBudget {
         ram_mb: 100,
         cpu_sustained_pct: 6,
         gpu_memory_mb: None,

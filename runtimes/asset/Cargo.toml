@@ -14,7 +14,6 @@ phoxal-engine = { workspace = true }
 phoxal-bus = { workspace = true }
 phoxal-runtime-asset-api = { workspace = true }
 phoxal-utils-helpers = { workspace = true }
-phoxal-utils-conventions = { workspace = true }
 
 anyhow = { workspace = true }
 async-trait = { workspace = true }

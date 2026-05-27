@@ -2,9 +2,10 @@ pub mod capability;
 pub mod v1;
 
 use anyhow::{Context, Result};
-use phoxal_utils_conventions::SIMULATION_FILE;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
+
+const SIMULATION_FILE: &str = "simulation.yaml";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "version")]

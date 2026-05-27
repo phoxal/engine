@@ -5,7 +5,8 @@ use anyhow::Result;
 use phoxal_bus::pubsub::Stamped;
 use phoxal_component_api::capability::{camera, depth, imu};
 use phoxal_component_api::{RuntimeStreamDemand, capability::gnss};
-use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs, Step};
+use phoxal_engine::clock::Step;
+use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_runtime_frame_api::FrameId;
 use phoxal_runtime_localize_api::{
@@ -614,7 +615,7 @@ pub(crate) fn corrections_response(
 
 #[cfg(test)]
 mod tests {
-    use phoxal_engine::step::Step;
+    use phoxal_engine::clock::Step;
     use phoxal_runtime_localize_api::PoseGraphRange;
     use phoxal_runtime_odometry_api::{
         Covariance as OdometryCovariance, PoseEstimate as OdometryPoseEstimate, Status,

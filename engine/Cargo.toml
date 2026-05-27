@@ -21,13 +21,11 @@ dotenvy = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 phoxal-utils-helpers = { workspace = true }
-phoxal-utils-conventions = { workspace = true }
 phoxal-utils-component = { workspace = true }
 phoxal-utils-robot = { workspace = true }
 phoxal-utils-spatial = { workspace = true }
 phoxal-utils-structure = { workspace = true }
 phoxal-component-api = { workspace = true }
-phoxal-runtime-presence-api = { workspace = true }
 urdf-rs = { workspace = true }
 async-trait = { workspace = true }
 erased-serde = { workspace = true }

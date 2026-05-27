@@ -2,13 +2,15 @@ use std::collections::HashMap;
 
 use anyhow::{Result, bail};
 use nalgebra::{Isometry3, Point3};
-use phoxal_utils_conventions::{BASE_FOOTPRINT_LINK, BASE_LINK};
 use phoxal_utils_robot::v1::KinematicConfig;
 use phoxal_utils_structure::Structure;
 use urdf_rs::Geometry;
 
 use crate::frame::{extract_link_transforms, pose_to_isometry, transform_from_isometry};
 use crate::geometry::convex_hull_xy;
+
+const BASE_FOOTPRINT_LINK: &str = "base_footprint";
+const BASE_LINK: &str = "base_link";
 
 #[derive(Debug, Clone)]
 pub struct SafetyModel {

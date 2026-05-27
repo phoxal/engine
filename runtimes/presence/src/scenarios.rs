@@ -1,8 +1,8 @@
 use std::borrow::Cow;
 
 use anyhow::{Result, ensure};
+use phoxal_engine::presence::{DebugReadiness, Readiness};
 use phoxal_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_runtime_presence_api::{DebugReadiness, Readiness};
 use phoxal_utils_scenario::helpers::{
     assert_ready_summary, heartbeat, readiness_for, readiness_summary,
 };

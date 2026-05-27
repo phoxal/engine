@@ -16,8 +16,8 @@ pub const QUERY_TRAVERSABILITY_TILE_TOPIC: &str = "runtime/map/query/traversabil
 pub const QUERY_LOCAL_GRID_TOPIC: &str = "runtime/map/query/local_grid";
 pub const QUERY_GLOBAL_GRID_TOPIC: &str = "runtime/map/query/global_grid";
 pub const QUERY_SNAPSHOT_TOPIC: &str = "runtime/map/query/snapshot";
-pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
-    phoxal_utils_conventions::resource::RuntimeBudget {
+pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
+    phoxal_engine::resource::RuntimeBudget {
         ram_mb: 600,
         cpu_sustained_pct: 30,
         gpu_memory_mb: None,

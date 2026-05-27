@@ -1,12 +1,13 @@
 //! Data types for authored source robot models.
 
 use anyhow::{Context, Result};
-use phoxal_utils_conventions::MODEL_FILE;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
 pub mod transform;
 pub mod v1;
+
+const MODEL_FILE: &str = "model.yaml";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "version")]

@@ -1,10 +1,10 @@
 use std::collections::BTreeMap;
 use std::path::Path;
 
+use crate::conventions::COMPONENTS_DIR;
 use anyhow::{Context, Result, anyhow, bail};
 use phoxal_utils_component::v1::CapabilityRef;
 use phoxal_utils_component::v1::capability::{Capability, Encoder, Motor, StructuralTarget};
-use phoxal_utils_conventions::COMPONENTS_DIR;
 use phoxal_utils_robot::v1::capability::Parameters;
 use phoxal_utils_robot::v1::{
     self as model_v1, ModelV1, ResolvedFacts, SourceBundle, resolve_source_bundle,

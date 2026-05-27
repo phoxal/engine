@@ -9,8 +9,8 @@ pub const DEBUG_TRACKING_ERROR_TOPIC: &str = "runtime/follow/debug/tracking_erro
 pub const DEBUG_CANDIDATES_TOPIC: &str = "runtime/follow/debug/candidates";
 pub const DEBUG_COSTS_TOPIC: &str = "runtime/follow/debug/costs";
 pub const DEBUG_REVISION_INPUTS_TOPIC: &str = "runtime/follow/debug/revision_inputs";
-pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
-    phoxal_utils_conventions::resource::RuntimeBudget {
+pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
+    phoxal_engine::resource::RuntimeBudget {
         ram_mb: 125,
         cpu_sustained_pct: 10,
         gpu_memory_mb: None,

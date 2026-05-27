@@ -3,9 +3,11 @@ use std::collections::HashMap;
 use anyhow::Result;
 use nalgebra::{Isometry3, Translation3, UnitQuaternion};
 use phoxal_utils_component::v1::capability::StructuralTarget;
-use phoxal_utils_conventions::{BASE_FOOTPRINT_LINK, BASE_LINK};
 use phoxal_utils_structure::Structure;
 use urdf_rs::{Joint, Pose};
+
+const BASE_FOOTPRINT_LINK: &str = "base_footprint";
+const BASE_LINK: &str = "base_link";
 
 pub fn resolve_target_link<'a>(
     target: &'a StructuralTarget,

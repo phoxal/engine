@@ -10,8 +10,8 @@ homepage.workspace = true
 repository.workspace = true
 
 [dependencies]
+phoxal-engine = { workspace = true }
 phoxal-bus = { workspace = true }
-phoxal-utils-conventions = { workspace = true }
 
 [lints]
 workspace = true

@@ -12,8 +12,8 @@ pub const DATA_SCHEMA: &str = "runtime/frame/data";
 /// is substituted at subscribe time by `data::path(...)`.
 pub const FRAME_TRANSFORM_TOPIC_TEMPLATE: &str = "runtime/frame/{frame-id}/data";
 pub const LOOKUP_TOPIC: &str = "runtime/frame/lookup";
-pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
-    phoxal_utils_conventions::resource::RuntimeBudget {
+pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
+    phoxal_engine::resource::RuntimeBudget {
         ram_mb: 80,
         cpu_sustained_pct: 8,
         gpu_memory_mb: None,

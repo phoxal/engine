@@ -25,7 +25,6 @@ phoxal-runtime-mission-api = { workspace = true }
 phoxal-runtime-motion-api = { workspace = true }
 phoxal-runtime-odometry-api = { workspace = true }
 phoxal-runtime-plan-api = { workspace = true }
-phoxal-runtime-presence-api = { workspace = true }
 phoxal-runtime-safety-api = { workspace = true }
 phoxal-utils-component = { workspace = true }
 phoxal-engine = { workspace = true }
@@ -35,7 +34,6 @@ serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
 phoxal-simulator-api = { workspace = true }
 tokio = { workspace = true, features = ["time"] }
-phoxal-utils-conventions = { workspace = true }
 nalgebra = { workspace = true }
 
 [lints]

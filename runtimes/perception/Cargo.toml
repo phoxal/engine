@@ -26,7 +26,6 @@ phoxal-utils-structure = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread", "sync", "signal", "process"] }
 tracing = { workspace = true }
-phoxal-utils-conventions = { workspace = true }
 phoxal-utils-helpers = { workspace = true }
 
 [lints]

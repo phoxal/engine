@@ -16,7 +16,6 @@ serde_yaml = { workspace = true }
 urdf-rs = { workspace = true }
 nalgebra = { workspace = true }
 phoxal-utils-component = { path = "../utils-component" }
-phoxal-utils-conventions = { workspace = true }
 
 [dev-dependencies]
 serde_json = { workspace = true }

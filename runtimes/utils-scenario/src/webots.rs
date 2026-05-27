@@ -3,13 +3,13 @@ use std::process::Command;
 use std::time::{Duration, Instant};
 
 use anyhow::{Context, Result, anyhow, bail, ensure};
+use phoxal_engine::DEFAULT_ROBOT_NAMESPACE;
+use phoxal_engine::presence::Readiness;
 use phoxal_engine::{RobotIdentity, RobotRuntimeArgs};
 use phoxal_runtime_localize_api::LocalizationMode;
 use phoxal_runtime_mission_api::{GoalPose, GoalTolerance};
 use phoxal_runtime_motion_api::ManualCommand;
-use phoxal_runtime_presence_api::Readiness;
 use phoxal_runtime_safety_api::SafetyDecision;
-use phoxal_utils_conventions::DEFAULT_ROBOT_NAMESPACE;
 
 use crate::harness::{ScenarioContext, ScenarioEnvironment};
 

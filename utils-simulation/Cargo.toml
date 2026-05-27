@@ -15,7 +15,6 @@ serde_yaml = { workspace = true }
 anyhow = { workspace = true }
 derive-new = {workspace = true}
 phoxal-utils-component.workspace = true
-phoxal-utils-conventions = { workspace = true }
 
 [dev-dependencies]
 tempfile = { workspace = true }

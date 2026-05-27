@@ -12,7 +12,6 @@ repository.workspace = true
 [dependencies]
 phoxal-engine = { workspace = true }
 phoxal-bus = { workspace = true }
-phoxal-runtime-presence-api = { workspace = true }
 phoxal-utils-robot = { workspace = true }
 phoxal-utils-helpers = { workspace = true }
 phoxal-utils-scenario = { workspace = true }

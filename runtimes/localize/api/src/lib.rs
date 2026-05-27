@@ -16,8 +16,8 @@ pub const CORRECTION_TOPIC: &str = "runtime/localize/correction";
 pub const QUERY_POSE_GRAPH_TOPIC: &str = "runtime/localize/query/pose_graph";
 pub const QUERY_KEYFRAME_TOPIC: &str = "runtime/localize/query/keyframe";
 pub const QUERY_CORRECTIONS_TOPIC: &str = "runtime/localize/query/corrections";
-pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
-    phoxal_utils_conventions::resource::RuntimeBudget {
+pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
+    phoxal_engine::resource::RuntimeBudget {
         ram_mb: 800,
         cpu_sustained_pct: 120,
         gpu_memory_mb: Some(500),

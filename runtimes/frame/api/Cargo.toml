@@ -10,7 +10,7 @@ homepage.workspace = true
 repository.workspace = true
 
 [dependencies]
-phoxal-utils-conventions = { workspace = true }
+phoxal-engine = { workspace = true }
 phoxal-bus = { workspace = true }
 phoxal-runtime-joint-api = { workspace = true }
 serde = { workspace = true, features = ["derive"] }

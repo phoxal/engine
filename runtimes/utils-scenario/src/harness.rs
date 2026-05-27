@@ -5,6 +5,8 @@ use anyhow::{Context, Result, anyhow, bail};
 use phoxal_bus::Bus;
 use phoxal_bus::pubsub::Stamped;
 use phoxal_bus::zenoh_typed::{TypedPublisher, TypedSchema, TypedSubscriber};
+use phoxal_engine::DEFAULT_ROBOT_NAMESPACE;
+use phoxal_engine::presence::Summary;
 use phoxal_runtime_explore_api::{GoalCandidates, State as ExploreState};
 use phoxal_runtime_follow_api::State as FollowState;
 use phoxal_runtime_localize_api::LocalizationState;
@@ -14,10 +16,8 @@ use phoxal_runtime_mission_api::{
     State as MissionState,
 };
 use phoxal_runtime_plan_api::State as PlanState;
-use phoxal_runtime_presence_api::Summary;
 use phoxal_runtime_safety_api::State as SafetyState;
 use phoxal_simulator_api::{clock::Clock, pose::Pose, reset, status::Status};
-use phoxal_utils_conventions::DEFAULT_ROBOT_NAMESPACE;
 use serde::{Serialize, de::DeserializeOwned};
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -171,7 +171,7 @@ impl ScenarioContext {
     }
 
     pub async fn latest_presence_summary(&self) -> Result<Stamped<Summary>> {
-        let subscriber = phoxal_runtime_presence_api::summary::subscriber_builder(&self.bus)
+        let subscriber = phoxal_engine::presence::summary::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await

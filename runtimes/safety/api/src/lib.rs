@@ -10,8 +10,8 @@ pub const DEBUG_EVIDENCE_TOPIC: &str = "runtime/safety/debug/evidence";
 pub const DEBUG_STOP_SET_TOPIC: &str = "runtime/safety/debug/stop_set";
 pub const DEBUG_LATENCY_BUDGET_TOPIC: &str = "runtime/safety/debug/latency_budget";
 pub const DEBUG_SOURCE_HEALTH_TOPIC: &str = "runtime/safety/debug/source_health";
-pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
-    phoxal_utils_conventions::resource::RuntimeBudget {
+pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
+    phoxal_engine::resource::RuntimeBudget {
         ram_mb: 100,
         cpu_sustained_pct: 7,
         gpu_memory_mb: None,

@@ -1,9 +1,10 @@
 use anyhow::{Context, Result};
-use phoxal_utils_conventions::COMPONENT_FILE;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
 pub mod v1;
+
+const COMPONENT_FILE: &str = "component.yaml";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "version")]

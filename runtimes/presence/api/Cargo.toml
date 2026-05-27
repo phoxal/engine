@@ -10,9 +10,7 @@ homepage.workspace = true
 repository.workspace = true
 
 [dependencies]
-phoxal-utils-conventions = { workspace = true }
-phoxal-bus = { workspace = true }
-serde = { workspace = true, features = ["derive"] }
+phoxal-engine = { workspace = true }
 
 [lints]
 workspace = true

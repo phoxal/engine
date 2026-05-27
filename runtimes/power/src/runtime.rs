@@ -3,7 +3,8 @@ use std::sync::Arc;
 use anyhow::Result;
 use phoxal_bus::pubsub::Stamped;
 use phoxal_engine::RobotRuntimeArgs;
-use phoxal_engine::step::{Io, Publisher, Runtime, RuntimeInputs, Step};
+use phoxal_engine::clock::Step;
+use phoxal_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_runtime_power_api::{
     Command, FailedReason, RejectedReason, State, Status, command, state,
 };

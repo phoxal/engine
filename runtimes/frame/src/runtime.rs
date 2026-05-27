@@ -4,7 +4,8 @@ use std::time::Duration;
 use anyhow::{Result, anyhow, bail};
 use nalgebra::{Isometry3, Quaternion, Translation3, Unit, UnitQuaternion, Vector3};
 use phoxal_bus::pubsub::Stamped;
-use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs, Step};
+use phoxal_engine::clock::Step;
+use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_runtime_frame_api::{
     FrameId, FrameLink, FrameLookupRequest, FrameLookupResponse, FrameTransform, Source, Static,

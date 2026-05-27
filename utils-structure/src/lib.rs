@@ -4,10 +4,13 @@ use std::collections::HashSet;
 use std::ops::Deref;
 use std::path::Path;
 // Allowed by deloper, the phoxal-utils-structure should be used instead of urdf_rs when using the structure.
-use phoxal_utils_conventions::{
-    BASE_FOOTPRINT_LINK, BASE_LINK, MODEL_URI_PREFIX, PACKAGE_URI_PREFIX, STRUCTURE_FILE,
-};
 pub use urdf_rs::*;
+
+const BASE_FOOTPRINT_LINK: &str = "base_footprint";
+const BASE_LINK: &str = "base_link";
+const MODEL_URI_PREFIX: &str = "model://";
+const PACKAGE_URI_PREFIX: &str = "package://";
+const STRUCTURE_FILE: &str = "structure.urdf";
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct Structure {
@@ -418,9 +421,8 @@ impl Deref for Structure {
 
 #[cfg(test)]
 mod tests {
-    use super::Structure;
+    use super::{BASE_FOOTPRINT_LINK, BASE_LINK, STRUCTURE_FILE, Structure};
     use anyhow::Context;
-    use phoxal_utils_conventions::{BASE_FOOTPRINT_LINK, BASE_LINK, STRUCTURE_FILE};
     use tempfile::tempdir;
 
     #[test]

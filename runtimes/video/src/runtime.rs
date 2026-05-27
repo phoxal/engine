@@ -12,8 +12,9 @@ use phoxal_bus::liveliness::LivelinessEvent;
 use phoxal_bus::pubsub::Stamped;
 use phoxal_component_api::capability::camera;
 use phoxal_component_api::capability::profile::{CameraProfileEncoding, CameraProfileSpec};
+use phoxal_engine::clock::Step;
 use phoxal_engine::staged::Robot;
-use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs, Step};
+use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_runtime_video_api::{
     Codec, EndReason, OpenRequest, OpenResponse, StreamEvent, StreamFormat, StreamPacket,

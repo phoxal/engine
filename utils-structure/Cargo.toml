@@ -14,7 +14,6 @@ derive-new = {workspace = true}
 anyhow = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 urdf-rs = { workspace = true }
-phoxal-utils-conventions = { workspace = true }
 
 [dev-dependencies]
 tempfile = { workspace = true }

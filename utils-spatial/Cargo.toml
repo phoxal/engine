@@ -23,7 +23,6 @@ phoxal-utils-robot.workspace = true
 phoxal-utils-structure.workspace = true
 serde = { workspace = true, features = ["derive"] }
 urdf-rs.workspace = true
-phoxal-utils-conventions.workspace = true
 
 [lints]
 workspace = true

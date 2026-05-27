@@ -1,4 +1,7 @@
+pub mod clock;
+pub mod conventions;
 pub mod execute;
+pub mod presence;
 pub mod sensor_store;
 pub mod staged;
 pub mod step;
@@ -11,10 +14,10 @@ use anyhow::Result;
 use clap::Parser;
 use phoxal_bus::Bus;
 use phoxal_bus::builder::Builder;
-use phoxal_utils_conventions::DEFAULT_ROBOT_NAMESPACE;
 use phoxal_utils_helpers::parse_trimmed_non_empty;
 use phoxal_utils_structure::Structure;
 
+pub use conventions::*;
 pub use execute::execute;
 pub use step::EmptyArgs;
 
@@ -73,7 +76,7 @@ pub struct RobotRuntimeArgs {
     #[arg(
         long,
         env = ENV_ROBOT_NAMESPACE,
-        default_value_t = String::from(DEFAULT_ROBOT_NAMESPACE),
+        default_value_t = String::from(conventions::DEFAULT_ROBOT_NAMESPACE),
         value_parser = parse_trimmed_non_empty
     )]
     pub robot_namespace: String,

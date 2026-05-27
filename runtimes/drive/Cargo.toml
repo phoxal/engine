@@ -18,7 +18,6 @@ phoxal-utils-component = { workspace = true }
 phoxal-utils-robot = { workspace = true }
 phoxal-utils-spatial = { workspace = true }
 phoxal-utils-structure = { workspace = true }
-phoxal-utils-conventions = { workspace = true }
 phoxal-utils-helpers = { workspace = true }
 phoxal-utils-scenario = { workspace = true }
 

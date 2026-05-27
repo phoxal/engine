@@ -6,8 +6,8 @@ pub const COMMAND_TOPIC: &str = "runtime/mission/command";
 pub const STATE_TOPIC: &str = "runtime/mission/state";
 pub const GOAL_TOPIC: &str = "runtime/mission/goal";
 pub const DEBUG_DECISION_TRACE_TOPIC: &str = "runtime/mission/debug/decision_trace";
-pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
-    phoxal_utils_conventions::resource::RuntimeBudget {
+pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
+    phoxal_engine::resource::RuntimeBudget {
         ram_mb: 100,
         cpu_sustained_pct: 5,
         gpu_memory_mb: None,

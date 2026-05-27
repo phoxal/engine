@@ -7,8 +7,8 @@ pub const STREAM_TOPIC_PREFIX: &str = "runtime/video/stream";
 /// Topic template for per-stream video events. The `{stream-id}` placeholder is
 /// substituted at subscribe time by `stream::path(...)`.
 pub const STREAM_TOPIC_TEMPLATE: &str = "runtime/video/stream/{stream-id}";
-pub const RESOURCE_BUDGET: phoxal_utils_conventions::resource::RuntimeBudget =
-    phoxal_utils_conventions::resource::RuntimeBudget {
+pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
+    phoxal_engine::resource::RuntimeBudget {
         ram_mb: 150,
         cpu_sustained_pct: 10,
         gpu_memory_mb: None,
