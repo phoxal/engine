@@ -120,3 +120,27 @@ unused = "warn"
 [profile.release]
 lto = false
 codegen-units = 16
+
+[patch."https://github.com/phoxal/engine"]
+phoxal-bus = { path = "bus" }
+phoxal-engine = { path = "engine" }
+phoxal-component-api = { path = "component-api" }
+phoxal-utils-component = { path = "utils-component" }
+phoxal-utils-helpers = { path = "utils-helpers" }
+phoxal-utils-robot = { path = "utils-robot" }
+phoxal-utils-scenario-spec = { path = "utils-scenario-spec" }
+phoxal-utils-simulation = { path = "utils-simulation" }
+phoxal-utils-spatial = { path = "utils-spatial" }
+phoxal-utils-structure = { path = "utils-structure" }
+
+[patch."https://github.com/phoxal/framework"]
+phoxal-bus = { path = "bus" }
+phoxal-engine = { path = "engine" }
+phoxal-component-api = { path = "component-api" }
+phoxal-utils-component = { path = "utils-component" }
+phoxal-utils-helpers = { path = "utils-helpers" }
+phoxal-utils-robot = { path = "utils-robot" }
+phoxal-utils-scenario-spec = { path = "utils-scenario-spec" }
+phoxal-utils-simulation = { path = "utils-simulation" }
+phoxal-utils-spatial = { path = "utils-spatial" }
+phoxal-utils-structure = { path = "utils-structure" }
