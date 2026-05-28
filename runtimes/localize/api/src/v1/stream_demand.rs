@@ -4,7 +4,7 @@ use phoxal_component_api::v1::{
     CameraStreamDemand, DepthStreamDemand, RuntimeStreamDemand,
     capability::profile::{CameraProfileEncoding, DepthProfileEncoding},
 };
-use phoxal_utils_robot::v1::{LocalizeBackendKind, Role};
+use phoxal_robot::v1::{LocalizeBackendKind, Role};
 
 pub struct LocalizeStreamDemands;
 

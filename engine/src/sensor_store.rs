@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
-use phoxal_utils_component::v1::CapabilityRef;
-use phoxal_utils_spatial::ray::Ray;
-use phoxal_utils_spatial::sensor::ResolvedSensorPose;
+use phoxal_component::v1::CapabilityRef;
+use phoxal_spatial::ray::Ray;
+use phoxal_spatial::sensor::ResolvedSensorPose;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
@@ -122,8 +122,8 @@ impl SensorStore {
 #[cfg(test)]
 mod tests {
     use nalgebra::UnitQuaternion;
-    use phoxal_utils_component::v1::CapabilityRef;
-    use phoxal_utils_spatial::sensor::{ResolvedSensorKind, ResolvedSensorPose};
+    use phoxal_component::v1::CapabilityRef;
+    use phoxal_spatial::sensor::{ResolvedSensorKind, ResolvedSensorPose};
 
     use super::{SensorStore, SourceHealth};
 
@@ -164,7 +164,7 @@ mod tests {
         sensor.update(
             10,
             SourceHealth::Available,
-            vec![phoxal_utils_spatial::ray::Ray::new(
+            vec![phoxal_spatial::ray::Ray::new(
                 [0.0, 0.0, 0.0],
                 [1.0, 0.0, 0.0],
                 4.0,

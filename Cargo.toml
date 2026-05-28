@@ -14,52 +14,51 @@ resolver = "3"
 members = [
     "bus",
     "component-api",
+    "component",
     "engine",
-    "runtimes/asset",
     "runtimes/asset/api",
-    "runtimes/drive",
+    "runtimes/asset/runtime",
     "runtimes/drive/api",
-    "runtimes/explore",
+    "runtimes/drive/runtime",
     "runtimes/explore/api",
-    "runtimes/follow",
+    "runtimes/explore/runtime",
     "runtimes/follow/api",
-    "runtimes/frame",
+    "runtimes/follow/runtime",
     "runtimes/frame/api",
-    "runtimes/joint",
+    "runtimes/frame/runtime",
     "runtimes/joint/api",
-    "runtimes/localize",
+    "runtimes/joint/runtime",
     "runtimes/localize/api",
     "runtimes/localize/orb-slam3-sys",
-    "runtimes/map",
+    "runtimes/localize/runtime",
     "runtimes/map/api",
-    "runtimes/mission",
+    "runtimes/map/runtime",
     "runtimes/mission/api",
-    "runtimes/motion",
+    "runtimes/mission/runtime",
     "runtimes/motion/api",
-    "runtimes/odometry",
+    "runtimes/motion/runtime",
     "runtimes/odometry/api",
-    "runtimes/perception",
+    "runtimes/odometry/runtime",
     "runtimes/perception/api",
-    "runtimes/plan",
+    "runtimes/perception/runtime",
     "runtimes/plan/api",
-    "runtimes/power",
+    "runtimes/plan/runtime",
     "runtimes/power/api",
-    "runtimes/presence",
+    "runtimes/power/runtime",
     "runtimes/presence/api",
-    "runtimes/router",
+    "runtimes/presence/runtime",
     "runtimes/router/api",
-    "runtimes/safety",
+    "runtimes/router/runtime",
     "runtimes/safety/api",
-    "runtimes/utils-scenario",
-    "runtimes/video",
+    "runtimes/safety/runtime",
     "runtimes/video/api",
-    "utils-component",
-    "utils-helpers",
-    "utils-robot",
-    "utils-scenario-spec",
-    "utils-simulation",
-    "utils-spatial",
-    "utils-structure"
+    "runtimes/video/runtime",
+    "helpers",
+    "robot",
+    "scenario",
+    "simulation",
+    "spatial",
+    "structure"
 ]
 
 [workspace.dependencies]
@@ -105,13 +104,13 @@ phoxal-runtime-plan-api = { path = "runtimes/plan/api" }
 phoxal-runtime-power-api = { path = "runtimes/power/api" }
 phoxal-runtime-safety-api = { path = "runtimes/safety/api" }
 phoxal-runtime-video-api = { path = "runtimes/video/api" }
-phoxal-utils-component = { path = "utils-component" }
-phoxal-utils-helpers = { path = "utils-helpers" }
-phoxal-utils-robot = { path = "utils-robot" }
-phoxal-utils-scenario = { path = "runtimes/utils-scenario" }
-phoxal-utils-scenario-spec = { path = "utils-scenario-spec" }
-phoxal-utils-spatial = { path = "utils-spatial" }
-phoxal-utils-structure = { path = "utils-structure" }
+phoxal-component = { path = "component" }
+phoxal-helpers = { path = "helpers" }
+phoxal-robot = { path = "robot" }
+phoxal-scenario = { path = "scenario" }
+phoxal-simulation = { path = "simulation" }
+phoxal-spatial = { path = "spatial" }
+phoxal-structure = { path = "structure" }
 
 [workspace.lints.rust]
 unused = "warn"
@@ -124,22 +123,22 @@ codegen-units = 16
 phoxal-bus = { path = "bus" }
 phoxal-engine = { path = "engine" }
 phoxal-component-api = { path = "component-api" }
-phoxal-utils-component = { path = "utils-component" }
-phoxal-utils-helpers = { path = "utils-helpers" }
-phoxal-utils-robot = { path = "utils-robot" }
-phoxal-utils-scenario-spec = { path = "utils-scenario-spec" }
-phoxal-utils-simulation = { path = "utils-simulation" }
-phoxal-utils-spatial = { path = "utils-spatial" }
-phoxal-utils-structure = { path = "utils-structure" }
+phoxal-component = { path = "component" }
+phoxal-helpers = { path = "helpers" }
+phoxal-robot = { path = "robot" }
+phoxal-scenario = { path = "scenario" }
+phoxal-simulation = { path = "simulation" }
+phoxal-spatial = { path = "spatial" }
+phoxal-structure = { path = "structure" }
 
 [patch."https://github.com/phoxal/framework"]
 phoxal-bus = { path = "bus" }
 phoxal-engine = { path = "engine" }
 phoxal-component-api = { path = "component-api" }
-phoxal-utils-component = { path = "utils-component" }
-phoxal-utils-helpers = { path = "utils-helpers" }
-phoxal-utils-robot = { path = "utils-robot" }
-phoxal-utils-scenario-spec = { path = "utils-scenario-spec" }
-phoxal-utils-simulation = { path = "utils-simulation" }
-phoxal-utils-spatial = { path = "utils-spatial" }
-phoxal-utils-structure = { path = "utils-structure" }
+phoxal-component = { path = "component" }
+phoxal-helpers = { path = "helpers" }
+phoxal-robot = { path = "robot" }
+phoxal-scenario = { path = "scenario" }
+phoxal-simulation = { path = "simulation" }
+phoxal-spatial = { path = "spatial" }
+phoxal-structure = { path = "structure" }

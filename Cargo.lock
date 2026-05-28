@@ -2237,6 +2237,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "phoxal-component"
+version = "0.0.0-dev"
+dependencies = [
+ "anyhow",
+ "derive-new",
+ "serde",
+ "serde_yaml",
+ "tempfile",
+]
+
+[[package]]
 name = "phoxal-component-api"
 version = "0.0.0-dev"
 dependencies = [
@@ -2256,17 +2267,39 @@ dependencies = [
  "dotenvy",
  "nalgebra",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-spatial",
- "phoxal-utils-structure",
+ "phoxal-helpers",
+ "phoxal-robot",
+ "phoxal-spatial",
+ "phoxal-structure",
  "rmp-serde",
  "serde",
  "serde_json",
  "tokio",
  "tracing",
+ "urdf-rs",
+]
+
+[[package]]
+name = "phoxal-helpers"
+version = "0.0.0-dev"
+dependencies = [
+ "anyhow",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "phoxal-robot"
+version = "0.0.0-dev"
+dependencies = [
+ "anyhow",
+ "nalgebra",
+ "phoxal-component",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "tempfile",
  "urdf-rs",
 ]
 
@@ -2279,8 +2312,8 @@ dependencies = [
  "clap",
  "phoxal-bus",
  "phoxal-engine",
+ "phoxal-helpers",
  "phoxal-runtime-asset-api",
- "phoxal-utils-helpers",
  "tokio",
  "tracing",
 ]
@@ -2302,15 +2335,15 @@ dependencies = [
  "clap",
  "nalgebra",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
  "phoxal-engine",
+ "phoxal-helpers",
+ "phoxal-robot",
  "phoxal-runtime-drive-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-scenario",
- "phoxal-utils-spatial",
- "phoxal-utils-structure",
+ "phoxal-scenario",
+ "phoxal-spatial",
+ "phoxal-structure",
  "serde_json",
  "tokio",
  "tracing",
@@ -2333,13 +2366,13 @@ dependencies = [
  "clap",
  "phoxal-bus",
  "phoxal-engine",
+ "phoxal-helpers",
  "phoxal-runtime-explore-api",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-mission-api",
- "phoxal-utils-helpers",
- "phoxal-utils-scenario",
+ "phoxal-scenario",
  "serde",
  "tokio",
  "tracing",
@@ -2365,14 +2398,14 @@ dependencies = [
  "clap",
  "phoxal-bus",
  "phoxal-engine",
+ "phoxal-helpers",
  "phoxal-runtime-follow-api",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-mission-api",
  "phoxal-runtime-plan-api",
- "phoxal-utils-helpers",
- "phoxal-utils-scenario",
+ "phoxal-scenario",
  "tokio",
  "tracing",
 ]
@@ -2397,12 +2430,12 @@ dependencies = [
  "nalgebra",
  "phoxal-bus",
  "phoxal-engine",
+ "phoxal-helpers",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-joint-api",
- "phoxal-utils-helpers",
- "phoxal-utils-scenario",
- "phoxal-utils-spatial",
- "phoxal-utils-structure",
+ "phoxal-scenario",
+ "phoxal-spatial",
+ "phoxal-structure",
  "tokio",
  "tracing",
  "urdf-rs",
@@ -2425,13 +2458,13 @@ dependencies = [
  "async-trait",
  "clap",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
  "phoxal-engine",
+ "phoxal-helpers",
+ "phoxal-robot",
  "phoxal-runtime-joint-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-structure",
+ "phoxal-structure",
  "tokio",
  "tracing",
  "urdf-rs",
@@ -2454,19 +2487,19 @@ dependencies = [
  "clap",
  "orb-slam3-sys",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
  "phoxal-engine",
+ "phoxal-helpers",
+ "phoxal-robot",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-motion-api",
  "phoxal-runtime-odometry-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-scenario",
- "phoxal-utils-spatial",
- "phoxal-utils-structure",
+ "phoxal-scenario",
+ "phoxal-spatial",
+ "phoxal-structure",
  "tempfile",
  "tokio",
  "tracing",
@@ -2478,8 +2511,8 @@ version = "0.0.0-dev"
 dependencies = [
  "phoxal-bus",
  "phoxal-component-api",
+ "phoxal-robot",
  "phoxal-runtime-frame-api",
- "phoxal-utils-robot",
  "serde",
  "serde_json",
 ]
@@ -2493,19 +2526,19 @@ dependencies = [
  "clap",
  "nalgebra",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
  "phoxal-engine",
+ "phoxal-helpers",
+ "phoxal-robot",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-mission-api",
  "phoxal-runtime-motion-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-scenario",
- "phoxal-utils-spatial",
- "phoxal-utils-structure",
+ "phoxal-scenario",
+ "phoxal-spatial",
+ "phoxal-structure",
  "rmp-serde",
  "serde",
  "tokio",
@@ -2531,12 +2564,12 @@ dependencies = [
  "clap",
  "phoxal-bus",
  "phoxal-engine",
+ "phoxal-helpers",
  "phoxal-runtime-explore-api",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-mission-api",
- "phoxal-utils-helpers",
  "tokio",
  "tracing",
 ]
@@ -2559,14 +2592,14 @@ dependencies = [
  "clap",
  "phoxal-bus",
  "phoxal-engine",
+ "phoxal-helpers",
  "phoxal-runtime-drive-api",
  "phoxal-runtime-follow-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-motion-api",
  "phoxal-runtime-safety-api",
- "phoxal-utils-helpers",
- "phoxal-utils-scenario",
+ "phoxal-scenario",
  "serde_json",
  "tokio",
  "tracing",
@@ -2592,16 +2625,16 @@ dependencies = [
  "clap",
  "nalgebra",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
  "phoxal-engine",
+ "phoxal-helpers",
+ "phoxal-robot",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-joint-api",
  "phoxal-runtime-odometry-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-scenario",
- "phoxal-utils-structure",
+ "phoxal-scenario",
+ "phoxal-structure",
  "tokio",
  "tracing",
  "urdf-rs",
@@ -2625,16 +2658,16 @@ dependencies = [
  "async-trait",
  "clap",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
  "phoxal-engine",
+ "phoxal-helpers",
+ "phoxal-robot",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-perception-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-structure",
+ "phoxal-structure",
  "serde",
  "tokio",
  "tracing",
@@ -2661,13 +2694,13 @@ dependencies = [
  "clap",
  "phoxal-bus",
  "phoxal-engine",
+ "phoxal-helpers",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-mission-api",
  "phoxal-runtime-plan-api",
- "phoxal-utils-helpers",
- "phoxal-utils-scenario",
+ "phoxal-scenario",
  "tokio",
  "tracing",
 ]
@@ -2692,8 +2725,8 @@ dependencies = [
  "clap",
  "phoxal-bus",
  "phoxal-engine",
+ "phoxal-helpers",
  "phoxal-runtime-power-api",
- "phoxal-utils-helpers",
  "reqwest",
  "rustls",
  "tokio",
@@ -2719,9 +2752,9 @@ dependencies = [
  "derive-new",
  "phoxal-bus",
  "phoxal-engine",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-scenario",
+ "phoxal-helpers",
+ "phoxal-robot",
+ "phoxal-scenario",
  "tokio",
  "tracing",
 ]
@@ -2737,7 +2770,7 @@ dependencies = [
  "anyhow",
  "clap",
  "phoxal-bus",
- "phoxal-utils-helpers",
+ "phoxal-helpers",
  "tokio",
  "tracing",
  "zenoh",
@@ -2759,16 +2792,16 @@ dependencies = [
  "clap",
  "nalgebra",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
  "phoxal-engine",
+ "phoxal-helpers",
+ "phoxal-robot",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-safety-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-scenario",
- "phoxal-utils-spatial",
- "phoxal-utils-structure",
+ "phoxal-scenario",
+ "phoxal-spatial",
+ "phoxal-structure",
  "serde_json",
  "tokio",
  "tracing",
@@ -2793,14 +2826,14 @@ dependencies = [
  "clap",
  "openh264",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-component-api",
  "phoxal-engine",
+ "phoxal-helpers",
+ "phoxal-robot",
  "phoxal-runtime-motion-api",
  "phoxal-runtime-video-api",
- "phoxal-utils-component",
- "phoxal-utils-helpers",
- "phoxal-utils-robot",
- "phoxal-utils-scenario",
+ "phoxal-scenario",
  "serde",
  "tokio",
  "tracing",
@@ -2816,46 +2849,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "phoxal-utils-component"
-version = "0.0.0-dev"
-dependencies = [
- "anyhow",
- "derive-new",
- "serde",
- "serde_yaml",
- "tempfile",
-]
-
-[[package]]
-name = "phoxal-utils-helpers"
-version = "0.0.0-dev"
-dependencies = [
- "anyhow",
- "tracing-subscriber",
-]
-
-[[package]]
-name = "phoxal-utils-robot"
-version = "0.0.0-dev"
-dependencies = [
- "anyhow",
- "nalgebra",
- "phoxal-utils-component",
- "serde",
- "serde_json",
- "serde_yaml",
- "tempfile",
- "urdf-rs",
-]
-
-[[package]]
-name = "phoxal-utils-scenario"
+name = "phoxal-scenario"
 version = "0.0.0-dev"
 dependencies = [
  "anyhow",
  "nalgebra",
  "phoxal-bus",
+ "phoxal-component",
  "phoxal-engine",
+ "phoxal-robot",
  "phoxal-runtime-explore-api",
  "phoxal-runtime-follow-api",
  "phoxal-runtime-frame-api",
@@ -2866,50 +2868,39 @@ dependencies = [
  "phoxal-runtime-odometry-api",
  "phoxal-runtime-plan-api",
  "phoxal-runtime-safety-api",
- "phoxal-utils-component",
- "phoxal-utils-robot",
- "phoxal-utils-scenario-spec",
  "serde",
  "serde_json",
  "tokio",
 ]
 
 [[package]]
-name = "phoxal-utils-scenario-spec"
-version = "0.0.0-dev"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "phoxal-utils-simulation"
+name = "phoxal-simulation"
 version = "0.0.0-dev"
 dependencies = [
  "anyhow",
  "derive-new",
- "phoxal-utils-component",
+ "phoxal-component",
  "serde",
  "serde_yaml",
  "tempfile",
 ]
 
 [[package]]
-name = "phoxal-utils-spatial"
+name = "phoxal-spatial"
 version = "0.0.0-dev"
 dependencies = [
  "anyhow",
  "nalgebra",
+ "phoxal-component",
  "phoxal-component-api",
- "phoxal-utils-component",
- "phoxal-utils-robot",
- "phoxal-utils-structure",
+ "phoxal-robot",
+ "phoxal-structure",
  "serde",
  "urdf-rs",
 ]
 
 [[package]]
-name = "phoxal-utils-structure"
+name = "phoxal-structure"
 version = "0.0.0-dev"
 dependencies = [
  "anyhow",

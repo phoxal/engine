@@ -3,19 +3,17 @@ use std::path::Path;
 
 use crate::conventions::COMPONENTS_DIR;
 use anyhow::{Context, Result, anyhow, bail};
-use phoxal_utils_component::v1::CapabilityRef;
-use phoxal_utils_component::v1::capability::{Capability, Encoder, Motor, StructuralTarget};
-use phoxal_utils_robot::v1::Robot as RobotManifest;
-use phoxal_utils_robot::v1::capability::Parameters;
-use phoxal_utils_robot::v1::{
-    self as model_v1, ResolvedFacts, SourceBundle, resolve_source_bundle,
-};
-use phoxal_utils_structure::Structure;
+use phoxal_component::v1::CapabilityRef;
+use phoxal_component::v1::capability::{Capability, Encoder, Motor, StructuralTarget};
+use phoxal_robot::v1::Robot as RobotManifest;
+use phoxal_robot::v1::capability::Parameters;
+use phoxal_robot::v1::{self as model_v1, ResolvedFacts, SourceBundle, resolve_source_bundle};
+use phoxal_structure::Structure;
 
 #[derive(Debug, Clone)]
 pub struct Robot {
     pub model: RobotManifest,
-    pub components: BTreeMap<String, phoxal_utils_component::v1::Component>,
+    pub components: BTreeMap<String, phoxal_component::v1::Component>,
 }
 
 struct ResolvedCapability<'a> {
@@ -45,7 +43,7 @@ pub struct ResolvedImu {
 
 pub struct DriverBinding<'a> {
     pub component_id: String,
-    pub component: &'a phoxal_utils_component::v1::Component,
+    pub component: &'a phoxal_component::v1::Component,
     pub component_instance: &'a model_v1::Component,
     pub driver: &'a model_v1::DriverConfig,
 }
@@ -66,33 +64,31 @@ impl Robot {
     }
 
     fn read_model_config(path: impl AsRef<Path>) -> Result<RobotManifest> {
-        phoxal_utils_robot::v1::Robot::read_from_dir(path)
+        phoxal_robot::v1::Robot::read_from_dir(path)
     }
 
     fn read_component_config(
         path: impl AsRef<Path>,
         component_type: &str,
-    ) -> Result<phoxal_utils_component::v1::Component> {
+    ) -> Result<phoxal_component::v1::Component> {
         let component_path = path.as_ref().join(COMPONENTS_DIR).join(component_type);
-        Ok(
-            phoxal_utils_component::Component::read_from_dir(&component_path)
-                .with_context(|| {
-                    format!(
-                        "failed to read component configuration for '{}' from {}",
-                        component_type,
-                        component_path.display()
-                    )
-                })?
-                .as_v1()
-                .context("staged robot only supports component.yaml version v1")?
-                .clone(),
-        )
+        Ok(phoxal_component::Component::read_from_dir(&component_path)
+            .with_context(|| {
+                format!(
+                    "failed to read component configuration for '{}' from {}",
+                    component_type,
+                    component_path.display()
+                )
+            })?
+            .as_v1()
+            .context("staged robot only supports component.yaml version v1")?
+            .clone())
     }
 
     fn read_used_component_configs(
         path: impl AsRef<Path>,
         model: &RobotManifest,
-    ) -> Result<BTreeMap<String, phoxal_utils_component::v1::Component>> {
+    ) -> Result<BTreeMap<String, phoxal_component::v1::Component>> {
         model
             .used_component_types()
             .into_iter()
@@ -117,7 +113,7 @@ impl Robot {
     pub fn component_for_instance(
         &self,
         component_id: &str,
-    ) -> Result<&phoxal_utils_component::v1::Component> {
+    ) -> Result<&phoxal_component::v1::Component> {
         let model_component = self.component_instance(component_id)?;
         self.components
             .get(&model_component.component)
@@ -167,7 +163,7 @@ impl Robot {
     pub fn parameters(
         &self,
         capability_ref: &CapabilityRef,
-    ) -> Option<&phoxal_utils_robot::v1::capability::Parameters> {
+    ) -> Option<&phoxal_robot::v1::capability::Parameters> {
         self.model.parameter(capability_ref)
     }
 
@@ -376,8 +372,8 @@ fn validate_positive_f64(value: f64, field: &str, reference: &CapabilityRef) -> 
 mod tests {
     use std::collections::BTreeMap;
 
-    use phoxal_utils_component::v1::Component as ComponentSpec;
-    use phoxal_utils_component::v1::capability::{Camera, CameraMode, Depth};
+    use phoxal_component::v1::Component as ComponentSpec;
+    use phoxal_component::v1::capability::{Camera, CameraMode, Depth};
 
     use super::*;
 

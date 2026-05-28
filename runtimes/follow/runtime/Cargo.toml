@@ -1,0 +1,30 @@
+[package]
+name = "phoxal-runtime-follow"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[dependencies]
+async-trait = { workspace = true }
+phoxal-bus = { workspace = true }
+phoxal-runtime-follow-api = { workspace = true }
+phoxal-runtime-localize-api = { workspace = true }
+phoxal-runtime-map-api = { workspace = true }
+phoxal-runtime-plan-api = { workspace = true }
+phoxal-engine = { workspace = true }
+phoxal-scenario = { workspace = true }
+phoxal-helpers = { workspace = true }
+
+anyhow = { workspace = true }
+clap = { workspace = true, features = ["derive", "env"] }
+tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread", "sync", "signal", "process"] }
+tracing = { workspace = true }
+
+[dev-dependencies]
+phoxal-runtime-frame-api = { workspace = true }
+phoxal-runtime-mission-api = { workspace = true }

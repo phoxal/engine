@@ -17,8 +17,8 @@ use anyhow::Result;
 use clap::Parser;
 use phoxal_bus::Bus;
 use phoxal_bus::builder::Builder;
-use phoxal_utils_helpers::parse_trimmed_non_empty;
-use phoxal_utils_structure::Structure;
+use phoxal_helpers::parse_trimmed_non_empty;
+use phoxal_structure::Structure;
 
 pub use conventions::*;
 pub use execute::execute;
@@ -131,7 +131,7 @@ impl RobotRuntimeArgs {
         staged::Robot::read_from_dir(&self.robot_config)
     }
 
-    pub fn resolved_facts(&self) -> Result<phoxal_utils_robot::v1::ResolvedFacts> {
+    pub fn resolved_facts(&self) -> Result<phoxal_robot::v1::ResolvedFacts> {
         self.robot()?.resolve()
     }
 

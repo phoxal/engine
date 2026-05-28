@@ -1,5 +1,5 @@
 [package]
-name = "phoxal-runtime-localize-api"
+name = "phoxal-structure"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -10,14 +10,13 @@ homepage.workspace = true
 repository.workspace = true
 
 [dependencies]
-phoxal-component-api = { workspace = true }
-phoxal-robot = { workspace = true }
-phoxal-bus = { workspace = true }
-phoxal-runtime-frame-api = { workspace = true }
+derive-new = {workspace = true}
+anyhow = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
+urdf-rs = { workspace = true }
 
 [dev-dependencies]
-serde_json = { workspace = true }
+tempfile = { workspace = true }
 
 [lints]
 workspace = true

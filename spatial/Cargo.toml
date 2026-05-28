@@ -1,0 +1,27 @@
+[package]
+name = "phoxal-spatial"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lib]
+name = "phoxal_spatial"
+path = "src/lib.rs"
+
+[dependencies]
+anyhow.workspace = true
+nalgebra.workspace = true
+phoxal-component-api.workspace = true
+phoxal-component.workspace = true
+phoxal-robot.workspace = true
+phoxal-structure.workspace = true
+serde = { workspace = true, features = ["derive"] }
+urdf-rs.workspace = true
+
+[lints]
+workspace = true
