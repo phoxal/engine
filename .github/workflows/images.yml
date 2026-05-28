@@ -2,7 +2,7 @@ name: build-images
 
 on:
   push:
-    tags: ['v*.*.*']
+    tags: ['phoxal-bus-v*']
 
 permissions:
   contents: read
