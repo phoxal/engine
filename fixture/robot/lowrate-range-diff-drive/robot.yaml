@@ -102,3 +102,9 @@ components:
         - safety
         - mapping
         - traversability
+    ground_tof:
+      component: range_lowrate
+      mount_link: ground_tof_mount
+      roles:
+        range:
+        - safety

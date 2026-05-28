@@ -89,59 +89,35 @@ fn expected_floor_distance_m(sensor_z_m: f32, beam_z: f32) -> Option<f32> {
 #[cfg(test)]
 mod tests {
     use std::collections::BTreeMap;
-    use std::path::{Path, PathBuf};
 
     use crate::core::RangeSafetyClass;
-    use anyhow::{Context, Result};
-    use phoxal_engine::staged::Robot;
+    use anyhow::Result;
+    use phoxal_utils_scenario::helpers::{fixture_bundle_path, fixture_robot, workspace_root};
     use phoxal_utils_structure::Structure;
 
     use super::classify_safety_range_inputs;
 
-    // TODO: this test reaches into `models/robot-v1`, which no longer lives in
-    // the framework repo (moved to phoxal/robot-v1). Relocate to that repo as a
-    // robot-acceptance test, or replace here with a generic fixture under
-    // fixture/robot/. Ignored for now to keep Gate 1 green.
     #[test]
-    #[ignore = "robot-v1 fixture moved to phoxal/robot-v1"]
-    fn classifies_robot_v1_ground_tofs_as_cliff_and_forward_as_obstacle() -> Result<()> {
-        let workspace_root = workspace_root();
-        let bundle_root = workspace_root.join("models").join("robot-v1");
-        let robot = source_robot(&workspace_root, &bundle_root)?;
-        let structure = Structure::read_from_dir(&bundle_root)?;
+    fn classifies_ground_tofs_as_cliff_and_forward_as_obstacle() -> Result<()> {
+        const FIXTURE_BUNDLE: &str = "lowrate-range-diff-drive";
+
+        let robot = fixture_robot(FIXTURE_BUNDLE)?;
+        let structure = fixture_structure(FIXTURE_BUNDLE)?;
         let classes = classify_safety_range_inputs(&robot, &structure);
 
-        assert_cliff(&classes, "front_left_ground_tof.range");
-        assert_cliff(&classes, "front_right_ground_tof.range");
+        assert_cliff(&classes, "ground_tof.range");
         assert_eq!(
             classes.get("front_center_tof.range"),
-            Some(&RangeSafetyClass::Obstacle)
-        );
-        assert_eq!(
-            classes.get("front_left_tof.range"),
             Some(&RangeSafetyClass::Obstacle)
         );
 
         Ok(())
     }
 
-    fn source_robot(workspace_root: &Path, bundle_root: &Path) -> Result<Robot> {
-        let model = phoxal_utils_robot::v1::Robot::read_from_dir(bundle_root)
-            .context("failed to read robot-v1 robot.yaml")?;
-        let components = model
-            .used_component_types()
-            .into_iter()
-            .map(|component_type| {
-                let component = phoxal_utils_component::Component::read_from_dir(
-                    workspace_root.join("components").join(component_type),
-                )?
-                .as_v1()
-                .context("robot-v1 components must use component.yaml version v1")?
-                .clone();
-                Ok((component_type.to_string(), component))
-            })
-            .collect::<Result<BTreeMap<_, _>>>()?;
-        Ok(Robot { model, components })
+    fn fixture_structure(fixture_bundle: &str) -> Result<Structure> {
+        let workspace_root = workspace_root()?;
+        let bundle_root = fixture_bundle_path(&workspace_root, fixture_bundle);
+        Structure::read_from_dir(bundle_root)
     }
 
     fn assert_cliff(classes: &BTreeMap<String, RangeSafetyClass>, source_id: &str) {
@@ -156,20 +132,5 @@ mod tests {
             (0.1..1.0).contains(expected_floor_m),
             "{source_id} expected floor distance {expected_floor_m} must be plausible"
         );
-    }
-
-    fn workspace_root() -> PathBuf {
-        let manifest_dir = match std::env::var("CARGO_MANIFEST_DIR") {
-            Ok(value) => PathBuf::from(value),
-            Err(error) => panic!("CARGO_MANIFEST_DIR is not set: {error}"),
-        };
-        let workspace_root = match manifest_dir.parent().and_then(|path| path.parent()) {
-            Some(path) => path,
-            None => panic!(
-                "runtimes/safety CARGO_MANIFEST_DIR must live two levels below workspace root: {}",
-                manifest_dir.display()
-            ),
-        };
-        workspace_root.to_path_buf()
     }
 }
