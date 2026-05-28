@@ -143,15 +143,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Tag the release
-        run: |
-          set -euo pipefail
-          v=v${{ needs.plan.outputs.version }}
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git tag "$v"
-          git push origin "$v"
-
       - name: Create release notes
         run: |
           set -euo pipefail
