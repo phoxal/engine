@@ -1,6 +1,16 @@
 [workspace]
 publish = false
-git_release_enable = false
-git_tag_enable = false
+git_release_enable = true
+git_tag_enable = true
 release_always = false
 changelog_update = true
+
+[changelog]
+header = """\
+# Changelog
+
+All notable changes to this project are documented here. The format follows
+[Keep a Changelog](https://keepachangelog.com/) and the project follows
+[Semantic Versioning](https://semver.org/).
+
+"""
