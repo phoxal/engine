@@ -318,10 +318,12 @@ mod tests {
             Ok(value) => PathBuf::from(value),
             Err(error) => panic!("CARGO_MANIFEST_DIR is not set: {error}"),
         };
-        let workspace_root = match manifest_dir.parent().and_then(|path| path.parent()) {
+        // utils-robot sits at the framework workspace root after the
+        // engine/runtimes merge — one level below the root.
+        let workspace_root = match manifest_dir.parent() {
             Some(path) => path,
             None => panic!(
-                "engine/utils-robot CARGO_MANIFEST_DIR must live two levels below the workspace root: {}",
+                "utils-robot CARGO_MANIFEST_DIR must live one level below the workspace root: {}",
                 manifest_dir.display()
             ),
         };
