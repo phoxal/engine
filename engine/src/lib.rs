@@ -3,6 +3,7 @@ pub mod conventions;
 pub mod execute;
 pub mod presence;
 pub mod sensor_store;
+pub mod sim_clock;
 pub mod staged;
 pub mod step;
 

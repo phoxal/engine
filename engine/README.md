@@ -212,7 +212,7 @@ async fn records_outputs_without_bus() {
 
     runtime
         .step(
-            phoxal_engine::step::Step::new(phoxal_simulator_api::v1::clock::Clock::new(
+            phoxal_engine::step::Step::new(phoxal_engine::sim_clock::SimulationClock::new(
                 0, 0, 1_000, 1_000,
             )),
             RuntimeInputs::default(),

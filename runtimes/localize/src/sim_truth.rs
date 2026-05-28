@@ -123,8 +123,8 @@ impl LocalizeBackend for SimulatorTruthBackend {
 
 #[cfg(test)]
 mod tests {
+    use phoxal_engine::sim_clock::SimulationClock as Clock;
     use phoxal_runtime_localize_api::v1::{AffectedKeyframeSummary, LocalizationRevisionCause};
-    use phoxal_simulator_api::v1::clock::Clock;
 
     use super::*;
 

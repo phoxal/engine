@@ -1132,7 +1132,7 @@ mod active {
         use std::path::PathBuf;
 
         use anyhow::Context as _;
-        use phoxal_simulator_api::v1::clock::Clock;
+        use phoxal_engine::sim_clock::SimulationClock as Clock;
 
         use super::*;
 

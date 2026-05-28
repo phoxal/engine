@@ -6,6 +6,7 @@
 use anyhow::{Result, bail, ensure};
 use phoxal_bus::pubsub::Stamped;
 use phoxal_engine::clock::Step;
+use phoxal_engine::sim_clock::SimulationClock as Clock;
 use phoxal_runtime_frame_api::v1::FrameId;
 use phoxal_runtime_localize_api::v1::{
     AffectedKeyframeSummary, CorrectionsRequest, CorrectionsResponse, KeyframeId, KeyframeRequest,
@@ -16,7 +17,6 @@ use phoxal_runtime_odometry_api::v1::{
     Covariance as OdometryCovariance, OdometryEstimate, PoseEstimate as OdometryPoseEstimate,
     Status, StatusMode, VelocityEstimate as OdometryVelocityEstimate,
 };
-use phoxal_simulator_api::v1::clock::Clock;
 
 use crate::runtime::{
     BackendUpdate, DeadReckoningBackend, LOCALIZE_EPOCH, LocalizeBackend, NewRevision,

@@ -188,6 +188,7 @@ const fn mission_goal_source(source: &GoalSource) -> MissionGoalSource {
 
 #[cfg(test)]
 mod tests {
+    use phoxal_engine::sim_clock::SimulationClock as Clock;
     use phoxal_runtime_explore_api::v1::{GoalCandidate, GoalCandidates};
     use phoxal_runtime_frame_api::v1::FrameId;
     use phoxal_runtime_localize_api::v1::{LocalizationSource, LocalizationStatus};
@@ -195,7 +196,6 @@ mod tests {
     use phoxal_runtime_mission_api::v1::{
         ExplorationCompletion, ExplorationCompletionMode, GoalPose, GoalSource, GoalTolerance,
     };
-    use phoxal_simulator_api::v1::clock::Clock;
 
     use super::*;
 

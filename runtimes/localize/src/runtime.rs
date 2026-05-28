@@ -618,12 +618,12 @@ pub(crate) fn corrections_response(
 #[cfg(test)]
 mod tests {
     use phoxal_engine::clock::Step;
+    use phoxal_engine::sim_clock::SimulationClock as Clock;
     use phoxal_runtime_localize_api::v1::PoseGraphRange;
     use phoxal_runtime_odometry_api::v1::{
         Covariance as OdometryCovariance, PoseEstimate as OdometryPoseEstimate, Status,
         VelocityEstimate as OdometryVelocityEstimate,
     };
-    use phoxal_simulator_api::v1::clock::Clock;
 
     use super::*;
 
