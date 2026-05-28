@@ -16,6 +16,10 @@ All notable changes documented here. The format follows
 - *(release)* Replace release-plz with homegrown release-prep PR + matrix release
 - *(release)* Keep release-prep body out of PR diff
 
+### Release
+
+- Prepare v0.1.0 (#2)
+
 ## [0.0.0-dev](https://github.com/phoxal/framework/releases/tag/v0.0.0-dev) - 2026-05-28
 
 
