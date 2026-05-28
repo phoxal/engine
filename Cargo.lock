@@ -759,17 +759,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
-name = "erased-serde"
-version = "0.4.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2add8a07dd6a8d93ff627029c51de145e12686fbc36ecb298ac22e74cf02dec"
-dependencies = [
- "serde",
- "serde_core",
- "typeid",
-]
-
-[[package]]
 name = "errno"
 version = "0.3.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2241,7 +2230,6 @@ dependencies = [
  "async-trait",
  "clap",
  "dotenvy",
- "erased-serde",
  "nalgebra",
  "phoxal-bus",
  "phoxal-component-api",
@@ -2278,7 +2266,6 @@ name = "phoxal-runtime-asset-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "serde",
 ]
 
@@ -2311,7 +2298,6 @@ name = "phoxal-runtime-drive-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "serde",
 ]
 
@@ -2341,7 +2327,6 @@ name = "phoxal-runtime-explore-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-mission-api",
@@ -2374,7 +2359,6 @@ name = "phoxal-runtime-follow-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "serde",
@@ -2406,7 +2390,6 @@ name = "phoxal-runtime-frame-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-joint-api",
  "serde",
 ]
@@ -2436,7 +2419,6 @@ name = "phoxal-runtime-joint-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "serde",
 ]
 
@@ -2473,7 +2455,6 @@ version = "0.2.2"
 dependencies = [
  "phoxal-bus",
  "phoxal-component-api",
- "phoxal-engine",
  "phoxal-runtime-frame-api",
  "phoxal-utils-robot",
  "serde",
@@ -2513,7 +2494,6 @@ name = "phoxal-runtime-map-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "serde",
@@ -2544,7 +2524,6 @@ name = "phoxal-runtime-mission-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-map-api",
  "serde",
 ]
@@ -2576,7 +2555,6 @@ name = "phoxal-runtime-motion-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-drive-api",
  "phoxal-runtime-safety-api",
  "serde",
@@ -2612,7 +2590,6 @@ name = "phoxal-runtime-odometry-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-joint-api",
  "serde",
@@ -2646,7 +2623,6 @@ name = "phoxal-runtime-perception-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-frame-api",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
@@ -2679,7 +2655,6 @@ name = "phoxal-runtime-plan-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-mission-api",
@@ -2709,7 +2684,6 @@ name = "phoxal-runtime-power-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "serde",
 ]
 
@@ -2733,9 +2707,6 @@ dependencies = [
 [[package]]
 name = "phoxal-runtime-presence-api"
 version = "0.2.2"
-dependencies = [
- "phoxal-engine",
-]
 
 [[package]]
 name = "phoxal-runtime-router"
@@ -2755,7 +2726,6 @@ name = "phoxal-runtime-router-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
 ]
 
 [[package]]
@@ -2787,7 +2757,6 @@ name = "phoxal-runtime-safety-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "serde",
@@ -2820,7 +2789,6 @@ name = "phoxal-runtime-video-api"
 version = "0.2.2"
 dependencies = [
  "phoxal-bus",
- "phoxal-engine",
  "serde",
  "serde_bytes",
 ]
@@ -2920,7 +2888,6 @@ version = "0.2.2"
 dependencies = [
  "anyhow",
  "nalgebra",
- "phoxal-bus",
  "phoxal-component-api",
  "phoxal-utils-component",
  "phoxal-utils-robot",

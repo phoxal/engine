@@ -6,13 +6,6 @@ use serde::{Deserialize, Serialize};
 
 pub const COMMAND_TOPIC: &str = "runtime/power/command";
 pub const STATE_TOPIC: &str = "runtime/power/state";
-pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
-    phoxal_engine::resource::RuntimeBudget {
-        ram_mb: 20,
-        cpu_sustained_pct: 1,
-        gpu_memory_mb: None,
-    };
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum Command {

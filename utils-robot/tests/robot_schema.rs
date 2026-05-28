@@ -1,10 +1,11 @@
 use std::collections::BTreeMap;
 
 use phoxal_utils_component::v1::CapabilityRef;
-use phoxal_utils_robot::v1::{Component, ConnectionConfig, DriverConfig, KinematicConfig, Motion};
-use phoxal_utils_robot::{
-    ComponentSource, Components, Identity, Phoxal, PhoxalRuntimes, PlatformRuntimeOverride, Robot,
-    Sim, SourcePath, UserRuntime, ValidationError, Version,
+use phoxal_utils_robot::Robot as RobotManifest;
+use phoxal_utils_robot::v1::{
+    Component, ComponentSource, Components, ConnectionConfig, DriverConfig, Identity,
+    KinematicConfig, Motion, Phoxal, PhoxalRuntimes, PlatformRuntimeOverride, Robot, Sim,
+    SourcePath, UserRuntime, ValidationError,
 };
 
 const PLATFORM_RUNTIMES: &[&str] = &["router", "drive", "localize"];
@@ -12,7 +13,8 @@ const PLATFORM_RUNTIMES: &[&str] = &["router", "drive", "localize"];
 #[test]
 fn robot_roundtrips_through_yaml() {
     let robot = sample_robot();
-    let yaml = serde_yaml::to_string(&robot).expect("robot should serialize");
+    let yaml = serde_yaml::to_string(&RobotManifest::V1(robot.clone()))
+        .expect("robot should serialize with version dispatcher");
     let reparsed = Robot::read_from_string(&yaml).expect("serialized robot should parse");
 
     assert_eq!(reparsed, robot);
@@ -90,7 +92,6 @@ fn component_instance_requires_declared_source() {
 
 fn sample_robot() -> Robot {
     Robot {
-        version: Version::V1,
         phoxal: Phoxal {
             cli_min_version: "^0.6".to_string(),
         },

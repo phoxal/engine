@@ -4,7 +4,7 @@ use anyhow::{Result, bail};
 use nalgebra::{Isometry3, UnitQuaternion};
 use phoxal_utils_component::v1::capability::Capability;
 use phoxal_utils_component::v1::{CapabilityRef, Component as SourceComponent};
-use phoxal_utils_robot::Robot;
+use phoxal_utils_robot::v1::Robot;
 use phoxal_utils_structure::Structure;
 
 use crate::frame::{extract_link_transforms, resolve_target_link};
@@ -260,7 +260,7 @@ mod tests {
             .join("fixture")
             .join("robot")
             .join("rgbd-imu-diff-drive");
-        let model = phoxal_utils_robot::Robot::read_from_dir(&bundle_root)?;
+        let model = phoxal_utils_robot::v1::Robot::read_from_dir(&bundle_root)?;
         let components = source_components(&bundle_root, &model)?;
         let structure = Structure::read_from_dir(&bundle_root)?;
         assert!(
@@ -291,7 +291,7 @@ mod tests {
             .join("fixture")
             .join("robot")
             .join("rgbd-imu-diff-drive");
-        let model = phoxal_utils_robot::Robot::read_from_dir(&bundle_root)?;
+        let model = phoxal_utils_robot::v1::Robot::read_from_dir(&bundle_root)?;
         let components = source_components(&bundle_root, &model)?;
         let structure = Structure::read_from_dir(&bundle_root)?;
 
@@ -382,7 +382,7 @@ mod tests {
 
     fn source_components(
         bundle_root: &Path,
-        model: &phoxal_utils_robot::Robot,
+        model: &phoxal_utils_robot::v1::Robot,
     ) -> Result<BTreeMap<String, phoxal_utils_component::v1::Component>> {
         let fixture_root = bundle_root
             .parent()

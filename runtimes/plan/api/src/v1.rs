@@ -14,13 +14,6 @@ pub const DEBUG_SEARCH_GRAPH_TOPIC: &str = "runtime/plan/debug/search_graph";
 pub const DEBUG_COST_LAYERS_TOPIC: &str = "runtime/plan/debug/cost_layers";
 pub const DEBUG_REJECTED_PATHS_TOPIC: &str = "runtime/plan/debug/rejected_paths";
 pub const DEBUG_REVISION_INPUTS_TOPIC: &str = "runtime/plan/debug/revision_inputs";
-pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
-    phoxal_engine::resource::RuntimeBudget {
-        ram_mb: 125,
-        cpu_sustained_pct: 10,
-        gpu_memory_mb: None,
-    };
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Path {
     pub goal: Goal,

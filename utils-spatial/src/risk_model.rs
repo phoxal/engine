@@ -14,7 +14,7 @@ const BASE_LINK: &str = "base_link";
 
 #[derive(Debug, Clone)]
 pub struct SafetyModel {
-    pub base_link_to_base_footprint: phoxal_utils_robot::transform::Transform,
+    pub base_link_to_base_footprint: phoxal_utils_robot::v1::transform::Transform,
     pub collision_primitives: Vec<SafetyCollisionPrimitive>,
     pub support_regions: Vec<SafetyRegion>,
     pub support_plane_z_m: f32,

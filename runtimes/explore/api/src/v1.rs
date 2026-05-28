@@ -12,13 +12,6 @@ pub const GOAL_CANDIDATES_TOPIC: &str = "runtime/explore/goal_candidates";
 pub const STATE_TOPIC: &str = "runtime/explore/state";
 pub const DEBUG_SCORING_TOPIC: &str = "runtime/explore/debug/scoring";
 pub const DEBUG_REJECTED_CANDIDATES_TOPIC: &str = "runtime/explore/debug/rejected_candidates";
-pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
-    phoxal_engine::resource::RuntimeBudget {
-        ram_mb: 100,
-        cpu_sustained_pct: 5,
-        gpu_memory_mb: None,
-    };
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Frontiers {
     pub map_revision: MapRevisionId,

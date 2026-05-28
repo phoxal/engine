@@ -5,9 +5,7 @@ use serde::{Deserialize, Serialize};
 use phoxal_utils_component::v1::CapabilityRef;
 use phoxal_utils_component::v1::capability::Capability;
 
-use crate::Robot;
-
-use super::Role;
+use super::{Robot, Role};
 
 /// Resolved-fact identity of the localization backend.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -165,8 +163,7 @@ mod tests {
     use phoxal_utils_component::v1::capability::{Capability, Gnss, StructuralTarget};
 
     use super::{LocalizeBackendKind, ResolvedLocalizeBackend, Role, resolve_localize_backend};
-    use crate::Robot;
-    use crate::v1::Component;
+    use crate::v1::{Component, Robot};
 
     #[test]
     fn resolves_orb_slam3_from_rgbd_imu_roles() {

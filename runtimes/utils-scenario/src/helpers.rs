@@ -160,7 +160,7 @@ pub fn ok_transform(response: FrameLookupResponse) -> Result<FrameTransform> {
 pub fn fixture_robot(fixture_bundle: &str) -> Result<staged::Robot> {
     let workspace_root = workspace_root()?;
     let bundle_path = fixture_bundle_path(&workspace_root, fixture_bundle);
-    let model = phoxal_utils_robot::Robot::read_from_dir(&bundle_path)
+    let model = phoxal_utils_robot::v1::Robot::read_from_dir(&bundle_path)
         .context("failed to load scenario fixture robot")?;
     let components = model
         .used_component_types()

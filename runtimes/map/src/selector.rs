@@ -40,7 +40,7 @@ mod tests {
 
     use phoxal_engine::staged::Robot;
     use phoxal_utils_component::v1::CapabilityRef;
-    use phoxal_utils_robot::Robot as RobotManifest;
+    use phoxal_utils_robot::v1::Robot as RobotManifest;
     use phoxal_utils_robot::v1::Role;
 
     use super::detect_mapping_range_inputs;

@@ -10,7 +10,6 @@ homepage.workspace = true
 repository.workspace = true
 
 [dependencies]
-phoxal-engine = { workspace = true }
 phoxal-bus = { workspace = true }
 phoxal-runtime-frame-api = { workspace = true }
 phoxal-runtime-localize-api = { workspace = true }

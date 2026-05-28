@@ -7,8 +7,7 @@ use serde::{Deserialize, Serialize};
 use super::conformance::{ConformanceEvidence, ConformanceFailure, ConformanceReport};
 use super::localize_backend::{LocalizeBackendKind, resolve_localize_backend};
 use super::role_resolution::resolve_roles;
-use super::{AutonomyProfileId, Role, RoleResolution, autonomy_profile};
-use crate::Robot;
+use super::{AutonomyProfileId, Robot, Role, RoleResolution, autonomy_profile};
 
 #[derive(Debug, Clone)]
 pub struct SourceBundle {

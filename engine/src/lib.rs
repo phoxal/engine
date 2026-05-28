@@ -5,7 +5,6 @@ pub mod presence;
 pub mod sensor_store;
 pub mod staged;
 pub mod step;
-pub mod support;
 
 use std::path::PathBuf;
 use std::time::Duration;
@@ -29,10 +28,6 @@ pub const ENV_ROBOT_CONNECT_RETRIES: &str = "ROBOT_CONNECT_RETRIES";
 pub const ENV_COMPONENT_ID: &str = "COMPONENT_ID";
 pub const ENV_ROBOT_ID: &str = "ROBOT_ID";
 pub const ENV_ROBOT_NAMESPACE: &str = "ROBOT_NAMESPACE";
-pub const ENV_BALENA_DEVICE_UUID: &str = "BALENA_DEVICE_UUID";
-pub const ENV_BALENA_APP_NAME: &str = "BALENA_APP_NAME";
-pub const ENV_BALENA_SUPERVISOR_ADDRESS: &str = "BALENA_SUPERVISOR_ADDRESS";
-pub const ENV_BALENA_SUPERVISOR_API_KEY: &str = "BALENA_SUPERVISOR_API_KEY";
 
 const DEFAULT_STALE_CYCLE_COUNT: f64 = 2.0;
 
@@ -68,10 +63,6 @@ pub struct RobotRuntimeArgs {
 
     #[arg(long, env = ENV_ROBOT_ID, value_parser = parse_trimmed_non_empty)]
     pub robot_id: Option<String>,
-
-    /// Balena device UUID fallback for robot identity resolution.
-    #[arg(long = "balena-device-uuid", env = ENV_BALENA_DEVICE_UUID, hide = true)]
-    pub balena_device_uuid: Option<String>,
 
     #[arg(
         long,
@@ -183,10 +174,7 @@ impl From<RobotRuntimeArgs> for Builder {
 impl From<&RobotRuntimeArgs> for RobotIdentity {
     fn from(args: &RobotRuntimeArgs) -> Self {
         Self::new(
-            args.robot_id
-                .clone()
-                .or_else(|| args.balena_device_uuid.clone())
-                .unwrap_or_default(),
+            args.robot_id.clone().unwrap_or_default(),
             args.robot_namespace.clone(),
         )
     }

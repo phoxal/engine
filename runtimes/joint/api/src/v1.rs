@@ -11,13 +11,6 @@ pub const DATA_SCHEMA: &str = "runtime/joint/data";
 /// Topic template for per-joint state streams. The `{joint-id}` placeholder is
 /// substituted at subscribe time by `data::path(...)`.
 pub const JOINT_STATE_TOPIC_TEMPLATE: &str = "runtime/joint/{joint-id}/data";
-pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
-    phoxal_engine::resource::RuntimeBudget {
-        ram_mb: 40,
-        cpu_sustained_pct: 5,
-        gpu_memory_mb: None,
-    };
-
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub struct JointId(pub String);
 

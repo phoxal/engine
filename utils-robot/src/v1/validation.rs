@@ -2,9 +2,7 @@ use std::collections::BTreeSet;
 
 use phoxal_utils_component::v1::CapabilityRef;
 
-use crate::{Robot, ValidationError};
-
-use super::{KinematicConfig, capability};
+use super::{KinematicConfig, Robot, ValidationError, capability};
 
 impl Robot {
     pub(crate) fn validate_component_structure(

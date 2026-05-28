@@ -5,9 +5,7 @@ use phoxal_utils_component::v1::CapabilityRef;
 use phoxal_utils_component::v1::capability::Capability;
 use serde::{Deserialize, Serialize};
 
-use crate::Robot;
-
-use super::Role;
+use super::{Robot, Role};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RoleAssignment {

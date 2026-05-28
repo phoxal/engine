@@ -313,7 +313,7 @@ fn signed_velocity(omega_radps: f64, direction_sign: i8) -> f32 {
 mod tests {
     use std::path::{Path, PathBuf};
 
-    use phoxal_utils_robot::Robot as RobotManifest;
+    use phoxal_utils_robot::v1::Robot as RobotManifest;
 
     use super::*;
 

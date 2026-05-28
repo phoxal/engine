@@ -126,7 +126,7 @@ mod tests {
     }
 
     fn source_robot(workspace_root: &Path, bundle_root: &Path) -> Result<Robot> {
-        let model = phoxal_utils_robot::Robot::read_from_dir(bundle_root)
+        let model = phoxal_utils_robot::v1::Robot::read_from_dir(bundle_root)
             .context("failed to read robot-v1 robot.yaml")?;
         let components = model
             .used_component_types()

@@ -65,9 +65,9 @@ pub fn pose_to_isometry(pose: &Pose) -> Isometry3<f64> {
 
 pub(crate) fn transform_from_isometry(
     transform: Isometry3<f64>,
-) -> phoxal_utils_robot::transform::Transform {
+) -> phoxal_utils_robot::v1::transform::Transform {
     let (roll, pitch, yaw) = transform.rotation.euler_angles();
-    phoxal_utils_robot::transform::Transform::new(
+    phoxal_utils_robot::v1::transform::Transform::new(
         [
             transform.translation.x,
             transform.translation.y,

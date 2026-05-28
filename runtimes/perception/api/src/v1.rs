@@ -11,13 +11,6 @@ use serde::{Deserialize, Serialize};
 
 pub const DETECTIONS_TOPIC: &str = "runtime/perception/detections";
 pub const STATE_TOPIC: &str = "runtime/perception/state";
-pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
-    phoxal_engine::resource::RuntimeBudget {
-        ram_mb: 400,
-        cpu_sustained_pct: 20,
-        gpu_memory_mb: Some(1_500),
-    };
-
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct BoundingBox {
     pub x: f32,

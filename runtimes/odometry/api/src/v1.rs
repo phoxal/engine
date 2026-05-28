@@ -11,13 +11,6 @@ pub const STATUS_TOPIC: &str = "runtime/odometry/status";
 pub const DEBUG_SOURCE_HEALTH_TOPIC: &str = "runtime/odometry/debug/source_health";
 pub const DEBUG_RESIDUALS_TOPIC: &str = "runtime/odometry/debug/residuals";
 pub const DEBUG_INTEGRATION_TOPIC: &str = "runtime/odometry/debug/integration";
-pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
-    phoxal_engine::resource::RuntimeBudget {
-        ram_mb: 80,
-        cpu_sustained_pct: 7,
-        gpu_memory_mb: None,
-    };
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OdometryEstimate {
     pub pose: PoseEstimate,

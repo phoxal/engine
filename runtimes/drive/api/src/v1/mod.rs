@@ -10,13 +10,6 @@ pub const DEBUG_ACTUATOR_COMMANDS_TOPIC: &str = "runtime/drive/debug/actuator_co
 pub const DEBUG_SATURATION_TOPIC: &str = "runtime/drive/debug/saturation";
 pub const DEBUG_WATCHDOG_TOPIC: &str = "runtime/drive/debug/watchdog";
 pub const DEBUG_KINEMATICS_TOPIC: &str = "runtime/drive/debug/kinematics";
-pub const RESOURCE_BUDGET: phoxal_engine::resource::RuntimeBudget =
-    phoxal_engine::resource::RuntimeBudget {
-        ram_mb: 100,
-        cpu_sustained_pct: 7,
-        gpu_memory_mb: None,
-    };
-
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Target {
     pub linear_x_mps: f64,

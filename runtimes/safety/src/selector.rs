@@ -55,7 +55,7 @@ mod tests {
 
     use phoxal_engine::staged::Robot;
     use phoxal_utils_component::v1::CapabilityRef;
-    use phoxal_utils_robot::Robot as RobotManifest;
+    use phoxal_utils_robot::v1::Robot as RobotManifest;
 
     use super::{detect_safety_emergency_stop_inputs, detect_safety_range_inputs};
 

@@ -17,15 +17,12 @@ pub(crate) struct Config {
 
 #[derive(Debug, clap::Args)]
 pub(crate) struct Args {
-    #[arg(
-        long = "balena-supervisor-address",
-        env = phoxal_engine::ENV_BALENA_SUPERVISOR_ADDRESS
-    )]
+    #[arg(long = "balena-supervisor-address", env = "BALENA_SUPERVISOR_ADDRESS")]
     supervisor_address: Option<String>,
 
     #[arg(
         long = "balena-supervisor-api-key",
-        env = phoxal_engine::ENV_BALENA_SUPERVISOR_API_KEY,
+        env = "BALENA_SUPERVISOR_API_KEY",
         hide = true
     )]
     supervisor_api_key: Option<String>,

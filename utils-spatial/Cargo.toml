@@ -16,7 +16,6 @@ path = "src/lib.rs"
 [dependencies]
 anyhow.workspace = true
 nalgebra.workspace = true
-phoxal-bus.workspace = true
 phoxal-component-api.workspace = true
 phoxal-utils-component.workspace = true
 phoxal-utils-robot.workspace = true

@@ -15,32 +15,6 @@ pub const PACKAGE_URI_PREFIX: &str = "package://";
 pub const PHOXAL_COMPONENT_PACKAGE_PREFIX: &str = "phoxal-component-";
 pub const PHOXAL_RUNTIME_PACKAGE_PREFIX: &str = "phoxal-runtime-";
 
-pub mod resource {
-    use serde::{Deserialize, Serialize};
-
-    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-    pub struct RuntimeBudget {
-        pub ram_mb: u32,
-        pub cpu_sustained_pct: u16,
-        pub gpu_memory_mb: Option<u32>,
-    }
-
-    #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-    pub struct DeviceEnvelope {
-        pub ram_mb: u32,
-        pub cpu_sustained_pct: u16,
-        pub gpu_memory_mb: u32,
-        pub deploy_headroom_pct: u8,
-    }
-
-    pub const ORIN_NANO_8GB: DeviceEnvelope = DeviceEnvelope {
-        ram_mb: 6_000,
-        cpu_sustained_pct: 450,
-        gpu_memory_mb: 3_000,
-        deploy_headroom_pct: 10,
-    };
-}
-
 pub fn component_package_name(component_type: &str) -> String {
     format!("{PHOXAL_COMPONENT_PACKAGE_PREFIX}{component_type}")
 }
