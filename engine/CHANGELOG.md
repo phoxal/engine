@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.0-dev](https://github.com/phoxal/framework/releases/tag/phoxal-engine-v0.0.0-dev) - 2026-05-28
+
+### Added
+
+- *(utils-robot)* single Robot struct + new robot.yaml schema
+
+### Fixed
+
+- *(tests)* relocate fixture/ into framework; fix post-flatten paths
+
+### Other
+
+- *(workspace)* drop utils- prefix; merge scenario crates; structure runtimes/<name>/{api,runtime}/
+- *(workspace)* drop phoxal-simulator-api workspace dep
+- *(engine)* own SimulationClock; drop engine→simulator-api dep edge
+- *(framework)* delete dead RuntimeBudget; adopt v1 dispatcher in utils-robot; sweep dead code
+- *(release)* configure release-plz + cargo-dist + publish flags (dry-run)
+- *(api)* introduce pub mod v1 in every phoxal-*-api crate
+- *(engine)* fold phoxal-utils-conventions into phoxal-engine
+- *(workspace)* carve members into future-repo subdirs
+
 ### Breaking
 
 - Unified the runtime model into a single `phoxal_engine::step::Runtime`
