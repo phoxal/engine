@@ -11,5 +11,5 @@
 
 ## Local Development
 
-- In `cargo xtask webots up ...`, the per-robot router is exposed to host-local
-  tools and runtimes at `tcp/127.0.0.1:7447`.
+- `phoxal-cli simulate` exposes the per-robot router to host-local tools and
+  runtimes at `tcp/127.0.0.1:7447`.

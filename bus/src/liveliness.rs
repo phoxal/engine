@@ -81,7 +81,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap_or_default()
             .as_nanos();
-        format!("robot-framework/tests/liveliness/{suffix}/{nanos}")
+        format!("phoxal/tests/liveliness/{suffix}/{nanos}")
     }
 
     async fn open_bus() -> Bus {

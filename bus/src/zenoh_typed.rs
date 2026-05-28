@@ -1129,7 +1129,7 @@ mod tests {
             .duration_since(UNIX_EPOCH)
             .unwrap_or_default()
             .as_nanos();
-        format!("robot-framework/tests/{suffix}/{nanos}")
+        format!("phoxal/tests/{suffix}/{nanos}")
     }
 
     async fn open_session() -> zenoh::Session {

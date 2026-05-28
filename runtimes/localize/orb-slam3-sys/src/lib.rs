@@ -1,14 +1,13 @@
 //! GPL-3.0-or-later — see crate-root README.
 //!
-//! ORB-SLAM3 is licensed under GPL-3.0-or-later. The rest of the robot-framework
-//! workspace is dual-licensed per crate: Apache-2.0 on contract/utils/api crates,
-//! AGPL-3.0-or-later on runtime/bus/tool crates. This crate always exposes the
+//! ORB-SLAM3 is licensed under GPL-3.0-or-later. The rest of the Phoxal
+//! framework workspace is AGPL-3.0-only. This crate always exposes the
 //! ORB-SLAM3 C ABI, but links the real ORB-SLAM3 library only when
 //! `ORB_SLAM3_DIR` is present at build time and the build script emits the
 //! `orb_slam3_linked` cfg. Callers can check [`LINKED`] at runtime.
 //!
 //! A binary that link-time includes ORB-SLAM3 must be distributed under
-//! GPL-3.0-or-later terms. Only AGPL/GPL-compatible runtimes, such as the AGPL
+//! GPL-3.0-or-later terms. Only AGPL/GPL-compatible runtimes, such as the
 //! localize runtime, may link it. Metadata-only/stub builds link no ORB-SLAM3
 //! code and carry no GPL obligation from ORB-SLAM3.
 
