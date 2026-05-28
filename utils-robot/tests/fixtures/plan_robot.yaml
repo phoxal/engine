@@ -43,10 +43,10 @@ components:
   sources:
     oak_d_lite:
       git: https://github.com/phoxal/component-oak_d_lite
-      tag: v1.3.0
+      tag: main
     ddsm115:
       git: https://github.com/phoxal/component-ddsm115
-      tag: v0.4.0
+      tag: main
     passive_caster:
       path: ./components/passive_caster
   instances:
