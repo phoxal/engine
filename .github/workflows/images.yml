@@ -2,7 +2,7 @@ name: build-images
 
 on:
   push:
-    tags: ['phoxal-bus-v*']
+    tags: ['v*.*.*']
 
 permissions:
   contents: read
@@ -17,7 +17,7 @@ jobs:
 
       - name: Extract version
         id: version
-        run: echo "version=${GITHUB_REF#refs/tags/phoxal-bus-v}" >> "$GITHUB_OUTPUT"
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
 
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3

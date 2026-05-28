@@ -1,17 +1,30 @@
+# All publishable crates ship together at the same workspace version.
+# To avoid release-plz emitting one tag per publishable crate, we designate
+# `phoxal-engine` as the release anchor: it's the only crate release-plz
+# processes for tag/GitHub-Release creation. Every other crate still gets a
+# version bump from the workspace inheritance -- they just don't trigger
+# their own tag or release.
+
 [workspace]
 publish = false
-release = true
+release = false                # default: don't track per-crate releases
 git_release_enable = true
 git_tag_enable = true
-release_always = false
+release_always = true
 changelog_update = true
 
 [changelog]
 header = """\
 # Changelog
 
-All notable changes to this project are documented here. The format follows
-[Keep a Changelog](https://keepachangelog.com/) and the project follows
-[Semantic Versioning](https://semver.org/).
+All notable changes to this project are documented here.
 
 """
+
+[[package]]
+name = "phoxal-engine"
+release = true                 # anchor: this is what drives the repo's release
+git_tag_name = "v{{ version }}"
+git_release_name = "v{{ version }}"
+changelog_path = "../CHANGELOG.md"   # one workspace-root changelog
+changelog_include = ["*"]            # include commits from across the workspace
