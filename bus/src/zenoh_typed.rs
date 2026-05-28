@@ -1094,6 +1094,7 @@ impl TypedSessionExt for Session {
 mod tests {
     use super::*;
     use serde::Deserialize;
+    use serial_test::serial;
     use std::time::{Duration, SystemTime, UNIX_EPOCH};
     use zenoh::key_expr::KeyExpr;
     use zenoh::sample::SampleBuilder;
@@ -1252,6 +1253,7 @@ mod tests {
         ));
     }
 
+    #[serial]
     #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
     async fn typed_publishers_default_to_lazy_policy() {
         let session = open_session().await;
@@ -1267,6 +1269,7 @@ mod tests {
         session.close().await.expect("session should close");
     }
 
+    #[serial]
     #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
     async fn lazy_publisher_skips_serialization_when_unmatched() {
         let session = open_session().await;
@@ -1285,6 +1288,7 @@ mod tests {
         session.close().await.expect("session should close");
     }
 
+    #[serial]
     #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
     async fn eager_publisher_reports_publishable_without_subscribers() {
         let session = open_session().await;
@@ -1307,6 +1311,7 @@ mod tests {
         session.close().await.expect("session should close");
     }
 
+    #[serial]
     #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
     async fn lazy_publisher_publishes_once_subscriber_matches() {
         let publisher_session = open_session().await;

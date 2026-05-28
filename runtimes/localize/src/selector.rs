@@ -1,3 +1,5 @@
+use std::path::{Path, PathBuf};
+
 use anyhow::{Result, bail};
 use phoxal_component_api::v1::capability::profile::ProfileId;
 use phoxal_engine::staged::Robot;
@@ -36,6 +38,15 @@ pub fn select_backend(
     structure: &Structure,
     orb_slam3_vocabulary_path: Option<&std::path::Path>,
 ) -> Result<BackendSelection> {
+    select_backend_with_settings_dir(robot, structure, orb_slam3_vocabulary_path, None)
+}
+
+fn select_backend_with_settings_dir(
+    robot: &Robot,
+    structure: &Structure,
+    orb_slam3_vocabulary_path: Option<&Path>,
+    settings_dir: Option<&Path>,
+) -> Result<BackendSelection> {
     match resolve_localize_backend(&robot.model, &robot.components) {
         ResolvedLocalizeBackend::DeadReckoning => Ok(BackendSelection::DeadReckoning),
         ResolvedLocalizeBackend::GnssAnchored { gnss } => Ok(BackendSelection::GnssAnchored {
@@ -62,6 +73,7 @@ pub fn select_backend(
                 camera_fps,
                 imu_frequency_hz,
                 imu_to_camera_optical,
+                settings_dir,
             )?;
 
             Ok(BackendSelection::OrbSlam3(Box::new(
@@ -91,7 +103,8 @@ pub fn select_backend(
             let camera_topic = default_profile_topic(&camera);
             let depth_topic = default_profile_topic(&depth);
             let camera_optical_to_base = camera_optical_to_base(robot, structure, &camera)?;
-            let settings_path = write_orb_slam3_rgbd_settings(&color_intrinsics, camera_fps)?;
+            let settings_path =
+                write_orb_slam3_rgbd_settings(&color_intrinsics, camera_fps, settings_dir)?;
 
             Ok(BackendSelection::OrbSlam3(Box::new(
                 crate::orbslam3::OrbSlam3Config {
@@ -282,6 +295,7 @@ fn write_orb_slam3_settings(
     camera_fps: f64,
     imu_frequency_hz: f64,
     imu_to_camera_optical: ([f64; 3], [[f64; 3]; 3]),
+    settings_dir: Option<&Path>,
 ) -> Result<std::path::PathBuf> {
     use anyhow::Context as _;
 
@@ -295,7 +309,7 @@ fn write_orb_slam3_settings(
         imu_to_camera_optical,
     );
 
-    let settings_dir = std::env::temp_dir().join("orb-slam3");
+    let settings_dir = orb_slam3_settings_dir(settings_dir);
     std::fs::create_dir_all(&settings_dir).with_context(|| {
         format!(
             "failed to create ORB-SLAM3 settings directory {}",
@@ -316,6 +330,7 @@ fn write_orb_slam3_settings(
 fn write_orb_slam3_rgbd_settings(
     intrinsics: &crate::settings::CameraIntrinsics,
     camera_fps: f64,
+    settings_dir: Option<&Path>,
 ) -> Result<std::path::PathBuf> {
     use anyhow::Context as _;
 
@@ -323,7 +338,7 @@ fn write_orb_slam3_rgbd_settings(
 
     let settings = render_rgbd_settings(intrinsics, 1000.0, camera_fps);
 
-    let settings_dir = std::env::temp_dir().join("orb-slam3");
+    let settings_dir = orb_slam3_settings_dir(settings_dir);
     std::fs::create_dir_all(&settings_dir).with_context(|| {
         format!(
             "failed to create ORB-SLAM3 settings directory {}",
@@ -341,6 +356,12 @@ fn write_orb_slam3_rgbd_settings(
     Ok(settings_path)
 }
 
+fn orb_slam3_settings_dir(settings_dir: Option<&Path>) -> PathBuf {
+    settings_dir
+        .map(Path::to_path_buf)
+        .unwrap_or_else(|| std::env::temp_dir().join("orb-slam3"))
+}
+
 #[cfg(test)]
 mod tests {
     use std::collections::BTreeMap;
@@ -355,7 +376,7 @@ mod tests {
 
     use super::{
         GnssCoordinateSystem, capability_default_profile_topic, default_profile_topic,
-        imu_to_camera_optical, select_backend,
+        imu_to_camera_optical, select_backend, select_backend_with_settings_dir,
     };
     use crate::runtime::BackendSelection;
 
@@ -425,11 +446,18 @@ mod tests {
         let robot = fixture_robot();
         let structure = fixture_structure();
         let vocabulary_path = PathBuf::from("/tmp/orb-vocabulary.txt");
+        let (settings_root, settings_dir) = temp_settings_dir();
 
-        let backend = match select_backend(&robot, &structure, Some(&vocabulary_path)) {
+        let backend = match select_backend_with_settings_dir(
+            &robot,
+            &structure,
+            Some(&vocabulary_path),
+            Some(&settings_dir),
+        ) {
             Ok(backend) => backend,
             Err(error) => panic!("selector failed: {error:#}"),
         };
+        let _settings_root = settings_root;
         let BackendSelection::OrbSlam3(config) = backend else {
             panic!("expected ORB-SLAM3 backend");
         };
@@ -460,11 +488,18 @@ mod tests {
         let robot = fixture_robot();
         let structure = fixture_structure();
         let vocabulary_path = PathBuf::from("/tmp/orb-vocabulary.txt");
+        let (settings_root, settings_dir) = temp_settings_dir();
 
-        let backend = match select_backend(&robot, &structure, Some(&vocabulary_path)) {
+        let backend = match select_backend_with_settings_dir(
+            &robot,
+            &structure,
+            Some(&vocabulary_path),
+            Some(&settings_dir),
+        ) {
             Ok(backend) => backend,
             Err(error) => panic!("selector failed: {error:#}"),
         };
+        let _settings_root = settings_root;
         let BackendSelection::OrbSlam3(config) = backend else {
             panic!("expected ORB-SLAM3 backend");
         };
@@ -554,11 +589,18 @@ mod tests {
         let structure = fixture_structure();
         component_roles_mut(&mut robot, "imu").insert("imu".to_string(), vec![Role::Odometry]);
         let vocabulary_path = PathBuf::from("/tmp/orb-vocabulary.txt");
+        let (settings_root, settings_dir) = temp_settings_dir();
 
-        let backend = match select_backend(&robot, &structure, Some(&vocabulary_path)) {
+        let backend = match select_backend_with_settings_dir(
+            &robot,
+            &structure,
+            Some(&vocabulary_path),
+            Some(&settings_dir),
+        ) {
             Ok(backend) => backend,
             Err(error) => panic!("selector failed: {error:#}"),
         };
+        let _settings_root = settings_root;
         let BackendSelection::OrbSlam3(config) = backend else {
             panic!("expected ORB-SLAM3 backend");
         };
@@ -606,6 +648,12 @@ mod tests {
             matrix[idx / 4][idx % 4] = value;
         }
         matrix
+    }
+
+    fn temp_settings_dir() -> (tempfile::TempDir, PathBuf) {
+        let root = tempfile::tempdir().expect("selector test settings tempdir should be created");
+        let settings_dir = root.path().join("orb-slam3");
+        (root, settings_dir)
     }
 
     fn fixture_robot() -> Robot {

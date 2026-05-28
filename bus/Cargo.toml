@@ -20,5 +20,8 @@ tokio = { workspace = true, features = ["time"] }
 tracing = { workspace = true }
 zenoh = { workspace = true }
 
+[dev-dependencies]
+serial_test = { workspace = true }
+
 [lints]
 workspace = true

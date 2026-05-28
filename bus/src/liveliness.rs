@@ -71,6 +71,7 @@ fn event_from_sample(sample: &Sample) -> LivelinessEvent {
 mod tests {
     use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+    use serial_test::serial;
     use tokio::time::timeout;
 
     use super::{LivelinessEvent, declare_liveliness_token, liveliness_subscriber};
@@ -91,6 +92,7 @@ mod tests {
         Bus::new(session, String::new())
     }
 
+    #[serial]
     #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
     async fn liveliness_subscriber_receives_alive_and_dropped_events() {
         let bus = open_bus().await;
