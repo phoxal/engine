@@ -1,7 +1,7 @@
 use anyhow::{Result, bail};
+use phoxal_engine::sim_pose::Pose;
 use phoxal_runtime_localize_api::v1::{LocalizationRevision, LocalizationRevisionId};
 use phoxal_runtime_map_api::v1::{MapRevision, MapRevisionId};
-use phoxal_simulator_api::v1::pose::Pose;
 
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Meters(pub f64);
@@ -142,12 +142,12 @@ fn angle_delta(start: f64, end: f64) -> f64 {
 
 #[cfg(test)]
 mod tests {
+    use phoxal_engine::sim_pose::Pose;
     use phoxal_runtime_localize_api::v1::{
         AffectedKeyframeSummary, LocalizationRevision, LocalizationRevisionCause,
         LocalizationRevisionId,
     };
     use phoxal_runtime_map_api::v1::{MapRevision, MapRevisionCause, MapRevisionId};
-    use phoxal_simulator_api::v1::pose::Pose;
 
     use super::{
         Meters, assert_forward_delta, assert_lateral_drift, assert_revision_linked,

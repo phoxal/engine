@@ -26,4 +26,3 @@ tracing = { workspace = true }
 [dev-dependencies]
 phoxal-runtime-frame-api = { workspace = true }
 phoxal-runtime-map-api = { workspace = true }
-phoxal-simulator-api = { workspace = true }

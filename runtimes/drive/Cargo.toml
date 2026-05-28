@@ -28,6 +28,3 @@ tracing = { workspace = true }
 clap = { workspace = true, features = ["derive", "env"] }
 anyhow = { workspace = true }
 async-trait = { workspace = true }
-
-[dev-dependencies]
-phoxal-simulator-api.workspace = true

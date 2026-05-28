@@ -105,7 +105,6 @@ phoxal-runtime-plan-api = { path = "runtimes/plan/api" }
 phoxal-runtime-power-api = { path = "runtimes/power/api" }
 phoxal-runtime-safety-api = { path = "runtimes/safety/api" }
 phoxal-runtime-video-api = { path = "runtimes/video/api" }
-phoxal-simulator-api = { git = "https://github.com/phoxal/simulator", branch = "main" }
 phoxal-utils-component = { path = "utils-component" }
 phoxal-utils-helpers = { path = "utils-helpers" }
 phoxal-utils-robot = { path = "utils-robot" }

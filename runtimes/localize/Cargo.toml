@@ -29,7 +29,6 @@ phoxal-engine = { workspace = true }
 phoxal-utils-scenario = { workspace = true }
 phoxal-utils-spatial = { workspace = true }
 phoxal-utils-structure = { workspace = true }
-phoxal-simulator-api = { workspace = true }
 phoxal-utils-helpers = { workspace = true }
 
 anyhow = { workspace = true }

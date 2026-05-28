@@ -3,10 +3,6 @@
 //! The engine owns this contract because the shared step clock is part of
 //! runtime bootstrap, not a simulator-domain API.
 //!
-//! TODO: Once phoxal/simulator's api crate switches to re-exporting from here,
-//! the `phoxal-simulator-api` workspace.dependency in framework can be removed
-//! entirely.
-
 use phoxal_bus::pubsub::Stamped;
 use phoxal_bus::zenoh_typed::{TypedPublisherBuilder, TypedSchema, TypedSubscriberBuilder};
 use serde::{Deserialize, Serialize};

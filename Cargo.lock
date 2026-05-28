@@ -2305,7 +2305,6 @@ dependencies = [
  "phoxal-component-api",
  "phoxal-engine",
  "phoxal-runtime-drive-api",
- "phoxal-simulator-api",
  "phoxal-utils-component",
  "phoxal-utils-helpers",
  "phoxal-utils-robot",
@@ -2462,7 +2461,6 @@ dependencies = [
  "phoxal-runtime-map-api",
  "phoxal-runtime-motion-api",
  "phoxal-runtime-odometry-api",
- "phoxal-simulator-api",
  "phoxal-utils-component",
  "phoxal-utils-helpers",
  "phoxal-utils-robot",
@@ -2538,7 +2536,6 @@ dependencies = [
  "phoxal-runtime-localize-api",
  "phoxal-runtime-map-api",
  "phoxal-runtime-mission-api",
- "phoxal-simulator-api",
  "phoxal-utils-helpers",
  "tokio",
  "tracing",
@@ -2819,15 +2816,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "phoxal-simulator-api"
-version = "0.2.2"
-source = "git+https://github.com/phoxal/simulator?branch=main#4ffedae0baa88cff09725600ab6da3158e14d0d7"
-dependencies = [
- "phoxal-bus",
- "serde",
-]
-
-[[package]]
 name = "phoxal-utils-component"
 version = "0.2.2"
 dependencies = [
@@ -2878,7 +2866,6 @@ dependencies = [
  "phoxal-runtime-odometry-api",
  "phoxal-runtime-plan-api",
  "phoxal-runtime-safety-api",
- "phoxal-simulator-api",
  "phoxal-utils-component",
  "phoxal-utils-robot",
  "phoxal-utils-scenario-spec",

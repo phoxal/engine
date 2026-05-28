@@ -32,7 +32,6 @@ phoxal-utils-scenario-spec = { workspace = true }
 phoxal-utils-robot = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
-phoxal-simulator-api = { workspace = true }
 tokio = { workspace = true, features = ["time"] }
 nalgebra = { workspace = true }
 

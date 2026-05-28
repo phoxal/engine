@@ -6,6 +6,7 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_component_api::v1::capability::{camera, depth, imu};
 use phoxal_component_api::v1::{RuntimeStreamDemand, capability::gnss};
 use phoxal_engine::clock::Step;
+use phoxal_engine::sim_pose::{self, Pose as SimPose};
 use phoxal_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
 use phoxal_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_runtime_frame_api::v1::FrameId;
@@ -19,7 +20,6 @@ use phoxal_runtime_localize_api::v1::{
     revision, state,
 };
 use phoxal_runtime_odometry_api::v1::{OdometryEstimate, StatusMode, data as odometry_data};
-use phoxal_simulator_api::v1::pose::Pose as SimPose;
 use phoxal_utils_component::v1::capability::GnssCoordinateSystem;
 use phoxal_utils_robot::v1::LocalizeBackendKind;
 use tracing::info;
@@ -338,11 +338,8 @@ impl Runtime for LocalizeRuntime {
         io.subscribe::<Stamped<OdometryEstimate>, _>(odometry_data::TOPIC, Input::Odometry)
             .await?;
         if let BackendSelection::SimulatorTruth { robot_id } = &config.backend {
-            io.subscribe::<Stamped<SimPose>, _>(
-                &phoxal_simulator_api::v1::pose::path(robot_id),
-                Input::SimPose,
-            )
-            .await?;
+            io.subscribe::<Stamped<SimPose>, _>(&sim_pose::path(robot_id), Input::SimPose)
+                .await?;
         }
         if let BackendSelection::GnssAnchored { gnss_topic, .. } = &config.backend {
             io.subscribe::<Stamped<gnss::Sample>, _>(gnss_topic, Input::Gnss)

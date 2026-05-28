@@ -7,6 +7,10 @@ use phoxal_bus::pubsub::Stamped;
 use phoxal_bus::zenoh_typed::{TypedPublisher, TypedSchema, TypedSubscriber};
 use phoxal_engine::DEFAULT_ROBOT_NAMESPACE;
 use phoxal_engine::presence::Summary;
+use phoxal_engine::{
+    sim_clock, sim_clock::SimulationClock as Clock, sim_pose, sim_pose::Pose, sim_reset as reset,
+    sim_status, sim_status::Status,
+};
 use phoxal_runtime_explore_api::v1::{GoalCandidates, State as ExploreState};
 use phoxal_runtime_follow_api::v1::State as FollowState;
 use phoxal_runtime_localize_api::v1::LocalizationState;
@@ -17,7 +21,6 @@ use phoxal_runtime_mission_api::v1::{
 };
 use phoxal_runtime_plan_api::v1::State as PlanState;
 use phoxal_runtime_safety_api::v1::State as SafetyState;
-use phoxal_simulator_api::v1::{clock::Clock, pose::Pose, reset, status::Status};
 use serde::{Serialize, de::DeserializeOwned};
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -129,7 +132,7 @@ impl ScenarioContext {
 
     pub async fn advance_for_secs(&self, secs: f64) -> Result<Stamped<Clock>> {
         let duration_ns = duration_ns_from_secs(secs)?;
-        let subscriber = phoxal_simulator_api::v1::clock::subscriber_builder(&self.bus)
+        let subscriber = sim_clock::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         let first = next_stamped(&subscriber, self.wallclock_timeout).await?;
@@ -156,12 +159,9 @@ impl ScenarioContext {
     }
 
     pub async fn simulation_pose(&self) -> Result<Stamped<Pose>> {
-        let subscriber = phoxal_simulator_api::v1::pose::subscriber_builder(
-            &self.bus,
-            &self.environment.robot_id,
-        )
-        .await
-        .map_err(|error| anyhow!(error.to_string()))?;
+        let subscriber = sim_pose::subscriber_builder(&self.bus, &self.environment.robot_id)
+            .await
+            .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
@@ -285,7 +285,7 @@ impl ScenarioContext {
         &self,
         predicate: impl Fn(&Status) -> bool,
     ) -> Result<Stamped<Status>> {
-        let subscriber = phoxal_simulator_api::v1::status::subscriber_builder(&self.bus)
+        let subscriber = sim_status::subscriber_builder(&self.bus)
             .await
             .map_err(|error| anyhow!(error.to_string()))?;
         loop {
