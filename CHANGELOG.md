@@ -4,6 +4,17 @@ All notable changes documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [0.2.0](https://github.com/phoxal/framework/releases/tag/v0.2.0) - 2026-05-28
+
+
+### Added
+
+- *(release)* Publish per-runtime native binaries alongside docker images
+
+### Fixed
+
+- *(release)* Drop git push tag step (gh release create --target main handles both via API; bypasses workflow-touching commit restriction)
+
 ## [0.1.0](https://github.com/phoxal/framework/releases/tag/v0.1.0) - 2026-05-28
 
 
@@ -15,6 +26,7 @@ All notable changes documented here. The format follows
 
 - *(release)* Replace release-plz with homegrown release-prep PR + matrix release
 - *(release)* Keep release-prep body out of PR diff
+- *(release-prep)* Skip when Cargo.toml is ahead of last tag (release in flight); cliff ignores 'release:' commits
 
 ## [0.0.0-dev](https://github.com/phoxal/framework/releases/tag/v0.0.0-dev) - 2026-05-28
 
