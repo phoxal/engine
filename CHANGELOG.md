@@ -1,0 +1,65 @@
+# Changelog
+
+All notable changes documented here. The format follows
+[Keep a Changelog](https://keepachangelog.com/) and the project follows
+[Semantic Versioning](https://semver.org/).
+
+## [0.1.0](https://github.com/phoxal/framework/releases/tag/v0.1.0) - 2026-05-28
+
+
+### Added
+
+- *(ci)* Bootstrap homegrown release flow
+
+### CI
+
+- *(release)* Replace release-plz with homegrown release-prep PR + matrix release
+- *(release)* Keep release-prep body out of PR diff
+
+## [0.0.0-dev](https://github.com/phoxal/framework/releases/tag/v0.0.0-dev) - 2026-05-28
+
+
+### Added
+
+- Integrate ORB-SLAM3 backend with robot-localize runtime
+- *(utils-robot)* Single Robot struct + new robot.yaml schema
+
+### CI
+
+- Wire docker images + release-plz + GH release for the runtime workspace
+
+### Documentation
+
+- Drop stale robot-framework / cargo xtask references
+
+### Fixed
+
+- *(workspace)* Add [patch] sections for transitive-git phoxal-* deps
+- *(tests)* Relocate fixture/ into framework; fix post-flatten paths
+- *(ci)* Images.yml triggers on phoxal-bus-v* (release-plz uses per-crate tag pattern)
+- *(ci)* Images.yml strips phoxal-bus-v prefix to get the workspace version
+
+### Other
+
+- *(license)* Switch workspace to AGPL-3.0-only
+- Bootstrap framework workspace
+- Ignore target/ and editor cruft
+- *(workspace)* Drop phoxal-simulator-api workspace dep
+- *(version)* Workspace → 0.0.0-dev for the pre-release period
+- Release v0.0.0-dev
+
+### Refactored
+
+- *(workspace)* Carve members into future-repo subdirs
+- *(engine)* Fold phoxal-utils-conventions into phoxal-engine
+- *(api)* Introduce pub mod v1 in every phoxal-*-api crate
+- *(framework)* Delete dead RuntimeBudget; adopt v1 dispatcher in utils-robot; sweep dead code
+- *(tests)* Annotate live-bus tests with #[serial]; tidy localize selector tempdirs
+- *(engine)* Own SimulationClock; drop engine→simulator-api dep edge
+- *(workspace)* Drop utils- prefix; merge scenario crates; structure runtimes/<name>/{api,runtime}/
+
+### Tests
+
+- *(fixture)* Plan_robot.yaml uses tag: main for real catalog repos
+- *(safety)* Replace ignored robot-v1 test with fixture-driven coverage
+
