@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.0-dev](https://github.com/phoxal/framework/releases/tag/phoxal-robot-v0.0.0-dev) - 2026-05-28
+
+### Other
+
+- *(workspace)* drop utils- prefix; merge scenario crates; structure runtimes/<name>/{api,runtime}/
+
 ## [0.1.0](https://github.com/phoxal/engine/releases/tag/v0.1.0) - 2026-03-14
 
 ### Fixed
