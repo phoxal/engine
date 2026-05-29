@@ -134,24 +134,6 @@ fn insert_json(config: &mut zenoh::Config, path: &str, value: String) -> Result<
     })
 }
 
-pub fn insert_router_config(
-    config: &mut zenoh::Config,
-    path: &str,
-    value: impl AsRef<str>,
-) -> std::result::Result<(), crate::Error> {
-    config.insert_json5(path, value.as_ref()).map_err(|error| {
-        crate::Error::InvalidTopic(format!(
-            "failed to apply router config override '{path}': {error}"
-        ))
-    })
-}
-
-pub fn endpoints_json<'a>(
-    endpoints: impl Iterator<Item = &'a str>,
-) -> std::result::Result<String, serde_json::Error> {
-    serde_json::to_string(&endpoints.collect::<Vec<_>>())
-}
-
 fn duration_to_millis(duration: Duration) -> u64 {
     duration.as_millis().try_into().unwrap_or(u64::MAX)
 }

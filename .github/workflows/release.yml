@@ -46,7 +46,6 @@ jobs:
           - plan
           - power
           - presence
-          - router
           - safety
           - video
         platform: [linux/amd64, linux/arm64]
@@ -126,7 +125,7 @@ jobs:
       - name: Build release binaries
         run: |
           set -euo pipefail
-          runtimes=(asset drive explore follow frame joint localize map mission motion odometry perception plan power presence router safety video)
+          runtimes=(asset drive explore follow frame joint localize map mission motion odometry perception plan power presence safety video)
           args=()
           for r in "${runtimes[@]}"; do
             args+=(--bin "phoxal-runtime-${r}")
@@ -137,7 +136,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          for r in asset drive explore follow frame joint localize map mission motion odometry perception plan power presence router safety video; do
+          for r in asset drive explore follow frame joint localize map mission motion odometry perception plan power presence safety video; do
             bin=target/${{ matrix.target }}/release/phoxal-runtime-${r}
             tar -czf "dist/phoxal-runtime-${r}-${{ needs.plan.outputs.version }}-${{ matrix.target }}.tar.gz" \
               -C "$(dirname "$bin")" "$(basename "$bin")"
@@ -170,7 +169,6 @@ jobs:
           - plan
           - power
           - presence
-          - router
           - safety
           - video
     steps:
@@ -213,14 +211,14 @@ jobs:
           {
             echo ""
             echo "## Runtime images @ v${v}"
-            for r in asset drive explore follow frame joint localize map mission motion odometry perception plan power presence router safety video; do
+            for r in asset drive explore follow frame joint localize map mission motion odometry perception plan power presence safety video; do
               echo "- \`ghcr.io/phoxal/runtime-${r}:${v}\`"
             done
             echo ""
             echo "## Runtime binaries @ v${v}"
             echo ""
             echo "Each runtime is also published as a standalone binary for systemd-style deployment:"
-            for r in asset drive explore follow frame joint localize map mission motion odometry perception plan power presence router safety video; do
+            for r in asset drive explore follow frame joint localize map mission motion odometry perception plan power presence safety video; do
               for target in ${binary_targets}; do
                 echo "- \`phoxal-runtime-${r}-${v}-${target}.tar.gz\`"
               done

@@ -47,8 +47,6 @@ members = [
     "runtimes/power/runtime",
     "runtimes/presence/api",
     "runtimes/presence/runtime",
-    "runtimes/router/api",
-    "runtimes/router/runtime",
     "runtimes/safety/api",
     "runtimes/safety/runtime",
     "runtimes/video/api",
