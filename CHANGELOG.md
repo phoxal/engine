@@ -4,13 +4,26 @@ All notable changes documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project follows
 [Semantic Versioning](https://semver.org/).
 
-## Unreleased
+## [0.3.0](https://github.com/phoxal/framework/releases/tag/v0.3.0) - 2026-05-29
 
-### BREAKING
 
-- `robot.yaml`: removed the `sim:` block. World selection is now a positional
-  argument on `phoxal simulate <world>` (phoxal-cli ≥ next release). Existing
-  `robot.yaml` files with a `sim:` block will fail to parse — delete the block.
+### Added
+
+- *(robot)* Add optional network section + infra/router README
+
+### Documentation
+
+- *(infra/router)* Document zenoh image override + rename to DEFAULT_ZENOH_IMAGE
+
+### Other
+
+- *(infra)* Move Dockerfile.runtime to infra/runtime/
+- *(framework)* Regroup workspace into infra/api/core/runtime/validation; rename packages to match
+
+### Refactored
+
+- *(router)* Drop in-tree zenoh router crate
+- *(robot)* Drop sim section from robot.yaml schema
 
 ## [0.2.0](https://github.com/phoxal/framework/releases/tag/v0.2.0) - 2026-05-28
 
@@ -71,14 +84,15 @@ All notable changes documented here. The format follows
 ### Refactored
 
 - *(workspace)* Carve members into future-repo subdirs
-- *(engine)* Fold phoxal-utils-conventions into phoxal-core-engine
+- *(engine)* Fold phoxal-utils-conventions into phoxal-engine
 - *(api)* Introduce pub mod v1 in every phoxal-*-api crate
 - *(framework)* Delete dead RuntimeBudget; adopt v1 dispatcher in utils-robot; sweep dead code
 - *(tests)* Annotate live-bus tests with #[serial]; tidy localize selector tempdirs
 - *(engine)* Own SimulationClock; drop engine→simulator-api dep edge
-- *(workspace)* Drop utils- prefix; merge scenario crates; structure runtime/<name>/{api,runtime}/
+- *(workspace)* Drop utils- prefix; merge scenario crates; structure runtimes/<name>/{api,runtime}/
 
 ### Tests
 
 - *(fixture)* Plan_robot.yaml uses tag: main for real catalog repos
 - *(safety)* Replace ignored robot-v1 test with fixture-driven coverage
+
