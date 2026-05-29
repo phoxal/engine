@@ -1,6 +1,6 @@
 # Phoxal Framework
 
-The Phoxal robot framework as one coherent workspace: engine library crates (`phoxal-engine`, `phoxal-bus`, schema crates, `phoxal-component-api`) plus the complete mandatory platform runtime set. Released together — every runtime image and every `phoxal-runtime-<name>-api` crate ships at the same version.
+The Phoxal robot framework as one coherent workspace: engine library crates (`phoxal-core-engine`, `phoxal-infra-bus`, schema crates, `phoxal-api-component`) plus the complete mandatory platform runtime set. Released together — every runtime image and every `phoxal-runtime-<name>-api` crate ships at the same version.
 
 ## License
 
