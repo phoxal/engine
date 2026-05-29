@@ -5,9 +5,14 @@ This directory intentionally has no Dockerfile. Phoxal uses the upstream
 and for the host-side local router used during simulation.
 
 The pinned image tag and digest live outside this repository in
-`phoxal-cli/src/local_zenoh.rs` as `const ZENOH_IMAGE`. Bump that constant in
+`phoxal-cli/src/local_zenoh.rs` as `const DEFAULT_ZENOH_IMAGE`. Bump that constant in
 `phoxal-cli` when the zenoh image needs to move; this framework repository only
 documents the policy and carries the robot-side runtime Dockerfile elsewhere.
+
+For local overrides, place `zenoh_image: <ref>` in `~/.phoxal/config.yaml`.
+That host-level setting overrides the compiled default used by `phoxal-cli`.
+Bumping the bundled default still requires editing `local_zenoh.rs` and
+shipping a new `phoxal-cli` release.
 
 ## Simulation Topology
 
