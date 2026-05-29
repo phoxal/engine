@@ -75,7 +75,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile.runtime
+          file: infra/runtime/Dockerfile
           platforms: ${{ matrix.platform }}
           build-args: |
             RUNTIME_NAME=${{ matrix.runtime }}
