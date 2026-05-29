@@ -22,7 +22,7 @@ pub use profile::{AutonomyProfileId, AutonomyProfileSpec, autonomy_profile};
 pub use resolver::{ResolvedCapabilityRole, ResolvedFacts, SourceBundle, resolve_source_bundle};
 pub use robot::{
     ComponentSource, Components, Identity, Network, NetworkTls, Phoxal, PhoxalRuntimes,
-    PlatformRuntimeOverride, Robot, Sim, SourceGit, SourcePath, Tool, Uplink, UserRuntime,
+    PlatformRuntimeOverride, Robot, SourceGit, SourcePath, Tool, Uplink, UserRuntime,
     ValidationError,
 };
 pub use role::Role;

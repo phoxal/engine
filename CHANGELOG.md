@@ -4,6 +4,14 @@ All notable changes documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/) and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### BREAKING
+
+- `robot.yaml`: removed the `sim:` block. World selection is now a positional
+  argument on `phoxal simulate <world>` (phoxal-cli ≥ next release). Existing
+  `robot.yaml` files with a `sim:` block will fail to parse — delete the block.
+
 ## [0.2.0](https://github.com/phoxal/framework/releases/tag/v0.2.0) - 2026-05-28
 
 
@@ -74,4 +82,3 @@ All notable changes documented here. The format follows
 
 - *(fixture)* Plan_robot.yaml uses tag: main for real catalog repos
 - *(safety)* Replace ignored robot-v1 test with fixture-driven coverage
-

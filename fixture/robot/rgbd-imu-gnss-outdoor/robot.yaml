@@ -7,8 +7,6 @@ identity:
 structure: structure.urdf
 phoxal_runtimes:
   version: "^0.1"
-sim:
-  world: sim/worlds/default.wbt
 motion:
   kinematic:
     kind: differential

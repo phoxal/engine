@@ -5,8 +5,8 @@ use phoxal_component::v1::CapabilityRef;
 use phoxal_robot::Robot as RobotManifest;
 use phoxal_robot::v1::{
     Component, ComponentSource, Components, ConnectionConfig, DriverConfig, Identity,
-    KinematicConfig, Motion, Phoxal, PhoxalRuntimes, PlatformRuntimeOverride, Robot, Sim,
-    SourcePath, UserRuntime, ValidationError,
+    KinematicConfig, Motion, Phoxal, PhoxalRuntimes, PlatformRuntimeOverride, Robot, SourcePath,
+    UserRuntime, ValidationError,
 };
 
 const PLATFORM_RUNTIMES: &[&str] = &["router", "drive", "localize"];
@@ -187,9 +187,6 @@ fn sample_robot() -> Robot {
                 path: "./runtimes/mission_behavior".into(),
             },
         )]),
-        sim: Sim {
-            world: "sim/worlds/training.wbt".into(),
-        },
         tools: BTreeMap::new(),
         motion: Motion {
             kinematic: KinematicConfig::Differential {

@@ -19,7 +19,6 @@ pub struct Robot {
     pub phoxal_runtimes: PhoxalRuntimes,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub user_runtimes: BTreeMap<String, UserRuntime>,
-    pub sim: Sim,
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub tools: BTreeMap<String, Tool>,
     pub motion: Motion,
@@ -62,12 +61,6 @@ pub struct PlatformRuntimeOverride {
 #[serde(deny_unknown_fields)]
 pub struct UserRuntime {
     pub path: PathBuf,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct Sim {
-    pub world: PathBuf,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
