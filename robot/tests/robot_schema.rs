@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+use std::path::PathBuf;
 
 use phoxal_component::v1::CapabilityRef;
 use phoxal_robot::Robot as RobotManifest;
@@ -30,6 +31,76 @@ fn parses_plan_robot_fixture() {
     robot
         .validate_with(PLATFORM_RUNTIMES)
         .expect("plan robot fixture should validate against platform names");
+}
+
+#[test]
+fn network_absent_round_trips_as_none() {
+    let robot = Robot::read_from_string(include_str!("fixtures/plan_robot.yaml"))
+        .expect("plan robot fixture should parse");
+
+    assert!(robot.network.is_none());
+
+    let yaml = serde_yaml::to_string(&RobotManifest::V1(robot))
+        .expect("robot should serialize with version dispatcher");
+
+    assert!(!yaml.starts_with("network:"));
+    assert!(!yaml.contains("\nnetwork:"));
+}
+
+#[test]
+fn network_full_round_trips() {
+    let yaml = plan_robot_with_network(
+        r#"network:
+  uplink:
+    endpoints: ["tls/uplink.phoxal.cloud:7447", "tcp/backup.example:7447"]
+  tls:
+    cert: secrets/router/cert.pem
+    key: secrets/router/key.pem
+    ca: secrets/router/ca.pem
+"#,
+    );
+    let robot = Robot::read_from_string(&yaml).expect("robot with network should parse");
+    let serialized = serde_yaml::to_string(&RobotManifest::V1(robot.clone()))
+        .expect("robot should serialize with version dispatcher");
+    let reparsed =
+        Robot::read_from_string(&serialized).expect("serialized robot with network should parse");
+
+    assert_eq!(reparsed.network, robot.network);
+    let network = reparsed.network.expect("network should be present");
+    assert_eq!(
+        network.uplink.endpoints,
+        vec![
+            "tls/uplink.phoxal.cloud:7447".to_string(),
+            "tcp/backup.example:7447".to_string(),
+        ]
+    );
+    let tls = network.tls.expect("tls should be present");
+    assert_eq!(tls.cert, PathBuf::from("secrets/router/cert.pem"));
+    assert_eq!(tls.key, PathBuf::from("secrets/router/key.pem"));
+    assert_eq!(tls.ca, PathBuf::from("secrets/router/ca.pem"));
+}
+
+#[test]
+fn network_with_only_uplink_no_tls() {
+    let yaml = plan_robot_with_network(
+        r#"network:
+  uplink:
+    endpoints: ["tls/uplink.phoxal.cloud:7447"]
+"#,
+    );
+    let robot = Robot::read_from_string(&yaml).expect("robot with network should parse");
+    let serialized = serde_yaml::to_string(&RobotManifest::V1(robot.clone()))
+        .expect("robot should serialize with version dispatcher");
+    let reparsed =
+        Robot::read_from_string(&serialized).expect("serialized robot with network should parse");
+
+    assert_eq!(reparsed.network, robot.network);
+    let network = reparsed.network.expect("network should be present");
+    assert_eq!(
+        network.uplink.endpoints,
+        vec!["tls/uplink.phoxal.cloud:7447".to_string()]
+    );
+    assert!(network.tls.is_none());
 }
 
 #[test]
@@ -130,6 +201,7 @@ fn sample_robot() -> Robot {
                 wheel_base_m: 0.6,
             },
         },
+        network: None,
         components: Components {
             sources: BTreeMap::from([(
                 "ddsm115".to_string(),
@@ -149,6 +221,14 @@ fn sample_robot() -> Robot {
             ]),
         },
     }
+}
+
+fn plan_robot_with_network(network: &str) -> String {
+    include_str!("fixtures/plan_robot.yaml").replacen(
+        "\ncomponents:\n",
+        &format!("\n{network}components:\n"),
+        1,
+    )
 }
 
 fn drive_instance(node_id: u8, mount_link: &str) -> Component {

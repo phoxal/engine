@@ -23,6 +23,8 @@ pub struct Robot {
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub tools: BTreeMap<String, Tool>,
     pub motion: Motion,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub network: Option<Network>,
     pub components: Components,
 }
 
@@ -72,6 +74,32 @@ pub struct Sim {
 #[serde(deny_unknown_fields)]
 pub struct Tool {
     pub version: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Network {
+    #[serde(default)]
+    pub uplink: Uplink,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tls: Option<NetworkTls>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Uplink {
+    /// Production zenoh endpoints (e.g. "tls/uplink.phoxal.cloud:7447").
+    /// Ignored in sim mode - phoxal-cli rewrites the upstream link.
+    #[serde(default)]
+    pub endpoints: Vec<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct NetworkTls {
+    pub cert: PathBuf,
+    pub key: PathBuf,
+    pub ca: PathBuf,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

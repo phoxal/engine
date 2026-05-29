@@ -21,8 +21,9 @@ pub use motion::{KinematicConfig, KinematicKind, Motion};
 pub use profile::{AutonomyProfileId, AutonomyProfileSpec, autonomy_profile};
 pub use resolver::{ResolvedCapabilityRole, ResolvedFacts, SourceBundle, resolve_source_bundle};
 pub use robot::{
-    ComponentSource, Components, Identity, Phoxal, PhoxalRuntimes, PlatformRuntimeOverride, Robot,
-    Sim, SourceGit, SourcePath, Tool, UserRuntime, ValidationError,
+    ComponentSource, Components, Identity, Network, NetworkTls, Phoxal, PhoxalRuntimes,
+    PlatformRuntimeOverride, Robot, Sim, SourceGit, SourcePath, Tool, Uplink, UserRuntime,
+    ValidationError,
 };
 pub use role::Role;
 pub use role_resolution::{RoleAssignment, RoleResolution};
