@@ -1,0 +1,35 @@
+[package]
+name = "phoxal-runtime-odometry"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[dependencies]
+phoxal-infra-bus = { workspace = true }
+phoxal-core-engine = { workspace = true }
+phoxal-api-component = { workspace = true }
+phoxal-api-frame = { workspace = true }
+phoxal-api-joint = { workspace = true }
+phoxal-api-odometry = { workspace = true }
+phoxal-validation-scenario = { workspace = true }
+
+async-trait = { workspace = true }
+phoxal-core-component = { workspace = true }
+phoxal-core-robot = { workspace = true }
+phoxal-core-structure = { workspace = true }
+urdf-rs = { workspace = true }
+phoxal-infra-helpers = { workspace = true }
+
+anyhow = { workspace = true }
+nalgebra = { workspace = true }
+clap = { workspace = true, features = ["derive", "env"] }
+tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread", "sync", "signal", "process"] }
+tracing = { workspace = true }
+
+[dev-dependencies]
+approx = "0.5.1"

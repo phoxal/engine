@@ -12,51 +12,33 @@ repository = "https://github.com/phoxal/framework"
 [workspace]
 resolver = "3"
 members = [
-    "bus",
-    "component-api",
-    "component",
-    "engine",
-    "runtimes/asset/api",
-    "runtimes/asset/runtime",
-    "runtimes/drive/api",
-    "runtimes/drive/runtime",
-    "runtimes/explore/api",
-    "runtimes/explore/runtime",
-    "runtimes/follow/api",
-    "runtimes/follow/runtime",
-    "runtimes/frame/api",
-    "runtimes/frame/runtime",
-    "runtimes/joint/api",
-    "runtimes/joint/runtime",
-    "runtimes/localize/api",
-    "runtimes/localize/orb-slam3-sys",
-    "runtimes/localize/runtime",
-    "runtimes/map/api",
-    "runtimes/map/runtime",
-    "runtimes/mission/api",
-    "runtimes/mission/runtime",
-    "runtimes/motion/api",
-    "runtimes/motion/runtime",
-    "runtimes/odometry/api",
-    "runtimes/odometry/runtime",
-    "runtimes/perception/api",
-    "runtimes/perception/runtime",
-    "runtimes/plan/api",
-    "runtimes/plan/runtime",
-    "runtimes/power/api",
-    "runtimes/power/runtime",
-    "runtimes/presence/api",
-    "runtimes/presence/runtime",
-    "runtimes/safety/api",
-    "runtimes/safety/runtime",
-    "runtimes/video/api",
-    "runtimes/video/runtime",
-    "helpers",
-    "robot",
-    "scenario",
-    "simulation",
-    "spatial",
-    "structure"
+    "infra/bus",
+    "infra/helpers",
+    "api/component",
+    "core/engine",
+    "core/component",
+    "core/robot",
+    "core/structure",
+    "core/simulation",
+    "core/spatial",
+    "validation/scenario",
+    "api/asset",      "runtime/asset",
+    "api/drive",      "runtime/drive",
+    "api/explore",    "runtime/explore",
+    "api/follow",     "runtime/follow",
+    "api/frame",      "runtime/frame",
+    "api/joint",      "runtime/joint",
+    "api/localize",   "runtime/localize",   "runtime/localize/orb-slam3-sys",
+    "api/map",        "runtime/map",
+    "api/mission",    "runtime/mission",
+    "api/motion",     "runtime/motion",
+    "api/odometry",   "runtime/odometry",
+    "api/perception", "runtime/perception",
+    "api/plan",       "runtime/plan",
+    "api/power",      "runtime/power",
+    "api/presence",   "runtime/presence",
+    "api/safety",     "runtime/safety",
+    "api/video",      "runtime/video",
 ]
 
 [workspace.dependencies]
@@ -82,33 +64,34 @@ tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
 urdf-rs = "0.9.0"
 zenoh = { version = "1.9.0" }
-orb-slam3-sys = { path = "runtimes/localize/orb-slam3-sys" }
-phoxal-bus = { path = "bus" }
-phoxal-component-api = { path = "component-api" }
-phoxal-engine = { path = "engine" }
-phoxal-runtime-asset-api = { path = "runtimes/asset/api" }
-phoxal-runtime-drive-api = { path = "runtimes/drive/api" }
-phoxal-runtime-explore-api = { path = "runtimes/explore/api" }
-phoxal-runtime-follow-api = { path = "runtimes/follow/api" }
-phoxal-runtime-frame-api = { path = "runtimes/frame/api" }
-phoxal-runtime-joint-api = { path = "runtimes/joint/api" }
-phoxal-runtime-localize-api = { path = "runtimes/localize/api" }
-phoxal-runtime-map-api = { path = "runtimes/map/api" }
-phoxal-runtime-mission-api = { path = "runtimes/mission/api" }
-phoxal-runtime-motion-api = { path = "runtimes/motion/api" }
-phoxal-runtime-odometry-api = { path = "runtimes/odometry/api" }
-phoxal-runtime-perception-api = { path = "runtimes/perception/api" }
-phoxal-runtime-plan-api = { path = "runtimes/plan/api" }
-phoxal-runtime-power-api = { path = "runtimes/power/api" }
-phoxal-runtime-safety-api = { path = "runtimes/safety/api" }
-phoxal-runtime-video-api = { path = "runtimes/video/api" }
-phoxal-component = { path = "component" }
-phoxal-helpers = { path = "helpers" }
-phoxal-robot = { path = "robot" }
-phoxal-scenario = { path = "scenario" }
-phoxal-simulation = { path = "simulation" }
-phoxal-spatial = { path = "spatial" }
-phoxal-structure = { path = "structure" }
+phoxal-infra-bus                       = { path = "infra/bus" }
+phoxal-infra-helpers                   = { path = "infra/helpers" }
+phoxal-api-component                   = { path = "api/component" }
+phoxal-core-engine                     = { path = "core/engine" }
+phoxal-core-component                  = { path = "core/component" }
+phoxal-core-robot                      = { path = "core/robot" }
+phoxal-core-structure                  = { path = "core/structure" }
+phoxal-core-simulation                 = { path = "core/simulation" }
+phoxal-core-spatial                    = { path = "core/spatial" }
+phoxal-validation-scenario             = { path = "validation/scenario" }
+phoxal-api-asset                       = { path = "api/asset" }
+phoxal-api-drive                       = { path = "api/drive" }
+phoxal-api-explore                     = { path = "api/explore" }
+phoxal-api-follow                      = { path = "api/follow" }
+phoxal-api-frame                       = { path = "api/frame" }
+phoxal-api-joint                       = { path = "api/joint" }
+phoxal-api-localize                    = { path = "api/localize" }
+phoxal-api-map                         = { path = "api/map" }
+phoxal-api-mission                     = { path = "api/mission" }
+phoxal-api-motion                      = { path = "api/motion" }
+phoxal-api-odometry                    = { path = "api/odometry" }
+phoxal-api-perception                  = { path = "api/perception" }
+phoxal-api-plan                        = { path = "api/plan" }
+phoxal-api-power                       = { path = "api/power" }
+phoxal-api-presence                    = { path = "api/presence" }
+phoxal-api-safety                      = { path = "api/safety" }
+phoxal-api-video                       = { path = "api/video" }
+phoxal-runtime-localize-orb-slam3-sys  = { path = "runtime/localize/orb-slam3-sys" }
 
 [workspace.lints.rust]
 unused = "warn"
@@ -118,25 +101,25 @@ lto = false
 codegen-units = 16
 
 [patch."https://github.com/phoxal/engine"]
-phoxal-bus = { path = "bus" }
-phoxal-engine = { path = "engine" }
-phoxal-component-api = { path = "component-api" }
-phoxal-component = { path = "component" }
-phoxal-helpers = { path = "helpers" }
-phoxal-robot = { path = "robot" }
-phoxal-scenario = { path = "scenario" }
-phoxal-simulation = { path = "simulation" }
-phoxal-spatial = { path = "spatial" }
-phoxal-structure = { path = "structure" }
+phoxal-infra-bus           = { path = "infra/bus" }
+phoxal-core-engine         = { path = "core/engine" }
+phoxal-api-component       = { path = "api/component" }
+phoxal-core-component      = { path = "core/component" }
+phoxal-infra-helpers       = { path = "infra/helpers" }
+phoxal-core-robot          = { path = "core/robot" }
+phoxal-validation-scenario = { path = "validation/scenario" }
+phoxal-core-simulation     = { path = "core/simulation" }
+phoxal-core-spatial        = { path = "core/spatial" }
+phoxal-core-structure      = { path = "core/structure" }
 
 [patch."https://github.com/phoxal/framework"]
-phoxal-bus = { path = "bus" }
-phoxal-engine = { path = "engine" }
-phoxal-component-api = { path = "component-api" }
-phoxal-component = { path = "component" }
-phoxal-helpers = { path = "helpers" }
-phoxal-robot = { path = "robot" }
-phoxal-scenario = { path = "scenario" }
-phoxal-simulation = { path = "simulation" }
-phoxal-spatial = { path = "spatial" }
-phoxal-structure = { path = "structure" }
+phoxal-infra-bus           = { path = "infra/bus" }
+phoxal-core-engine         = { path = "core/engine" }
+phoxal-api-component       = { path = "api/component" }
+phoxal-core-component      = { path = "core/component" }
+phoxal-infra-helpers       = { path = "infra/helpers" }
+phoxal-core-robot          = { path = "core/robot" }
+phoxal-validation-scenario = { path = "validation/scenario" }
+phoxal-core-simulation     = { path = "core/simulation" }
+phoxal-core-spatial        = { path = "core/spatial" }
+phoxal-core-structure      = { path = "core/structure" }

@@ -71,12 +71,12 @@ All notable changes documented here. The format follows
 ### Refactored
 
 - *(workspace)* Carve members into future-repo subdirs
-- *(engine)* Fold phoxal-utils-conventions into phoxal-engine
+- *(engine)* Fold phoxal-utils-conventions into phoxal-core-engine
 - *(api)* Introduce pub mod v1 in every phoxal-*-api crate
 - *(framework)* Delete dead RuntimeBudget; adopt v1 dispatcher in utils-robot; sweep dead code
 - *(tests)* Annotate live-bus tests with #[serial]; tidy localize selector tempdirs
 - *(engine)* Own SimulationClock; drop engine→simulator-api dep edge
-- *(workspace)* Drop utils- prefix; merge scenario crates; structure runtimes/<name>/{api,runtime}/
+- *(workspace)* Drop utils- prefix; merge scenario crates; structure runtime/<name>/{api,runtime}/
 
 ### Tests
 
