@@ -2,15 +2,8 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 use anyhow::Result;
-use phoxal_infra_bus::pubsub::Stamped;
-use phoxal_core_component::v1::capability::GnssCoordinateSystem;
 use phoxal_api_component::v1::capability::{camera, depth, imu};
 use phoxal_api_component::v1::{RuntimeStreamDemand, capability::gnss};
-use phoxal_core_engine::clock::Step;
-use phoxal_core_engine::sim_pose::{self, Pose as SimPose};
-use phoxal_core_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
-use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_core_robot::v1::LocalizeBackendKind;
 use phoxal_api_frame::v1::FrameId;
 use phoxal_api_localize::v1::{
     AffectedKeyframeSummary, CorrectionsRequest, CorrectionsResponse, Covariance, ImuBiasEstimate,
@@ -22,6 +15,13 @@ use phoxal_api_localize::v1::{
     revision, state,
 };
 use phoxal_api_odometry::v1::{OdometryEstimate, StatusMode, data as odometry_data};
+use phoxal_core_component::v1::capability::GnssCoordinateSystem;
+use phoxal_core_engine::clock::Step;
+use phoxal_core_engine::sim_pose::{self, Pose as SimPose};
+use phoxal_core_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
+use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
+use phoxal_core_robot::v1::LocalizeBackendKind;
+use phoxal_infra_bus::pubsub::Stamped;
 use tracing::info;
 
 use crate::gnss_anchored::GnssAnchoredBackend;
@@ -549,9 +549,7 @@ pub(crate) fn publishable_revision(
     }
 }
 
-fn localize_pose_from_odometry(
-    pose: &phoxal_api_odometry::v1::PoseEstimate,
-) -> PoseEstimate {
+fn localize_pose_from_odometry(pose: &phoxal_api_odometry::v1::PoseEstimate) -> PoseEstimate {
     PoseEstimate {
         frame_id: FrameId::new(ODOM_FRAME_ID),
         child_frame_id: FrameId::new(BASE_FRAME_ID),
@@ -614,13 +612,13 @@ pub(crate) fn corrections_response(
 
 #[cfg(test)]
 mod tests {
-    use phoxal_core_engine::clock::Step;
-    use phoxal_core_engine::sim_clock::SimulationClock as Clock;
     use phoxal_api_localize::v1::PoseGraphRange;
     use phoxal_api_odometry::v1::{
         Covariance as OdometryCovariance, PoseEstimate as OdometryPoseEstimate, Status,
         VelocityEstimate as OdometryVelocityEstimate,
     };
+    use phoxal_core_engine::clock::Step;
+    use phoxal_core_engine::sim_clock::SimulationClock as Clock;
 
     use super::*;
 

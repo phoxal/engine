@@ -2,9 +2,9 @@ use std::borrow::Cow;
 use std::time::Instant;
 
 use anyhow::{Result, ensure};
+use phoxal_api_mission::v1::{GoalSource, MissionMode};
 use phoxal_core_engine::RobotRuntimeArgs;
 use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_api_mission::v1::{GoalSource, MissionMode};
 use phoxal_validation_scenario::harness::ScenarioContext;
 use phoxal_validation_scenario::webots::{
     command_deadline, context_from_args, wait_for_mission_state, wait_until_tracking,

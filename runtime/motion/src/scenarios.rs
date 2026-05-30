@@ -2,8 +2,6 @@ use std::borrow::Cow;
 
 use crate::core::Arbitration as MotionArbitration;
 use anyhow::{Result, ensure};
-use phoxal_infra_bus::pubsub::Stamped;
-use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
 use phoxal_api_drive::v1::Target as DriveTarget;
 use phoxal_api_follow::v1::Target as FollowTarget;
 use phoxal_api_localize::v1::LocalizationRevisionId;
@@ -14,6 +12,8 @@ use phoxal_api_motion::v1::{
 use phoxal_api_safety::v1::{
     Constraint, MotionConstraint, SafetyAuthorization, SafetyDecision, SafetySourceRevision,
 };
+use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
+use phoxal_infra_bus::pubsub::Stamped;
 use phoxal_validation_scenario::helpers::assert_schema;
 
 pub const SCENARIOS: &[ScenarioDescriptor] = &[ScenarioDescriptor {

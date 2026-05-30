@@ -2,15 +2,7 @@ use std::time::Duration;
 
 use crate::core::{HealthState, Tracker, TrackerConfig};
 use anyhow::{Result, bail};
-use phoxal_infra_bus::pubsub::Stamped;
-use phoxal_core_component::v1::CapabilityRef;
-use phoxal_core_component::v1::capability::Capability;
 use phoxal_api_component::v1::capability::{camera, depth};
-use phoxal_core_engine::clock::Step;
-use phoxal_core_engine::staged::Robot;
-use phoxal_core_engine::step::{InputPolicy, Io, Publisher, Runtime, RuntimeInputs};
-use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_core_robot::v1::Role;
 use phoxal_api_frame::v1::{FrameId, Tree, tree};
 use phoxal_api_localize::v1::LocalizationState;
 use phoxal_api_map::v1::{MapRevision, revision};
@@ -18,7 +10,15 @@ use phoxal_api_perception::v1::{
     BoundingBox, Detection, Detections, PerceptionDegradedReason, PerceptionState,
     PerceptionStoppedReason, RevisionLinkage, detections, state,
 };
+use phoxal_core_component::v1::CapabilityRef;
+use phoxal_core_component::v1::capability::Capability;
+use phoxal_core_engine::clock::Step;
+use phoxal_core_engine::staged::Robot;
+use phoxal_core_engine::step::{InputPolicy, Io, Publisher, Runtime, RuntimeInputs};
+use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
+use phoxal_core_robot::v1::Role;
 use phoxal_core_structure::Structure;
+use phoxal_infra_bus::pubsub::Stamped;
 use tracing::warn;
 
 const CLOCK_PERIOD: Duration = Duration::from_millis(50);

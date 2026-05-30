@@ -1,9 +1,9 @@
 pub const SCHEMA_NAME: &str = "phoxal-api-safety/v1";
 pub const SCHEMA_VERSION: u32 = 1;
 
-use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use phoxal_api_localize::v1::LocalizationRevisionId;
 use phoxal_api_map::v1::MapRevisionId;
+use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use serde::{Deserialize, Serialize};
 
 pub const AUTHORIZATION_TOPIC: &str = "runtime/safety/authorization";

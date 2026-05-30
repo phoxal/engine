@@ -3,9 +3,9 @@ pub const SCHEMA_VERSION: u32 = 1;
 
 use std::fmt;
 
+use phoxal_api_joint::v1::JointId;
 use phoxal_infra_bus::pubsub::Stamped;
 use phoxal_infra_bus::zenoh_typed::{TypedPublisherBuilder, TypedSchema, TypedSubscriberBuilder};
-use phoxal_api_joint::v1::JointId;
 use serde::{Deserialize, Serialize};
 
 pub const TREE_TOPIC: &str = "runtime/frame/tree";

@@ -2,15 +2,15 @@ use std::time::Duration;
 
 use crate::core::{GoalPublish, MissionState};
 use anyhow::Result;
-use phoxal_infra_bus::pubsub::Stamped;
-use phoxal_core_engine::clock::Step;
-use phoxal_core_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
-use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_api_explore::v1::{GoalCandidates, goal_candidates};
 use phoxal_api_localize::v1::{LocalizationMode, LocalizationState, PoseEstimate};
 use phoxal_api_mission::v1::{
     Goal, GoalSource, MissionCommand, MissionMode, State, command, goal, state,
 };
+use phoxal_core_engine::clock::Step;
+use phoxal_core_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
+use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
+use phoxal_infra_bus::pubsub::Stamped;
 use tracing::info;
 
 const CLOCK_PERIOD: Duration = Duration::from_millis(100);
@@ -188,7 +188,6 @@ const fn mission_goal_source(source: &GoalSource) -> MissionGoalSource {
 
 #[cfg(test)]
 mod tests {
-    use phoxal_core_engine::sim_clock::SimulationClock as Clock;
     use phoxal_api_explore::v1::{GoalCandidate, GoalCandidates};
     use phoxal_api_frame::v1::FrameId;
     use phoxal_api_localize::v1::{LocalizationSource, LocalizationStatus};
@@ -196,6 +195,7 @@ mod tests {
     use phoxal_api_mission::v1::{
         ExplorationCompletion, ExplorationCompletionMode, GoalPose, GoalSource, GoalTolerance,
     };
+    use phoxal_core_engine::sim_clock::SimulationClock as Clock;
 
     use super::*;
 

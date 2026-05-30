@@ -2,17 +2,17 @@ use std::borrow::Cow;
 use std::time::Instant;
 
 use anyhow::{Result, anyhow, ensure};
-use phoxal_infra_bus::liveliness::declare_liveliness_token;
-use phoxal_infra_bus::pubsub::Stamped;
 use phoxal_api_component::v1::capability::{
     camera::{Encoding as CameraEncoding, Frame as CameraFrame},
     depth::Depth as DepthFrame,
     profile::{CameraProfileEncoding, CameraProfileSpec, DepthProfileSpec},
     profile_path,
 };
+use phoxal_api_motion::v1::ManualCommand;
 use phoxal_core_engine::RobotRuntimeArgs;
 use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_api_motion::v1::ManualCommand;
+use phoxal_infra_bus::liveliness::declare_liveliness_token;
+use phoxal_infra_bus::pubsub::Stamped;
 use phoxal_validation_scenario::harness::ScenarioContext;
 use phoxal_validation_scenario::webots::{command_deadline, context_from_args};
 

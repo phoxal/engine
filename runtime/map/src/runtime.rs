@@ -3,12 +3,7 @@ use std::time::Duration;
 
 use anyhow::Result;
 use nalgebra::{Quaternion, UnitQuaternion};
-use phoxal_infra_bus::pubsub::Stamped;
-use phoxal_core_component::v1::CapabilityRef;
 use phoxal_api_component::v1::capability::range;
-use phoxal_core_engine::clock::Step;
-use phoxal_core_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
-use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_api_frame::v1::FrameId;
 use phoxal_api_localize::v1::{
     Keyframe, LocalizationRevision, LocalizationRevisionId, LocalizationState, PoseEstimate,
@@ -24,10 +19,15 @@ use phoxal_api_map::v1::{
     query::local_grid, query::snapshot, query::submap, query::traversability_tile, revision,
     summary, traversability, traversability_summary,
 };
+use phoxal_core_component::v1::CapabilityRef;
+use phoxal_core_engine::clock::Step;
+use phoxal_core_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
+use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_core_spatial::ray::sample_range_rays;
 use phoxal_core_spatial::sensor::{
     ResolvedSensorKind, ResolvedSensorPose, resolve_sensor_poses_in_frame,
 };
+use phoxal_infra_bus::pubsub::Stamped;
 use tracing::info;
 
 use crate::core::body_envelope;
@@ -744,9 +744,7 @@ mod tests {
         AffectedKeyframeSummary, Keyframe, KeyframeId, LocalizationRevisionCause, PoseEstimate,
         Region as LocalizeRegion,
     };
-    use phoxal_api_map::v1::{
-        MapRevisionCause, MapTileRequest, Region, Resolution, Submap,
-    };
+    use phoxal_api_map::v1::{MapRevisionCause, MapTileRequest, Region, Resolution, Submap};
 
     use crate::core::occupancy::{
         GRID_HEIGHT_CELLS, GRID_RESOLUTION_M, GRID_WIDTH_CELLS, OccupancyGrid, OccupancySnapshot,

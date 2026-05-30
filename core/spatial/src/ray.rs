@@ -271,9 +271,9 @@ fn is_range_hit(distance_m: f32, max_range_m: f32) -> bool {
 #[cfg(test)]
 mod tests {
     use nalgebra::UnitQuaternion;
-    use phoxal_core_component::v1::CapabilityRef;
     use phoxal_api_component::v1::capability::depth::Depth as DepthPayload;
     use phoxal_api_component::v1::capability::lidar::{Points, Ranges, Scan as LidarData};
+    use phoxal_core_component::v1::CapabilityRef;
 
     use crate::sensor::{ResolvedSensorKind, ResolvedSensorPose};
 

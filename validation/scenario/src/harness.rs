@@ -2,15 +2,6 @@ use std::collections::BTreeMap;
 use std::time::Duration;
 
 use anyhow::{Context, Result, anyhow, bail};
-use phoxal_infra_bus::Bus;
-use phoxal_infra_bus::pubsub::Stamped;
-use phoxal_infra_bus::zenoh_typed::{TypedPublisher, TypedSchema, TypedSubscriber};
-use phoxal_core_engine::DEFAULT_ROBOT_NAMESPACE;
-use phoxal_core_engine::presence::Summary;
-use phoxal_core_engine::{
-    sim_clock, sim_clock::SimulationClock as Clock, sim_pose, sim_pose::Pose, sim_reset as reset,
-    sim_status, sim_status::Status,
-};
 use phoxal_api_explore::v1::{GoalCandidates, State as ExploreState};
 use phoxal_api_follow::v1::State as FollowState;
 use phoxal_api_localize::v1::LocalizationState;
@@ -21,6 +12,15 @@ use phoxal_api_mission::v1::{
 };
 use phoxal_api_plan::v1::State as PlanState;
 use phoxal_api_safety::v1::State as SafetyState;
+use phoxal_core_engine::DEFAULT_ROBOT_NAMESPACE;
+use phoxal_core_engine::presence::Summary;
+use phoxal_core_engine::{
+    sim_clock, sim_clock::SimulationClock as Clock, sim_pose, sim_pose::Pose, sim_reset as reset,
+    sim_status, sim_status::Status,
+};
+use phoxal_infra_bus::Bus;
+use phoxal_infra_bus::pubsub::Stamped;
+use phoxal_infra_bus::zenoh_typed::{TypedPublisher, TypedSchema, TypedSubscriber};
 use serde::{Serialize, de::DeserializeOwned};
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -48,8 +48,8 @@ impl ScenarioEnvironment {
     fn from_vars(
         var: impl Fn(&str) -> std::result::Result<String, std::env::VarError>,
     ) -> Result<Self> {
-        let robot_router_endpoint =
-            var(phoxal_core_engine::ENV_ROBOT_ROUTER_ENDPOINT).with_context(|| {
+        let robot_router_endpoint = var(phoxal_core_engine::ENV_ROBOT_ROUTER_ENDPOINT)
+            .with_context(|| {
                 format!(
                     "{} must be set for scenario context",
                     phoxal_core_engine::ENV_ROBOT_ROUTER_ENDPOINT
@@ -215,10 +215,9 @@ impl ScenarioContext {
     }
 
     pub async fn latest_explore_candidates(&self) -> Result<Stamped<GoalCandidates>> {
-        let subscriber =
-            phoxal_api_explore::v1::goal_candidates::subscriber_builder(&self.bus)
-                .await
-                .map_err(|error| anyhow!(error.to_string()))?;
+        let subscriber = phoxal_api_explore::v1::goal_candidates::subscriber_builder(&self.bus)
+            .await
+            .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 
@@ -230,10 +229,9 @@ impl ScenarioContext {
     }
 
     pub async fn latest_traversability_summary(&self) -> Result<Stamped<TraversabilitySummary>> {
-        let subscriber =
-            phoxal_api_map::v1::traversability_summary::subscriber_builder(&self.bus)
-                .await
-                .map_err(|error| anyhow!(error.to_string()))?;
+        let subscriber = phoxal_api_map::v1::traversability_summary::subscriber_builder(&self.bus)
+            .await
+            .map_err(|error| anyhow!(error.to_string()))?;
         next_stamped(&subscriber, self.wallclock_timeout).await
     }
 

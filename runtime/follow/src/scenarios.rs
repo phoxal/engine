@@ -2,9 +2,9 @@ use std::borrow::Cow;
 use std::time::Instant;
 
 use anyhow::{Result, anyhow, ensure};
+use phoxal_api_follow::v1::FollowStatus;
 use phoxal_core_engine::RobotRuntimeArgs;
 use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_api_follow::v1::FollowStatus;
 use phoxal_validation_scenario::harness::ScenarioContext;
 use phoxal_validation_scenario::webots::{
     P4_GOAL_REACHED_TOLERANCE_M, P4_GOAL_XY_M, command_deadline, context_from_args, p4_goal,

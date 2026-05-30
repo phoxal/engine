@@ -7,21 +7,21 @@ use openh264::encoder::{
     BitRate, Encoder, EncoderConfig, FrameRate, IntraFramePeriod, RateControlMode,
 };
 use openh264::formats::{RgbSliceU8, YUVBuffer};
-use phoxal_infra_bus::Bus;
-use phoxal_infra_bus::liveliness::LivelinessEvent;
-use phoxal_infra_bus::pubsub::Stamped;
-use phoxal_core_component::v1::CapabilityRef;
-use phoxal_core_component::v1::capability::Capability;
 use phoxal_api_component::v1::capability::camera;
 use phoxal_api_component::v1::capability::profile::{CameraProfileEncoding, CameraProfileSpec};
-use phoxal_core_engine::clock::Step;
-use phoxal_core_engine::staged::Robot;
-use phoxal_core_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
-use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_api_video::v1::{
     Codec, EndReason, OpenRequest, OpenResponse, StreamEvent, StreamFormat, StreamPacket,
     UnavailableReason, open, stream,
 };
+use phoxal_core_component::v1::CapabilityRef;
+use phoxal_core_component::v1::capability::Capability;
+use phoxal_core_engine::clock::Step;
+use phoxal_core_engine::staged::Robot;
+use phoxal_core_engine::step::{Io, Publisher, RequestResponder, Runtime, RuntimeInputs};
+use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
+use phoxal_infra_bus::Bus;
+use phoxal_infra_bus::liveliness::LivelinessEvent;
+use phoxal_infra_bus::pubsub::Stamped;
 use tracing::warn;
 
 pub(crate) const PREVIEW_MAX_HEIGHT_PX: u32 = 480;

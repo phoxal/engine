@@ -3,11 +3,6 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result, bail, ensure};
 use nalgebra::{Isometry3, Quaternion, Translation3, UnitQuaternion};
-use phoxal_infra_bus::zenoh_typed::TypedSchema;
-use phoxal_core_engine::COMPONENT_FILE;
-use phoxal_core_engine::presence::{Heartbeat, Readiness, RuntimeId, RuntimeReadiness, Summary};
-use phoxal_core_engine::sim_pose::Pose;
-use phoxal_core_engine::staged;
 use phoxal_api_frame::v1::{FrameId, FrameLookupResponse, FrameTransform, Source};
 use phoxal_api_localize::v1::{
     AffectedKeyframeSummary, Keyframe, KeyframeId, LocalizationRevision, LocalizationRevisionCause,
@@ -16,6 +11,11 @@ use phoxal_api_localize::v1::{
 use phoxal_api_odometry::v1::{
     OdometryEstimate, PoseEstimate, Status, StatusMode, VelocityEstimate,
 };
+use phoxal_core_engine::COMPONENT_FILE;
+use phoxal_core_engine::presence::{Heartbeat, Readiness, RuntimeId, RuntimeReadiness, Summary};
+use phoxal_core_engine::sim_pose::Pose;
+use phoxal_core_engine::staged;
+use phoxal_infra_bus::zenoh_typed::TypedSchema;
 
 const TRACK_WIDTH_M: f64 = 0.40;
 
@@ -194,10 +194,7 @@ pub fn workspace_root() -> Result<PathBuf> {
         std::env::var("CARGO_MANIFEST_DIR")
             .context("CARGO_MANIFEST_DIR not set; run via a runtime cargo package")?,
     );
-    let Some(workspace_root) = manifest_dir
-        .parent()
-        .and_then(|path| path.parent())
-    else {
+    let Some(workspace_root) = manifest_dir.parent().and_then(|path| path.parent()) else {
         bail!(
             "runtime CARGO_MANIFEST_DIR must live two levels below the workspace root: {}",
             manifest_dir.display()

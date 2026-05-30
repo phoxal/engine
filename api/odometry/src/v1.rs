@@ -1,9 +1,9 @@
 pub const SCHEMA_NAME: &str = "phoxal-api-odometry/v1";
 pub const SCHEMA_VERSION: u32 = 1;
 
-use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use phoxal_api_frame::v1::FrameId;
 use phoxal_api_joint::v1::JointId;
+use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use serde::{Deserialize, Serialize};
 
 pub const DATA_TOPIC: &str = "runtime/odometry/data";
@@ -166,7 +166,8 @@ pub mod debug {
         /// Residuals intentionally stay empty for v1 until IMU fusion provides a reference signal.
         pub fn publisher(
             bus: &phoxal_infra_bus::Bus,
-        ) -> phoxal_infra_bus::Result<TypedPublisherBuilder<'_, 'static, Stamped<Residuals>>> {
+        ) -> phoxal_infra_bus::Result<TypedPublisherBuilder<'_, 'static, Stamped<Residuals>>>
+        {
             phoxal_infra_bus::pubsub::publisher_builder(bus, TOPIC)
         }
 

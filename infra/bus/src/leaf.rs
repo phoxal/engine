@@ -16,7 +16,8 @@ macro_rules! pubsub_leaf {
 
             pub fn publisher(
                 bus: &phoxal_infra_bus::Bus,
-            ) -> phoxal_infra_bus::Result<TypedPublisherBuilder<'_, 'static, Stamped<$payload>>> {
+            ) -> phoxal_infra_bus::Result<TypedPublisherBuilder<'_, 'static, Stamped<$payload>>>
+            {
                 phoxal_infra_bus::pubsub::publisher_builder(bus, TOPIC)
             }
 
@@ -52,7 +53,12 @@ macro_rules! query_leaf {
             pub fn queryable_builder(
                 bus: &phoxal_infra_bus::Bus,
             ) -> phoxal_infra_bus::Result<
-                phoxal_infra_bus::zenoh_typed::TypedQueryableBuilder<'_, 'static, $request, $response>,
+                phoxal_infra_bus::zenoh_typed::TypedQueryableBuilder<
+                    '_,
+                    'static,
+                    $request,
+                    $response,
+                >,
             > {
                 phoxal_infra_bus::query::queryable_builder(bus, TOPIC)
             }

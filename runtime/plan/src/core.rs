@@ -1,6 +1,4 @@
-use phoxal_api_localize::v1::{
-    LocalizationMode, LocalizationRevisionId, LocalizationState,
-};
+use phoxal_api_localize::v1::{LocalizationMode, LocalizationRevisionId, LocalizationState};
 use phoxal_api_map::v1::{MapRevision, MapRevisionId};
 use phoxal_api_mission::v1::{Goal, GoalPose};
 use phoxal_api_plan::v1::{Path, PathPose, PlanReason, PlanStatus, State};

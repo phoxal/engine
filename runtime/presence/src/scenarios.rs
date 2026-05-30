@@ -3,7 +3,9 @@ use std::borrow::Cow;
 use anyhow::{Result, ensure};
 use phoxal_core_engine::presence::{DebugReadiness, Readiness};
 use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
-use phoxal_validation_scenario::helpers::{assert_ready_summary, heartbeat, readiness_for, readiness_summary};
+use phoxal_validation_scenario::helpers::{
+    assert_ready_summary, heartbeat, readiness_for, readiness_summary,
+};
 
 const P0_RUNTIMES: &[&str] = &["asset", "power", "presence", "router"];
 
