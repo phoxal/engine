@@ -3,8 +3,8 @@ pub const SCHEMA_VERSION: u32 = 1;
 
 use std::fmt;
 
-use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use phoxal_api_frame::v1::FrameId;
+use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use serde::{Deserialize, Serialize};
 
 pub mod stream_demand;

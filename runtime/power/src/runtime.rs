@@ -1,13 +1,11 @@
 use std::sync::Arc;
 
 use anyhow::Result;
-use phoxal_infra_bus::pubsub::Stamped;
+use phoxal_api_power::v1::{Command, FailedReason, RejectedReason, State, Status, command, state};
 use phoxal_core_engine::RobotRuntimeArgs;
 use phoxal_core_engine::clock::Step;
 use phoxal_core_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
-use phoxal_api_power::v1::{
-    Command, FailedReason, RejectedReason, State, Status, command, state,
-};
+use phoxal_infra_bus::pubsub::Stamped;
 
 #[derive(Debug)]
 pub(crate) struct Config {

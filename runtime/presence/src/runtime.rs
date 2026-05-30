@@ -2,7 +2,6 @@ use std::collections::HashMap;
 use std::time::Duration;
 
 use anyhow::Result;
-use phoxal_infra_bus::pubsub::Stamped;
 use phoxal_core_engine::clock::Step;
 use phoxal_core_engine::presence::{
     DebugReadiness, Heartbeat, Readiness, RuntimeId, RuntimeReadiness, Summary, debug, heartbeat,
@@ -11,6 +10,7 @@ use phoxal_core_engine::presence::{
 use phoxal_core_engine::stale_timeout_ns;
 use phoxal_core_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
+use phoxal_infra_bus::pubsub::Stamped;
 
 const PUBLISH_HZ: f64 = 1.0;
 

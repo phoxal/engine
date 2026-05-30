@@ -1,10 +1,10 @@
 pub const SCHEMA_NAME: &str = "phoxal-api-explore/v1";
 pub const SCHEMA_VERSION: u32 = 1;
 
-use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use phoxal_api_localize::v1::LocalizationRevisionId;
 use phoxal_api_map::v1::MapRevisionId;
 use phoxal_api_mission::v1::{GoalPose, GoalTolerance};
+use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use serde::{Deserialize, Serialize};
 
 pub const FRONTIERS_TOPIC: &str = "runtime/explore/frontiers";

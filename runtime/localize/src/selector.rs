@@ -1,9 +1,9 @@
 use std::path::{Path, PathBuf};
 
 use anyhow::{Result, bail};
+use phoxal_api_component::v1::capability::profile::ProfileId;
 use phoxal_core_component::v1::CapabilityRef;
 use phoxal_core_component::v1::capability::{Capability, GnssCoordinateSystem};
-use phoxal_api_component::v1::capability::profile::ProfileId;
 use phoxal_core_engine::staged::Robot;
 use phoxal_core_robot::v1::{ResolvedLocalizeBackend, resolve_localize_backend};
 use phoxal_core_structure::Structure;

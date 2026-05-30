@@ -288,8 +288,10 @@ mod tests {
         assert_eq!(dead_reckoning.family(), "proprioceptive");
     }
 
-    fn fixture_model_and_components() -> (Robot, BTreeMap<String, phoxal_core_component::v1::Component>)
-    {
+    fn fixture_model_and_components() -> (
+        Robot,
+        BTreeMap<String, phoxal_core_component::v1::Component>,
+    ) {
         let bundle_root = fixture_bundle_root();
         let model = match Robot::read_from_dir(&bundle_root) {
             Ok(model) => model,

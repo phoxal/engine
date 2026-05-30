@@ -1,8 +1,8 @@
-use phoxal_infra_bus::pubsub::Stamped;
 use phoxal_api_drive::v1::Target as DriveTarget;
 use phoxal_api_follow::v1::Target as FollowTarget;
 use phoxal_api_motion::v1::{ManualCommand, MotionReason, MotionSource};
 use phoxal_api_safety::v1::{SafetyAuthorization, SafetyDecision};
+use phoxal_infra_bus::pubsub::Stamped;
 
 const MANUAL_COMMAND_STALE_TIMEOUT_NS: u64 = 500_000_000; // 500 ms
 const FOLLOW_TARGET_STALE_TIMEOUT_NS: u64 = 500_000_000;

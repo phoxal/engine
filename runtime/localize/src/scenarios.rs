@@ -2,9 +2,6 @@ use std::borrow::Cow;
 use std::time::Instant;
 
 use anyhow::{Result, anyhow, ensure};
-use phoxal_core_engine::RobotRuntimeArgs;
-use phoxal_core_engine::sim_pose::Pose as SimulatorPose;
-use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
 use phoxal_api_localize::v1::{
     Keyframe, LocalizationMode, LocalizationRevision, LocalizationRevisionCause,
     LocalizationSource, LocalizationState, LocalizationStatusReason, PoseEstimate,
@@ -12,6 +9,9 @@ use phoxal_api_localize::v1::{
 };
 use phoxal_api_map::v1::Summary as MapSummary;
 use phoxal_api_motion::v1::ManualCommand;
+use phoxal_core_engine::RobotRuntimeArgs;
+use phoxal_core_engine::sim_pose::Pose as SimulatorPose;
+use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
 use phoxal_validation_scenario::harness::ScenarioContext;
 use phoxal_validation_scenario::helpers::{assert_schema, fixture_robot};
 use phoxal_validation_scenario::webots::{
@@ -521,7 +521,8 @@ async fn assert_p2_revision_loop_closure(ctx: &ScenarioContext, deadline: Instan
     wait_until_tracking(ctx, deadline).await?;
 
     loop {
-        let summary: phoxal_infra_bus::pubsub::Stamped<MapSummary> = ctx.latest_map_summary().await?;
+        let summary: phoxal_infra_bus::pubsub::Stamped<MapSummary> =
+            ctx.latest_map_summary().await?;
         if summary.data.built_from_localize_revision.is_some() {
             break;
         }

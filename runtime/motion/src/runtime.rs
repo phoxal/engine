@@ -2,16 +2,14 @@ use std::time::Duration;
 
 use crate::core::Arbitration;
 use anyhow::Result;
-use phoxal_infra_bus::pubsub::Stamped;
+use phoxal_api_drive::v1::{Target as DriveTarget, target as drive_target};
+use phoxal_api_follow::v1::{Target as FollowTarget, target as follow_target};
+use phoxal_api_motion::v1::{ManualCommand, MotionReason, MotionSource, State, manual, state};
+use phoxal_api_safety::v1::{SafetyAuthorization, authorization as safety_authorization};
 use phoxal_core_engine::clock::Step;
 use phoxal_core_engine::step::{InputPolicy, Io, Publisher, Runtime, RuntimeInputs};
 use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_api_drive::v1::{Target as DriveTarget, target as drive_target};
-use phoxal_api_follow::v1::{Target as FollowTarget, target as follow_target};
-use phoxal_api_motion::v1::{
-    ManualCommand, MotionReason, MotionSource, State, manual, state,
-};
-use phoxal_api_safety::v1::{SafetyAuthorization, authorization as safety_authorization};
+use phoxal_infra_bus::pubsub::Stamped;
 use tracing::info;
 
 const CLOCK_PERIOD: Duration = Duration::from_millis(50);

@@ -1,8 +1,8 @@
 pub const SCHEMA_NAME: &str = "phoxal-api-mission/v1";
 pub const SCHEMA_VERSION: u32 = 1;
 
-use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use phoxal_api_map::v1::MapRevisionId;
+use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use serde::{Deserialize, Serialize};
 
 pub const COMMAND_TOPIC: &str = "runtime/mission/command";

@@ -1,12 +1,12 @@
 use std::borrow::Cow;
 
 use anyhow::{Result, bail, ensure};
-use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
 use phoxal_api_joint::v1::JointId;
 use phoxal_api_odometry::v1::{
     Integration, IntegrationStep, SourceHealth, SourceId, SourceReason, SourceStatus, Status,
     StatusMode, StatusReason,
 };
+use phoxal_core_engine::step::{ScenarioDescriptor, ScenarioKind};
 use phoxal_validation_scenario::assertions::{
     Meters, Radians, assert_forward_delta, assert_lateral_drift, assert_yaw_drift,
 };

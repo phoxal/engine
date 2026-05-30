@@ -197,9 +197,7 @@ impl Default for RevisionStore {
 #[cfg(test)]
 mod tests {
     use phoxal_api_frame::v1::FrameId;
-    use phoxal_api_localize::v1::{
-        AffectedKeyframeSummary, LocalizationRevisionCause, Region,
-    };
+    use phoxal_api_localize::v1::{AffectedKeyframeSummary, LocalizationRevisionCause, Region};
 
     use super::*;
 

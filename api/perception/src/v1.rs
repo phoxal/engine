@@ -3,10 +3,10 @@ pub const SCHEMA_VERSION: u32 = 1;
 
 use std::fmt;
 
-use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use phoxal_api_frame::v1::FrameId;
 use phoxal_api_localize::v1::LocalizationRevisionId;
 use phoxal_api_map::v1::MapRevisionId;
+use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use serde::{Deserialize, Serialize};
 
 pub const DETECTIONS_TOPIC: &str = "runtime/perception/detections";
@@ -191,10 +191,10 @@ phoxal_infra_bus::pubsub_leaf!(state, STATE_TOPIC, PerceptionState);
 
 #[cfg(test)]
 mod tests {
-    use phoxal_infra_bus::zenoh_typed::TypedSchema;
     use phoxal_api_frame::v1::FrameId;
     use phoxal_api_localize::v1::LocalizationRevisionId;
     use phoxal_api_map::v1::MapRevisionId;
+    use phoxal_infra_bus::zenoh_typed::TypedSchema;
 
     use super::{
         BoundingBox, Detection, Detections, DetectorHealth, PerceptionDegradedReason,

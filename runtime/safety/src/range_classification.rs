@@ -92,8 +92,8 @@ mod tests {
 
     use crate::core::RangeSafetyClass;
     use anyhow::Result;
-    use phoxal_validation_scenario::helpers::{fixture_bundle_path, fixture_robot, workspace_root};
     use phoxal_core_structure::Structure;
+    use phoxal_validation_scenario::helpers::{fixture_bundle_path, fixture_robot, workspace_root};
 
     use super::classify_safety_range_inputs;
 

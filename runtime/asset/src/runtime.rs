@@ -1,12 +1,12 @@
 use std::path::{Path, PathBuf};
 
 use anyhow::Result;
-use phoxal_core_engine::clock::Step;
-use phoxal_core_engine::step::{Io, RequestResponder, Runtime, RuntimeInputs};
-use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
 use phoxal_api_asset::v1::{
     GetRequest as AssetRequest, GetResponse as AssetResponse, InvalidPathReason, UnavailableReason,
 };
+use phoxal_core_engine::clock::Step;
+use phoxal_core_engine::step::{Io, RequestResponder, Runtime, RuntimeInputs};
+use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
 
 pub enum Input {
     Get {
@@ -107,10 +107,8 @@ impl Runtime for AssetRuntime {
 mod tests {
     use super::AssetRuntime;
     use anyhow::Result;
+    use phoxal_api_asset::v1::{GetRequest as Request, GetResponse as Response, InvalidPathReason};
     use phoxal_core_engine::MESHES_DIR;
-    use phoxal_api_asset::v1::{
-        GetRequest as Request, GetResponse as Response, InvalidPathReason,
-    };
     use std::fs;
 
     #[test]

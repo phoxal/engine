@@ -3,9 +3,9 @@ pub const SCHEMA_VERSION: u32 = 1;
 
 use std::fmt;
 
-use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use phoxal_api_frame::v1::FrameId;
 use phoxal_api_localize::v1::LocalizationRevisionId;
+use phoxal_infra_bus::zenoh_typed::TypedSchema;
 use serde::{Deserialize, Serialize};
 
 pub const REVISION_TOPIC: &str = "runtime/map/revision";

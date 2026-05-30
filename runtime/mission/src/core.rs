@@ -190,9 +190,7 @@ mod tests {
     use phoxal_api_frame::v1::FrameId;
     use phoxal_api_localize::v1::LocalizationMode;
     use phoxal_api_map::v1::MapRevisionId;
-    use phoxal_api_mission::v1::{
-        ExplorationCompletion, ExplorationCompletionMode, GoalTolerance,
-    };
+    use phoxal_api_mission::v1::{ExplorationCompletion, ExplorationCompletionMode, GoalTolerance};
 
     use super::*;
 

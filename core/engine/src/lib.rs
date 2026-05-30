@@ -15,10 +15,10 @@ use std::time::Duration;
 
 use anyhow::Result;
 use clap::Parser;
+use phoxal_core_structure::Structure;
 use phoxal_infra_bus::Bus;
 use phoxal_infra_bus::builder::Builder;
 use phoxal_infra_helpers::parse_trimmed_non_empty;
-use phoxal_core_structure::Structure;
 
 pub use conventions::*;
 pub use execute::execute;

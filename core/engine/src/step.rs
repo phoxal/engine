@@ -5,12 +5,12 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use anyhow::{Result, anyhow};
+use phoxal_api_component::v1::RuntimeStreamDemand;
 use phoxal_infra_bus::Bus;
 use phoxal_infra_bus::pubsub::Stamped;
 use phoxal_infra_bus::zenoh_typed::{
     TypedPublisher, TypedQuery, TypedQueryable, TypedSchema, TypedSubscriber,
 };
-use phoxal_api_component::v1::RuntimeStreamDemand;
 use serde::{Serialize, de::DeserializeOwned};
 use tokio::task::JoinHandle;
 
@@ -469,7 +469,9 @@ impl<Input: Send + 'static> Io<Input> {
     {
         if let Some(bus) = &self.bus {
             return Ok(Publisher {
-                inner: PublisherInner::Live(phoxal_infra_bus::pubsub::eager_publisher(bus, topic).await?),
+                inner: PublisherInner::Live(
+                    phoxal_infra_bus::pubsub::eager_publisher(bus, topic).await?,
+                ),
             });
         }
 

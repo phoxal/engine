@@ -1,13 +1,6 @@
 use std::time::Duration;
 
 use anyhow::{Result, bail};
-use phoxal_infra_bus::pubsub::Stamped;
-use phoxal_core_engine::clock::Step;
-use phoxal_core_engine::staged::Robot;
-use phoxal_core_engine::stale_timeout_ns;
-use phoxal_core_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
-use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
-use phoxal_core_robot::v1::KinematicConfig;
 use phoxal_api_frame::v1::FrameId;
 use phoxal_api_joint::v1::{JointId, JointState, Quantity, data as joint_data};
 use phoxal_api_odometry::v1::{
@@ -15,7 +8,14 @@ use phoxal_api_odometry::v1::{
     SourceHealth, SourceId, SourceReason, SourceStatus, Status, StatusMode, StatusReason,
     VelocityEstimate, data, debug, status,
 };
+use phoxal_core_engine::clock::Step;
+use phoxal_core_engine::staged::Robot;
+use phoxal_core_engine::stale_timeout_ns;
+use phoxal_core_engine::step::{Io, Publisher, Runtime, RuntimeInputs};
+use phoxal_core_engine::{EmptyArgs, RobotRuntimeArgs};
+use phoxal_core_robot::v1::KinematicConfig;
 use phoxal_core_structure::Structure;
+use phoxal_infra_bus::pubsub::Stamped;
 use tracing::warn;
 
 const CLOCK_PERIOD: Duration = Duration::from_millis(20);

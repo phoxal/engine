@@ -7,15 +7,15 @@ mod active {
     use std::path::{Path, PathBuf};
 
     use anyhow::{Context, Result, anyhow, bail};
-    use phoxal_infra_bus::pubsub::Stamped;
     use phoxal_api_component::v1::capability::{camera, depth, imu};
-    use phoxal_core_engine::clock::Step;
     use phoxal_api_frame::v1::FrameId;
     use phoxal_api_localize::v1::{
         AffectedKeyframeSummary, Covariance, ImuBiasEstimate, Keyframe, KeyframeId,
         LocalizationMode, LocalizationRevisionCause, LocalizationSource, LocalizationStatus,
         LocalizationStatusReason, PoseEstimate, VelocityEstimate,
     };
+    use phoxal_core_engine::clock::Step;
+    use phoxal_infra_bus::pubsub::Stamped;
 
     use crate::pose_math::{compose_poses, invert_pose};
     use crate::registration::DepthRegistration;
@@ -107,7 +107,10 @@ mod active {
                 let handle = unsafe {
                     // SAFETY: Both C strings are NUL-terminated and live for the duration
                     // of this call. The wrapper returns either a valid owned handle or NULL.
-                    phoxal_runtime_localize_orb_slam3_sys::os3_new_rgbd(vocabulary_path.as_ptr(), settings_path.as_ptr())
+                    phoxal_runtime_localize_orb_slam3_sys::os3_new_rgbd(
+                        vocabulary_path.as_ptr(),
+                        settings_path.as_ptr(),
+                    )
                 };
                 (handle, LocalizationSource::OrbSlam3Rgbd)
             };
@@ -320,10 +323,7 @@ mod active {
             self.source
         }
 
-        fn ingest_odometry(
-            &mut self,
-            _sample: Stamped<phoxal_api_odometry::v1::OdometryEstimate>,
-        ) {
+        fn ingest_odometry(&mut self, _sample: Stamped<phoxal_api_odometry::v1::OdometryEstimate>) {
         }
 
         fn ingest_imu(&mut self, sample: Stamped<imu::Sample>) -> Result<()> {
@@ -639,7 +639,9 @@ mod active {
         deque.insert(index, item);
     }
 
-    fn imu_sample_to_ffi(sample: &Stamped<imu::Sample>) -> phoxal_runtime_localize_orb_slam3_sys::OrbSlam3ImuSample {
+    fn imu_sample_to_ffi(
+        sample: &Stamped<imu::Sample>,
+    ) -> phoxal_runtime_localize_orb_slam3_sys::OrbSlam3ImuSample {
         let accel = sample.data.linear_acceleration_mps2();
         let gyro = sample.data.angular_velocity_radps();
         phoxal_runtime_localize_orb_slam3_sys::OrbSlam3ImuSample {
@@ -751,7 +753,10 @@ mod active {
         }
     }
 
-    fn status_result(status: phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status, operation: &str) -> Result<()> {
+    fn status_result(
+        status: phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status,
+        operation: &str,
+    ) -> Result<()> {
         if status == phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_OK {
             return Ok(());
         }
@@ -760,10 +765,18 @@ mod active {
 
     fn status_name(status: phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status) -> &'static str {
         match status {
-            phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_ERR_INIT_FAILED => "init_failed",
-            phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_ERR_TRACK_FAILED => "track_failed",
-            phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_ERR_INVALID_HANDLE => "invalid_handle",
-            phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_ERR_INVALID_INPUT => "invalid_input",
+            phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_ERR_INIT_FAILED => {
+                "init_failed"
+            }
+            phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_ERR_TRACK_FAILED => {
+                "track_failed"
+            }
+            phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_ERR_INVALID_HANDLE => {
+                "invalid_handle"
+            }
+            phoxal_runtime_localize_orb_slam3_sys::OrbSlam3Status_OS3_ERR_INVALID_INPUT => {
+                "invalid_input"
+            }
             _ => "unknown_status",
         }
     }

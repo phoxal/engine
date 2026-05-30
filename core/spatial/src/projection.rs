@@ -220,8 +220,8 @@ fn project_planar_ray(
 mod tests {
     use super::*;
     use nalgebra::UnitQuaternion;
-    use phoxal_core_component::v1::CapabilityRef;
     use phoxal_api_component::v1::capability::depth::Depth as DepthPayload;
+    use phoxal_core_component::v1::CapabilityRef;
 
     fn range_pose(yaw_rad: f32, pitch_rad: f32, roll_rad: f32) -> ResolvedSensorPose {
         ResolvedSensorPose {

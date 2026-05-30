@@ -72,17 +72,19 @@ impl Robot {
         component_type: &str,
     ) -> Result<phoxal_core_component::v1::Component> {
         let component_path = path.as_ref().join(COMPONENTS_DIR).join(component_type);
-        Ok(phoxal_core_component::Component::read_from_dir(&component_path)
-            .with_context(|| {
-                format!(
-                    "failed to read component configuration for '{}' from {}",
-                    component_type,
-                    component_path.display()
-                )
-            })?
-            .as_v1()
-            .context("staged robot only supports component.yaml version v1")?
-            .clone())
+        Ok(
+            phoxal_core_component::Component::read_from_dir(&component_path)
+                .with_context(|| {
+                    format!(
+                        "failed to read component configuration for '{}' from {}",
+                        component_type,
+                        component_path.display()
+                    )
+                })?
+                .as_v1()
+                .context("staged robot only supports component.yaml version v1")?
+                .clone(),
+        )
     }
 
     fn read_used_component_configs(
