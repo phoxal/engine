@@ -10,5 +10,5 @@ needed by tools and validators.
 Not in scope: robotics semantics, runtime graph generation, or owning any
 component/runtime contract.
 
-See `codex/BLUEPRINT.md` and `codex/BLUEPRINT_CONTRACTS.md` for the target
+See `docs/BLUEPRINT.md` and `docs/BLUEPRINT_CONTRACTS.md` for the target
 contract.
