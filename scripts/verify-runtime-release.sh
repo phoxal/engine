@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# Verify a coherent GHCR runtime image release.
+#
+# For a given framework version, confirm that EVERY runtime crate in the
+# workspace has a published GHCR image whose tag resolves to a real
+# multi-arch (linux/amd64 + linux/arm64) OCI index digest. This is the
+# repeatable form of the "first coherent GHCR runtime image release" proof
+# (phoxal/framework#31): the release matrix, the runtime crates, and the
+# phoxal-cli platform-runtime catalog must all name the same set, and every
+# image in that set must be pullable as a real digest pin.
+#
+# The runtime set is derived from the workspace (`runtime/<name>/Cargo.toml`),
+# not a hard-coded list, so this gate fails if a runtime crate is added
+# without a matching published image (or vice versa).
+#
+# Requires `docker buildx`. `imagetools inspect` queries the registry
+# directly and does NOT need a running Docker daemon. For private packages,
+# run `docker login ghcr.io` first.
+#
+# Usage:
+#   scripts/verify-runtime-release.sh [VERSION]
+#
+# VERSION defaults to the workspace version in Cargo.toml (e.g. 0.3.0).
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REGISTRY="${PHOXAL_RUNTIME_REGISTRY:-ghcr.io/phoxal}"
+
+version="${1:-}"
+if [[ -z "${version}" ]]; then
+  version="$(sed -n 's/^version = "\(.*\)"/\1/p' "${REPO_ROOT}/Cargo.toml" | head -n1)"
+fi
+[[ -n "${version}" ]] || { echo "could not determine version from Cargo.toml" >&2; exit 2; }
+
+command -v docker >/dev/null 2>&1 || { echo "docker (with buildx) is required" >&2; exit 2; }
+
+# Single source of truth: the runtime crates in the workspace. Each
+# runtime/<name>/Cargo.toml builds phoxal-runtime-<name> and ships as
+# ghcr.io/phoxal/runtime-<name>. The depth-1 glob excludes nested helper
+# crates (e.g. runtime/localize/orb-slam3-sys) and the empty router/ dir.
+runtimes=()
+for manifest in "${REPO_ROOT}"/runtime/*/Cargo.toml; do
+  [[ -f "${manifest}" ]] || continue
+  runtimes+=("$(basename "$(dirname "${manifest}")")")
+done
+[[ ${#runtimes[@]} -gt 0 ]] || { echo "no runtime crates found under runtime/" >&2; exit 2; }
+
+echo "Verifying ${#runtimes[@]} runtime images @ ${version} on ${REGISTRY}"
+echo
+
+fail=0
+for r in "${runtimes[@]}"; do
+  ref="${REGISTRY}/runtime-${r}:${version}"
+  if ! raw="$(docker buildx imagetools inspect "${ref}" --raw 2>/dev/null)"; then
+    printf '  %-12s MISSING    %s\n' "${r}" "${ref}"
+    fail=$((fail + 1))
+    continue
+  fi
+  digest="$(docker buildx imagetools inspect "${ref}" 2>/dev/null | awk '/^Digest:/{print $2; exit}')"
+  has_amd=0; has_arm=0
+  grep -q '"architecture": *"amd64"' <<<"${raw}" && has_amd=1
+  grep -q '"architecture": *"arm64"' <<<"${raw}" && has_arm=1
+  if [[ "${digest}" == sha256:* && ${has_amd} -eq 1 && ${has_arm} -eq 1 ]]; then
+    printf '  %-12s OK  amd64+arm64  %s\n' "${r}" "${digest}"
+  else
+    printf '  %-12s FAIL  amd64=%s arm64=%s digest=%s\n' \
+      "${r}" "${has_amd}" "${has_arm}" "${digest:-none}"
+    fail=$((fail + 1))
+  fi
+done
+
+echo
+if [[ ${fail} -ne 0 ]]; then
+  echo "FAIL: ${fail}/${#runtimes[@]} runtime images missing or not multi-arch @ ${version}" >&2
+  exit 1
+fi
+echo "OK: all ${#runtimes[@]} runtime images published as multi-arch (amd64+arm64) indexes @ ${version}"
