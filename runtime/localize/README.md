@@ -15,8 +15,8 @@ a pose is available. The ORB-SLAM3 RGB-D + inertial backend, keyframe store,
 pose graph, and correction publication land in a follow-up phase.
 
 Owned topics: `runtime/localize/{state,pose,revision,keyframe,correction}` and
-pose-graph/keyframe/correction queries described in `codex/BLUEPRINT.md` and
-`codex/BLUEPRINT_CONTRACTS.md`. The dead-reckoning backend has no pose graph or
+pose-graph/keyframe/correction queries described in `docs/BLUEPRINT.md` and
+`docs/BLUEPRINT_CONTRACTS.md`. The dead-reckoning backend has no pose graph or
 corrections, so query handlers return revision-unavailable responses unless the
 request is for the wrong epoch.
 
